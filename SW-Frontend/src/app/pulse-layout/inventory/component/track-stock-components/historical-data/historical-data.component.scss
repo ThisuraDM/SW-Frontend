@@ -1,0 +1,16 @@
+.details-label {
+    color: #697479;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.text-overflow-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-left: 1rem;
+}

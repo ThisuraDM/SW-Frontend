@@ -1,0 +1,30 @@
+@import 'styles/core/variables/_colors.scss';
+
+.title_container {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .title_text {
+    color: #3a3a3a;
+    font-size: 1.5rem;
+  }
+  .tac_text {
+    color: #3a3a3a;
+    font-size: 1rem;
+  }
+  img{
+    height: 45px;
+  }
+
+.invalid-feedbackk {
+    //display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+}

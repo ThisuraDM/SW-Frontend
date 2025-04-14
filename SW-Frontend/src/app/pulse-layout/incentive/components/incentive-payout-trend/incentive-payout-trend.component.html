@@ -1,0 +1,65 @@
+<sbpro-card>
+    <div class='card-header'>Payout Trend</div>
+    <div class='card-body fz'>
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='row filterDropdownRow'>
+                    <div class='col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'>
+                                <label class='small mb-1 dropdown-label'>Incentive Type</label>
+                                <select class='form-select form-select-custom custom-select' [(ngModel)]="selectedCategory" (change)="onCategoryChange()"
+                                    id='brandOwn'>
+                                    <option *ngFor="let item of categoryNames" [value]='item'>{{item}}</option>
+                                </select>
+                    </div>
+                    <div class='col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'>                   
+                                <label class='small mb-1 dropdown-label'>Scheme Name</label>
+                                <select class='form-select form-select-custom custom-select' [(ngModel)]="selectedSchemaName" (change)="onSchemaChange()"
+                                    id='brandOwn'>
+                                    <option *ngFor="let item of schemaNames" [value]='item'>{{item}}</option>
+                                </select>
+                    </div>
+                </div>
+                <br>
+                <div class='alert alert-primary dashboard-alert' role='alert'>
+                    <div class='row align-items-center justify-content-between'>
+                        <div class='col-auto'>
+                            <ol class='breadcrumb mt-4 mb-0 rounded fs'>
+                                <span class='text-dark fw-500' title="{{selectedCategory}}">{{selectedCategory}} </span>
+                                <span class='text-gray-600'>&nbsp;/ {{selectedSchemaName}}</span>
+                            </ol>
+                        </div>
+                        <div class='col-auto'>
+                            <span class='small m-1 flex-end text-black btntxt'>Sort by</span>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedNoOfMonth === 3 ? 'btn-primary' : 'btn-light'"
+                               (click)='onNoOfMonthChange()'>
+                                <span class='d-none d-sm-block'>3 Months</span>
+                                <span class='d-block d-sm-none'>3 M</span>
+                            </a>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedNoOfMonth === 6 ? 'btn-primary' : 'btn-light'"
+                               (click)='onNoOfMonthChange()'>
+                                <span class='d-none d-sm-block'>6 Months</span>
+                                <span class='d-block d-sm-none'>6 M</span>
+                            </a>
+                         
+                        </div>
+                    </div>
+                </div>
+                <div class='chart-bar' [style.height]='"300px"' [style.width]='width'>
+                    <canvas #myBarChart></canvas>
+                </div>
+            </div>
+
+        </div>
+        <br>
+    </div>
+</sbpro-card>
+
+<ng-template #noHistoricalPerformance>
+    <div class='row gx-4'>
+        <div class='col-md-12'>
+            <SW-no-data height='250'></SW-no-data>
+        </div>
+    </div>
+</ng-template>

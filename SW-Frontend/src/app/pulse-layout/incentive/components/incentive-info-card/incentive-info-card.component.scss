@@ -1,0 +1,11 @@
+.big-icon {
+    ::ng-deep i-feather svg {
+        height: 28px !important;
+        width: 28px !important;
+        vertical-align: top !important;
+    }
+}
+
+.download-summary-detail{
+    cursor: pointer;
+}

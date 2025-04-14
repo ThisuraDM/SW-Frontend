@@ -1,0 +1,32 @@
+@import '../../../../../styles/core/variables';
+
+.big-icon {
+    ::ng-deep i-feather svg {
+        height: 28px !important;
+        width: 28px !important;
+        vertical-align: top !important;
+    }
+}
+
+.download-summary-detail{
+    cursor: pointer;
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.form-select-custom {
+    line-height: 1.4 !important;
+    padding-top: 24px;
+}
+
+.ts-1{
+    font-size: 1rem;
+}
+
+.tc-w{
+    color: white;
+}

@@ -1,0 +1,194 @@
+<sbpro-dashboard-head title='{{title}}'
+                      [showDate]='true'
+                      [light]='true'
+                      [simplified]='true'>
+</sbpro-dashboard-head>
+
+<div class='container-xl px-4 mt-4'>
+    <div class='card mb-4'>
+        <div class='card-header'>Search Transaction</div>
+        <div class='card-body'>
+            <div class='row'>
+                <div class='col-md-10 pe-md-1'>
+                    <div class='input-group input-group-joined mb-4'>
+                        <div class='input-group-text'>
+                            <i-feather name='search'></i-feather>
+                        </div>
+                        <input class='form-control' type='text' [(ngModel)]='transactionHistoryRequest.search_value' maxlength="30"
+                               placeholder='Search by Name, Item IMEI, Mobile Number or Transaction ID' aria-label='Search' />
+                        <sbpro-dropdown class='ms-5' dropdownStyle='text' style='border-left: 1px solid #a8aaab;'>
+                            <div class='dropdown-trigger text-primary fw-bold me-3'>{{searchBy}}</div>
+                            <div class='dropdown-items'>
+                                <a class='dropdown-item' (click)="selectSearchBy('NAME', 'Customer Name')">Customer Name</a>
+                                <a class='dropdown-item' (click)="selectSearchBy('ITEM_IMEI', 'Item IMEI')">Item
+                                    IMEI</a>
+                                <a class='dropdown-item' (click)="selectSearchBy('MOBILE_NO', 'Mobile Number')">Mobile
+                                    Number</a>
+                                <a class='dropdown-item' (click)="selectSearchBy('ORDER_ID', 'Transaction ID')">Transaction ID</a>
+                            </div>
+                        </sbpro-dropdown>
+                    </div>
+                </div>
+                <div class='col-md-2 ps-md-1 mb-3'>
+                    <button class='btn btn-primary col-12' (click)='searchTransactionHistory(0)'>Search</button>
+                </div>
+
+                <div class='col-md-3 col-sm-6 mb-3'>
+                    <div>
+                        <div class='dropdown-label'>Transaction Type</div>
+                        <ng-multiselect-dropdown
+                            class='container p-0'
+                            [placeholder]="'TransactionType'"
+                            [settings]='transactionSettings'
+                            [data]='transactionList'
+                            [(ngModel)]='selectedTransactionTypes'
+                            (onSelect)='onTransactionChange()'
+                            (onDeSelect)='onTransactionChange()'>
+                        </ng-multiselect-dropdown>
+                    </div>
+                </div>
+                <div class='col-md-3 mb-3'>
+                    <SW-date-range-picker [enableMaxDate]='true' [enableMinDate]='true' [enable90]='false' [label]='"Date Range"'></SW-date-range-picker>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='card mb-4'>
+        <div class='card-header'>Transaction History</div>
+        <div class='card-body'>
+            <div class='dataTable-dropdown mb-4'><label>
+                <select class='dataTable-selector' name='pageSize' [(ngModel)]='pageSize'
+                        (change)='searchTransactionHistory(0)'>
+                    <option value='5'>5</option>
+                    <option value='10' selected=''>10</option>
+                    <option value='15'>15</option>
+                    <option value='20'>20</option>
+                    <option value='25'>25</option>
+                </select> entries per page</label>
+            </div>
+            <div class='col-md-12 table-responsive'>
+                <table class='table table-billing-history table-bordered' style='overflow: auto !important;'>
+                    <thead>
+                    <tr class='bg-primary text-white'>
+                        <th class='border-node' scope='col'>Date</th>
+                        <th class='border-node' scope='col'>Name</th>
+                        <th class='border-node' scope='col'>Transaction Type</th>
+                        <th class='border-node' scope='col'>Order ID</th>
+                        <th class='border-node' scope='col'>Mobile Number</th>
+                        <th class='border-node' scope='col'>Amount (RM)</th>
+                        <th class='border-node' scope='col'>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let trxHistory of transactionHistory'>
+                            <td>{{trxHistory.date | mask: '00-00-0000'}}</td>
+                            <td>{{trxHistory.name}}</td>
+                            <td>{{trxHistory.transaction_type }}</td>
+                            <td>{{trxHistory.order_id}}</td>
+                            <td>{{trxHistory.mobile_number| mask: '000-0000000'}}</td>
+                            <td><span class='text-success'> {{trxHistory.amount | currency: 'RM'}}</span></td>
+                            <td class='table-action-column'>
+                                <sbpro-dropdown placement='bottom-end sm' [classes]='["no-caret"]'>
+                                    <div class='dropdown-trigger'>
+                                        <i-feather class='text-primary' name='more-vertical'></i-feather>
+                                    </div>
+                                    <div class='dropdown-items'>
+                                        <a class='dropdown-item'
+                                           (click)='printReceipt(trxHistory.receipt_id, trxHistory.transaction_type)'>Print</a>
+                                        <a class='dropdown-item'
+                                           (click)='emailReceipt(modalDefaultStatic,  {backdrop: "static"}, trxHistory.receipt_id, trxHistory.transaction_type)'>Email</a>
+                                        <a class='dropdown-item'
+                                           (click)='downloadReceipt(trxHistory.receipt_id, trxHistory.transaction_type)'>Download</a>
+                                    </div>
+                                </sbpro-dropdown>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf='dataLoadingError' style='height: 224px'
+                     class='col-md-12 d-flex justify-content-center align-content-center flex-wrap bg-gray-100'>
+                    <SW-no-data [height]='250' [message]='errorMessage'></SW-no-data>
+                </div>
+            </div>
+            <div class='row  pt-2' [hidden]='!transactionHistory.length'>
+                <div class='col-sm-12 col-md-6'>
+                    <label class='small mb-2'>
+                        Showing {{(transactionHistoryResponse?.number*pageSize) +1}}
+                        to {{transactionHistoryResponse?.totalElements<(transactionHistoryResponse?.number+1) * pageSize
+                            ?transactionHistoryResponse?.totalElements:(transactionHistoryResponse?.number+1) * pageSize}} of
+                            {{transactionHistoryResponse?.totalElements}} entries </label>
+                </div>
+                <div class='col-sm-12 col-md-6 d-flex justify-content-end'>
+                    <div class='row d-flex justify-content-end'>
+                        <div class='col-sm-12 col-md-auto '>
+                            <ngb-pagination (pageChange)='loadPage($event)'
+                                            [collectionSize]='transactionHistoryResponse?.totalElements'
+                                            [maxSize]='3'
+                                            [(page)]='pageNo'
+                                            [pageSize]='transactionHistoryResponse?.size'>
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalDefaultStatic let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><strong class='text-warning'>Alert! </strong> <strong>Email Receipt</strong></h5>
+    </div>
+
+    <div class='modal-body'>
+        <div class='row'>
+            <label class='mb-4 fw-400'>You'll be sending a copy of receipt to customer. <br> Please enter customer customer's email address.</label>
+            <div class='col-lg-12 mb-3'>
+                    <label class='fw-400' >Email Address</label>
+            </div>
+            <div class='col-lg-12'>
+                <input type='text' class='form-control' #contactemail="ngModel" [(ngModel)]='emailDetails.emailAddress' required
+                       pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" placeholder="Enter Email Address" >
+            </div>
+            <div [hidden]="contactemail.valid || contactemail.untouched">
+                <div class='text-danger' *ngIf="contactemail.errors && contactemail.errors.required">
+                    Email is required
+                </div>
+                <div class='text-danger' *ngIf="contactemail.errors && contactemail.errors.pattern">
+                    Email is invalid
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close("Close Click")'>Cancel</button>
+        <button class='btn btn-primary' type='button'
+                [disabled]='contactemail.errors'
+                (click)='modal.close("Close Click");confirm();open(modalDefaultStaticSuccessEmail, {backdrop: "static"});'>Confirm</button>
+    </div>
+</ng-template>
+
+<ng-template #modalDefaultStaticSuccessEmail let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'>
+            <strong *ngIf='successEmailSend' class='text-success'>Successful! </strong>
+            <strong *ngIf='!successEmailSend' class='text-danger'>Failed! </strong>
+            <strong>Email Receipt</strong></h5>
+    </div>
+
+    <div class='modal-body'>
+        <div class='row'>
+            <label class='mb-4 fw-400' *ngIf='successEmailSend'> The receipt has been successfully sent to customer's
+                email address.</label>
+            <label class='mb-4 fw-400' *ngIf='!successEmailSend'> The receipt sent failed to customer's email
+                address.</label>
+        </div>
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close("Close Click")'>Close</button>
+    </div>
+</ng-template>
+

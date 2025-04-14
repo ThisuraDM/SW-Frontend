@@ -1,0 +1,71 @@
+<div class='container-xl px-4 mt-3 '>
+    <div class="row gx-4">
+        <div class='col-12 card mb-4 h-50 px-0'>
+            <div class='card-header w-100'>
+                <a (click)="onBackClick.emit(true)">
+                    <svg class='icon text-black back-arrow ' aria-hidden='true' width='24' height='24'>
+                        <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#arrow-previous'></use>
+                    </svg> </a>
+                <span class="ml-5">Stock Details</span>
+            </div>
+            <div class='card-body'>
+                <div class='col-md-12'>
+                    <div class='d-flex justify-content-between align-items-start pt-2 row'>
+                        <div class='col-12'>
+                            <label class='small mb-2'>{{stockResults?.store_id}}</label>
+                        </div>
+                        <div class='col-12'>
+                            <label class='small mb-2'>Item Name - {{productName}}</label>
+                        </div>
+                        <div class='col-12'>
+                            <label class='small mb-2'>SAP Material Code - {{stockResults?.sap_material_code}}</label>
+                        </div>
+
+                    </div>
+                    <div class='col-md-12 table-responsive'>
+                        <table class='table border rounded shadow' id='content' #content>
+                            <thead class="thead-dark">
+                                <tr >
+                                    <th class='small'>Serial No.</th>
+                                    <th class='small'>Service ID</th>
+                                    <th class='small'>Expiry Date</th>
+                                    <th class='small'>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf='tableDataList?.length'>
+                                <tr *ngFor='let item of tableDataList'>
+                                    <td class='small'>{{item.serial_number||'-'}}</td>
+                                    <td class='small'>{{item.service_id ||'-'}}</td>
+                                    <td class='small'>{{item.expiry_date||'-'}}</td>
+                                    <td class='small'>{{item.status ||'-'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <SW-no-data *ngIf='!tableDataList?.length' [height]="224" [message]="'Unable to load data.'">
+                        </SW-no-data>
+                    </div>
+
+                </div>
+                <div *ngIf='tableDataList?.length' class='d-flex justify-content-end'>
+                    <button (click)="onExport()" class='btn btn-primary' type='button'>Export
+                    </button>
+                </div>
+                <div class='d-flex justify-content-between align-items-center pt-2' *ngIf='tableDataList?.length'>
+                    <div class='d-flex align-items-start rctext'>
+                        <label class='small mb-2'>
+                            Showing {{(stockResults?.stock_detail_list?.number*10) + 1}} to {{stockResults?.stock_detail_list?.totalElements
+                            <(stockResults?.stock_detail_list?.number+1) * 10
+                                ?stockResults?.stock_detail_list?.totalElements:(stockResults?.stock_detail_list?.number+1) * 10}} of
+                                {{stockResults?.stock_detail_list?.totalElements||0}} entries </label>
+                    </div>
+                    <div class='d-flex align-items-end pag'>
+                        <ngb-pagination (pageChange)='loadPage($event)'
+                            [collectionSize]='stockResults?.stock_detail_list?.totalElements' [maxSize]='3'
+                            [(page)]='pageNo' [pageSize]='10'>
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

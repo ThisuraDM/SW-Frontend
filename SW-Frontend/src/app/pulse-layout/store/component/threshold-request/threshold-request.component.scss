@@ -1,0 +1,46 @@
+@import '../../../../../styles/core/variables';
+
+.h-auto {
+    height: 90px !important;
+    font-size: 10px !important;
+}
+
+.m-top {
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+.btn-add {
+    margin-top: 25px;
+    float: right;
+}
+
+.displace-icon{
+    position: absolute;
+    @media(min-width: 1200px) {
+        right: 21%;
+    }
+    right: 5%;
+    transform: translateY(-155%);
+    cursor: pointer;
+}
+
+.file-upload-input {
+    background-color: #f8f8f9 !important;
+}
+
+.time-input {
+    background-color: inherit;
+}
+.popover .popover-arrow {
+    display: none !important;
+ }
+ .invalid-msg{
+     display: block;
+ }
+ :host::ng-deep ngb-popover-window::ng-deep .popover-arrow{
+    display: none !important;
+ }
+ .hidden-date-time-picker{
+    opacity:0;width: 50%;height: 0px;
+ }

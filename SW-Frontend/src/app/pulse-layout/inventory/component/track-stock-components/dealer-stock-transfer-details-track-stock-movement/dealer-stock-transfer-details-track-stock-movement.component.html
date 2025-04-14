@@ -1,0 +1,68 @@
+<div class='container-xl px-4 mt-3'>
+    <div class="row gx-4">
+        <div class="col-md-10">
+            <sbpro-card>
+                <div class="card-header">
+                    Track Stock Movement
+                </div>
+                <div class="card-body">
+                    <div class="row gx-4">
+                        <div class="col-md-4 d-flex flex-column mb-3">
+                            <span class="mb-3">Delivery Address</span>
+                            <p class="small">{{stockTransferDetails?.delivery_address?.street_name}}<br>
+                                <br>{{stockTransferDetails?.delivery_address?.post_code ? (stockTransferDetails?.delivery_address?.post_code + ', ') : ''}}{{stockTransferDetails?.delivery_address?.city}}
+                                <br>{{stockTransferDetails?.delivery_address?.state ? (stockTransferDetails?.delivery_address?.state + ', ') : ''}}{{'Malaysia'}}</p>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                <div>Order Create Date:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{stockTransferDetails?.create_date}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                                <div>Delivery Date:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{stockTransferDetails?.transfer_date}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                                <div>Delivery Status:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{status}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                <div>Ship Via:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{''}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                <div>Consignment Note:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600 text-align-right">{{''}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                <div>Reference Link:</div>
+                                <div class="text-overflow-ellipsis text-primary text-bold-600 pointer">{{''}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row d-flex align-items-center justify-content-between">
+                        <div class="col-md-9 d-flex d-inline-flex mb-2">
+                            <div class="mb-0 me-5 text-primary text-bold-600 small"
+                                 [ngClass]="{'disable-link': status !== 'DO Issued', 'text-primary pointer': status === 'DO Issued'}"
+                                 (click)="status === 'DO Issued' ? onDownloadLink('Invoice') : null">
+                                Download Invoice
+                            </div>
+                            <div class="mb-0 text-primary text-bold-600 small"
+                                 [ngClass]="{'disable-link': status !== 'DO Issued', 'text-primary pointer': status === 'DO Issued'}"
+                                  (click)="status === 'DO Issued' ? onDownloadLink('Delivery_Order') : null">
+                                Download Delivery Order
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <button class="btn btn-primary close-button w-100" type="button" (click)="navigateBackToPreviousScreen.emit()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+    </div>
+</div>

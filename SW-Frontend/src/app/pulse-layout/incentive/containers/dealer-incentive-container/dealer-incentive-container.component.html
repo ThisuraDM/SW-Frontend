@@ -1,0 +1,67 @@
+<sbpro-dashboard-head [light]='true'
+                      [showDate]='true'
+                      [simplified]='true'
+                      title='{{title}}'>
+</sbpro-dashboard-head>
+
+<div class='container-xl px-4 mt-xl-3'>
+    <div class='col-xl-12 mb-4'>
+        <SW-incentive-filter-box (monthSelect)='getSelectedMonthAndYear($event)' (monthSelectLabel)='getSelectedYearAndMonthLabel($event)'></SW-incentive-filter-box>
+    </div>
+    <div class='col-xl-12 mb-4'>
+        <div class='alert alert-primary dashboard-alert' role='alert'>
+            <div class='row align-items-center justify-content-between'>
+                <div class='col-auto'>
+                    <ol class='breadcrumb mt-4 mb-0 py-2 rounded'>
+                        <li>
+                            <span class='txt-c'>Data as of <span
+                                class='dtxt-c'>{{dashboardDate | date:'d MMMM y'}}</span></span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='row gx-4'>
+        <div class='col-lg-3 col-md-6 mb-4'>
+            <SW-incentive-total-card [totalIncentive]='incentiveInfoCard?.total_incentive_payout' [month]='selectedMonthAndYearLabel'></SW-incentive-total-card>
+        </div>
+        <div class='col-lg-3 col-md-6 mb-4' *ngIf='incentiveInfoCard?.donut_details[0]'>
+            <SW-incentive-info-card [cardData]='incentiveInfoCard?.donut_details[0]'
+                                       [vendorId]='vendorId'
+                                       [selectedMonthAndYear]='selectedMonthAndYear'
+                                       [monthAndYearLabel]='selectedMonthAndYearLabel'>
+            </SW-incentive-info-card>
+        </div>
+        <div class='col-lg-3 col-md-6 mb-4' *ngIf='incentiveInfoCard?.donut_details[1]'>
+            <SW-incentive-info-card [cardData]='incentiveInfoCard?.donut_details[1]'></SW-incentive-info-card>
+        </div>
+        <div class='col-lg-3 col-md-6 mb-4'>
+            <SW-incentive-report-card [vendorId]='vendorId'
+                                         [selectedMonthAndYear]='selectedMonthAndYear'
+                                         [monthAndYearLabel]='selectedMonthAndYearLabel'>
+            </SW-incentive-report-card>
+        </div>
+        <div class='col-lg-3 col-md-6 mb-4' *ngIf='incentiveInfoCard?.donut_details[2]'>
+            <SW-incentive-info-card [cardData]='incentiveInfoCard?.donut_details[2]'></SW-incentive-info-card>
+        </div>
+        <div class='col-lg-3 col-md-6 mb-4' *ngIf='incentiveInfoCard?.donut_details[3]'>
+            <SW-incentive-info-card [cardData]='incentiveInfoCard?.donut_details[3]'></SW-incentive-info-card>
+        </div>
+        <div class='col-lg-3 col-md-6 mb-4' *ngIf='incentiveInfoCard?.donut_details[4]'>
+            <SW-incentive-info-card [cardData]='incentiveInfoCard?.donut_details[4]'></SW-incentive-info-card>
+        </div>
+        <div class='col-lg-3 col-md-6 mb-4'>
+            <SW-incentive-announcement-card></SW-incentive-announcement-card>
+        </div>
+    </div>
+    <div class='row gx-4'>
+        <SW-incentive-payout-trend  [vendorId]='vendorId'
+        [selectedMonthAndYear]='selectedMonthAndYear'></SW-incentive-payout-trend>
+    </div>
+    <div class='row gx-4'>
+        <!-- <SW-main-category-card></SW-main-category-card> -->
+    </div>
+</div>
+
+

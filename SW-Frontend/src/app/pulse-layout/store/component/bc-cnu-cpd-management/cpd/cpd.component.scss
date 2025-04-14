@@ -1,0 +1,144 @@
+@import 'src/styles/core/variables';
+ngb-pagination{
+    margin-top: 0.5rem;
+}
+.up-arrow {
+    width: 0;
+    height: 0;
+    border: solid 4px transparent;
+    background: transparent;
+    border-bottom: solid 5px black;
+    border-top-width: 0;
+    cursor: pointer;
+
+}
+
+.down-arrow {
+    width: 0;
+    height: 0;
+    border: solid 4px transparent;
+    background: transparent;
+    border-top: solid 5px black;
+    border-bottom-width: 0;
+    margin-top:1px;
+    cursor: pointer;
+
+}
+
+.tablesorter-header {
+    position: relative;          /* This is needed for the absolute positioning. */
+}
+
+.tablesorter-header::before,
+.tablesorter-header::after {
+    position: absolute;
+    right: 0.75em;
+    font-family: 'FontAwesome';  /* Use FontAwesome's font so that you can set the content */
+    opacity: 0.3;                /* Set opacity to gray out icons by default */
+}
+
+.tablesorter-header::before {
+    width: 0;
+    height: 0;
+    border: solid 4px transparent;
+    background: transparent;
+    border-top: solid 5px black;
+    border-bottom-width: 0;
+    margin-top:1px;
+    cursor: pointer;
+}
+
+.tablesorter-header::after {
+    width: 0;
+    height: 0;
+    border: solid 4px transparent;
+    background: transparent;
+    border-bottom: solid 5px black;
+    border-top-width: 0;
+    cursor: pointer;
+}
+
+.tablesorter-header.tablesorter-headerAsc::before,
+.tablesorter-header.tablesorter-headerDesc::after {
+    opacity: 1;                  /* When sorting, set full opacity on the direction */
+}
+
+.dataTable-sorter {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    padding-right: 2rem;
+    padding-left: 0rem;
+
+}
+
+.dataTable-table th a {
+    text-decoration: none;
+    color: inherit;
+}
+.dataTable-table th{
+    padding-right: 0rem !important;
+}
+.date-label{
+    margin-top: 10px;
+    margin-left:1.2rem !important;
+}
+.cnu-date-picker-input{
+    @media(min-width: 768px) {
+    margin-left: -0.2rem;
+    }
+    font-size: 1rem;
+    padding-bottom: 0.7rem;
+    margin-top: 0.1rem;
+}
+.no-data-banner{
+    height: 224px
+}
+.table-action-column{
+    text-align: center;
+    padding: 0rem;
+}
+.download-file{
+    cursor: pointer;
+    width:50%
+}
+.file-card-body{
+    padding: 1.35rem 0.7rem;
+}
+.disable-complete{
+    pointer-events: none;
+}
+.table, .dataTable-table {
+    overflow: auto !important;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+table > tbody > tr:last-child {
+    border-bottom: 1px ;
+    }
+.form-control[readonly], [readonly].dataTable-input {
+         background-color: inherit !important; 
+         opacity: 1;
+    }
+.form-select-111 {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.form-select2{
+    padding: 12px !important
+}
+
+.dtxt-c {
+    color: #424d52;
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+    margin-top: 10px;
+}
+.table-search-inputs {
+    line-height: 2.5 !important;
+}

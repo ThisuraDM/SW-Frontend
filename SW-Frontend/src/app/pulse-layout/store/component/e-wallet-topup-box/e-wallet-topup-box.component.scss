@@ -1,0 +1,38 @@
+@import '../../../../../styles/core/variables';
+
+
+.txt-a{
+    text-align: left !important;
+}
+
+.form-control[readonly]{
+    background-color: #ffffff !important;
+}
+
+.w-40{
+    width: 45px;
+    margin-right: 5px;
+}
+
+.flexWrap{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tco{
+    color: orange;
+}
+
+.tcr{
+    color: red;
+    font-size: 13px;
+}
+
+.rb{
+    border: solid 1px red;
+}
+
+.tc-m{
+    color: #c52957;
+}
+

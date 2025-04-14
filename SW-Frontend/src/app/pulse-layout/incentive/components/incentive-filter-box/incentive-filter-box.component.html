@@ -1,0 +1,30 @@
+<sbpro-card [classes]="['h-100']">
+    <div class='card card-body
+                bg-gradient-primary-to-secondary
+                h-100
+                d-flex
+                flex-column
+                justify-content-center
+                py-5 py-xl-4'>
+        <div class='row gx-4 align-items-center'>
+            <div class='col-xl-12 col-xxl-12'>
+                <div class='row'>
+                    <div class='col-md-8'>
+                        <div class='text-white text-lg fw-bolder'>Payout Performance Summary</div>
+                        <div class='text-white-75 small'>Select filter to view data</div>
+                        <div class='row mt-2'>
+                            <div class='col-md-4 col-sm-12 mb-2'>
+                                <SW-month-picker
+                                    [monthLabelWithYear]='true'
+                                    [monthStaticLabel]='"Payout Month"'
+                                    (selectYearAndMonth)='setYearAndMonth($event)'
+                                    (selectYearAndMonthLabel)='setYearAndMonthLabel($event)'>
+                                </SW-month-picker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</sbpro-card>

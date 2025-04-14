@@ -1,0 +1,167 @@
+<form [formGroup]="ownStoreSearchForm" (ngSubmit)='onSearch()' class='needs-validation'>
+
+
+    <div class='row'>
+        <div class='mb-3 col-md-10'>
+            <div class="input-group input-group-joined input-group-solid">
+                <div class="input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="feather feather-search">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg></div>
+                <input class="form-control" id="requestID" type="search" maxlength="100" placeholder="Search Request ID"
+                    formControlName='requestID'
+                    [ngClass]="{'is-invalid': ownStoreSearchForm.controls.requestID.invalid && ownStoreSearchForm.controls.requestID.touched}">
+
+            </div>
+            <div class='invalid-feedback invalid-msg'
+                *ngIf='ownStoreSearchForm.controls.requestID.invalid && ownStoreSearchForm.controls.requestID.errors?.required && ownStoreSearchForm.controls.requestID.touched'>
+                Fill all mandatory fields
+            </div>
+        </div>
+        <div class=' col-md-2'>
+            <button class='btn btn-primary mb-1 col-12' type='submit'>Search </button>   
+        </div>
+
+    </div>
+
+    <div class='result-header w-100 my-2'>Results</div>
+    <div class='row'>
+        <div class='mb-3 col-md-4'>
+            <label class='small mb-1 dropdown-label' for='DateRange'>Date Range</label>
+            <select class='form-select form-select-custom custom-select' id='DateRange' formControlName='dateRange'
+                (change)="$event.target.value==-1?dateRangeDrop.open():onDateRangeSelect($event.target.value);$event.target.value!=-1?dateRangeDrop.close():null">
+                <option class='custom-select-option' *ngFor='let date of dateRages' ngbDropdownItem [value]="date.id">
+                    {{date.value}}
+                </option>
+            </select>
+
+            <div class="d-inline-block" ngbDropdown #dateRangeDrop="ngbDropdown" [autoClose]="true">
+
+                <div ngbDropdownMenu aria-labelledby="dropdownManual">
+                    <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
+                        outsideDays="hidden" [maxDate]="maxDate">
+                    </ngb-datepicker>
+
+                    <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                            [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                            (mouseleave)="hoveredDate = null">
+                            {{ date.day }}
+                        </span>
+                    </ng-template>
+                </div>
+            </div>
+
+        </div>
+
+        <div class='mb-3 col-md-4'>
+            <label class='small mb-1 dropdown-label' for='DateRange'>Request Status</label>
+            <select class='form-select form-select-custom custom-select' id='DateRange' formControlName='status'
+                (change)="loadPage(1)">
+                <option class='custom-select-option' [ngValue]="null" selected>All</option>
+                <option class='custom-select-option' *ngFor='let transferStatus of transferStatus' ngbDropdownItem
+                    [value]="transferStatus.status_name">
+                    {{transferStatus.status_name}}
+                </option>
+            </select>
+        </div>
+        <div class='mb-3 col-md-4'>
+            <a class="info-icon" (click)="OnOpenInfo(ServiceRequestLegend)">
+                <svg class='icon text-black-75 back-arrow mt-3' aria-hidden='true' width='36' height='36'>
+                    <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#info'></use>
+                </svg> </a>
+
+        </div>
+    </div>
+</form>
+<div class="my-2 mb-4">
+    <div>
+        <div class='col-md-12 table-responsive'>
+            <table class="table border rounded my-3 w-100">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class='small' scope='col'>Request ID</th>
+                        <th class='small' scope='col'>Request Status</th>
+                        <th class='small' scope='col'>Date Created</th>
+                        <!-- <th class='small' scope='col'>Origin Store ID</th> -->
+                        <th class='small' scope='col'>Origin Name</th>
+                        <!-- <th class='small' scope='col'>Destination store ID</th> -->
+                        <th class='small' scope='col'>Destination Name</th>
+                        <!-- <th class='small' scope='col'>Remarks</th> -->
+                        <th class='small' scope='col'>Details</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf='stockResults?.length'>
+                    <tr *ngFor='let stockItem of stockResults'>
+                        <td class='small'>{{stockItem.transferId}}</td>
+                        <td class='small'>{{stockItem.transferStatus }}</td>
+                        <td class='small'>{{stockItem.createDate }}</td>
+                        <!-- <td class='small'>{{stockItem.transferFromStoreId }}</td> -->
+                        <td class='small'>{{stockItem.transferFromStoreName }}</td>
+                        <!-- <td class='small'>{{stockItem.transferToStoreId }}</td> -->
+                        <td class='small'>{{stockItem.transferToStoreName }}</td>
+                        <!-- <td class='small'>{{stockItem.comments }}</td> -->
+                        <td>
+                            <button class='btn btn-primary w-100 table-button-height'
+                                (click)="onSelectAction(stockItem)"
+                                type='button'>{{getActionButton(stockItem.transferStatus,stockItem.transferToStoreId===outletStoreDetails?.outlet_id)}}
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <SW-no-data *ngIf='!stockResults?.length' [height]="224" [content]="''" [message]="errorMessage">
+            </SW-no-data>
+        </div>
+        <div class="row dataTable-bottom" *ngIf="stockResults?.length">
+            <div class="col-md-6 dataTable-info">Showing {{(responseDetails?.number*pageSize) +1}}
+                to {{responseDetails?.totalElements<(responseDetails?.number+1) * pageSize
+                    ?responseDetails?.totalElements:(responseDetails?.number+1) * pageSize}} of
+                    {{responseDetails?.totalElements}} entries </div>
+                    <div class='col-md-6 d-flex justify-content-end'>
+                        <ngb-pagination (pageChange)='loadPage($event)'
+                            [collectionSize]='responseDetails?.totalElements' [maxSize]='3' [pageSize]='pageSize'
+                            [(page)]="pageNumber">
+                        </ngb-pagination>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #ServiceRequestLegend let-serviceRequestLegend>
+        <div class="modal-header">
+            <h5 class="modal-title"><span class="text-warning">Request Status Legend</span></h5>
+        </div>
+        <div class="modal-body">
+            <p class="text-black" style="margin-bottom: 0px;">
+                <span class="result-header">1. Awaiting Response:</span> Stock transfer has been submitted.
+                 awaiting response from the ROM/ZOM/Device Marketing to approve/reject.<br>
+                 <span class="result-header">2. Inbound Rejected Request/Outbound Rejected Request:</span>
+                 If request is rejected by the ROM/ZOM/Device Marketing,
+                  this status will appear.<br>
+                  <span class="result-header">3. Inbound Picking:</span> ROM/ZOM/Device Marketing approved,
+                 pending providing outlet to transfer the stock to the
+                pending Outlet.<br>
+                <span class="result-header">4. In Transit:</span> Distributor has transferred the stock to the Bluecube.
+                Bluecube needs to lookup for this
+                status to Acknowledge the stock received.<br>
+                <span class="result-header">5. Received:</span> Bluecube has acknowledged the stocks received (partial or full
+                acknowledgement).<br>
+                <span class="result-header">6. In Progress:</span> Once ROM/ZOM/Device Marketing approves, Distributor will
+                need to transfer stock to the
+                requesting outlet for all 'In Progress' status.<br>
+                <span class="result-header">7. Dispatched:</span> Once stocks have been transferred, status will change to
+                dispatched,pending
+                acknowledgement
+                from Requesting Outlet.<br>
+                <span class="result-header">8. Closed:</span> Once providing outlet has acknowledge the stock transfer, status
+                will be Closed.<br>
+                <span class="result-header">9. Pending Request:</span> ROM/ZOM/Device Marketing has to approve/reject requests
+                made by the Requesting
+                Outlet.<br>
+            </p>
+        </div>
+
+    </ng-template>

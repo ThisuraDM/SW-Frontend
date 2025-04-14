@@ -1,0 +1,108 @@
+<div class='container-xl px-4 mt-3'>
+    <div class="row gx-4">
+        <div class="col-12">
+            <sbpro-card>
+                <div class='card-header w-100'>
+                    <a (click)="navigateBack()">
+                        <svg class='icon text-black back-arrow' aria-hidden='true' width='24' height='24'>
+                            <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#arrow-previous'></use>
+                        </svg> </a>
+                    <span class="ml-5">Request Summary</span>
+                </div>
+
+                <div class="card-body">
+                    <div class="row d-flex justify-content-evenly gx-4">
+                        <div class="col-md-5">
+                            <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                <div>Store ID:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{requestSummaryDetails?.destination_outlet_store_id}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                                <div>Store Name:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{requestSummaryDetails?.destination_outlet_name}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                                <div>Request ID:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{requestSummaryDetails?.request_id}}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                <div>Request Status:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{requestSummaryDetails?.status}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                                <div>Request Date:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">{{requestSummaryDetails?.create_date}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="mt-2 mb-1">
+                        <span class="result-header">Return Request List</span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class='col-md-12 table-responsive'>
+                                <table class="table border rounded mt-0 mb-0 w-100">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th class='small' scope='col'>Category</th>
+                                        <th class='small' scope='col'>SAP Material Code</th>
+                                        <th class='small' scope='col'>Brand</th>
+                                        <th class='small' scope='col'>Item Name</th>
+                                        <th class='small' scope='col'>Quantity</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody *ngIf='tableDataList?.length'>
+                                    <tr
+                                        *ngFor='let outlet of tableDataList | slice : (pageNumber - 1) * 10 : (pageNumber - 1) * 10 + 10 let i = index'>
+                                        <td class='small'>{{outlet.category }}</td>
+                                        <td class='small'>{{outlet.sap_material_code }}</td>
+                                        <td class='small'>{{outlet.brand }}</td>
+                                        <td class='small'>{{outlet.item_name }}</td>
+                                        <td class='small'>{{outlet.requested_quantity }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <SW-no-data *ngIf='!tableDataList?.length' [height]="224" [message]="'Unable to load data.'">
+                                </SW-no-data>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2 dataTable-bottom" *ngIf="tableDataList?.length">
+                            <div class="col-md-6 dataTable-info">Showing 1 to {{10}} of {{tableDataList?.length}} entries
+                            </div>
+                            <div class='col-md-6 d-flex justify-content-end'>
+                                <ngb-pagination [collectionSize]='tableDataList?.length' [maxSize]='3' [pageSize]='10'
+                                                [(page)]="pageNumber">
+                                </ngb-pagination>
+                            </div>
+                        </div>
+
+                        <div class="row my-3 ms-2 w-100">
+                            <div class="col-md-5"></div>
+
+                            <div class="col-md-7 d-lg-flex justify-content-around">
+                                <button [disabled]="disablePrintButton" class="btn btn-outline-primary me-2 smaller-button mb-2" type="button"
+                                (click)="printReturnRequestSummaryToWarehouse()">
+                                    Print
+                                </button>
+
+                                <button class="btn btn-outline-primary me-2 smaller-button mb-2" type="button"
+                                (click)="navigateBack()">
+                                    Return
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+@import 'styles/core/variables';
+
+.input-h-1 {
+    height: 10px;
+    width: 150px;
+}
+
+.input-h-2 {
+    height: 44px;
+}
+
+// dropdowns
+.form-select-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.custom-select-option {
+    color: #424d52;
+}
+
+.custom-select {
+    color: $black;
+    font-weight: 600;
+    margin-left: -2.5px;
+}
+
+//inputs
+.form-control-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.custom-input {
+    color: $black;
+    font-weight: 600;
+    margin-left: -2.5px;
+}
+
+.text-black {
+    color: $black;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.table-button-height {
+    height: 26px;
+}
+
+.details-label {
+    color: #697479;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.text-invis {
+    color: #164396 !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.bc-grey{
+    background-color: #f4f4f5;
+}
+
+.ptb-1{
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+}
+
+.remove-shadow{
+    box-shadow: none !important;
+}
+
+.brad-035{
+    border-radius: 0.35rem;
+}
+
+.smaller-button{
+    width: 15%;
+}

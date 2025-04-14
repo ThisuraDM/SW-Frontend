@@ -1,0 +1,37 @@
+<svg id='Logo_SW' data-name='Logo — SW' xmlns='http://www.w3.org/2000/svg' width='150' height='76'
+     viewBox='0 0 150 76'>
+  <defs>
+    <linearGradient id="linear-gradient" x1="-0.005" y1="0.503" x2="0.997" y2="0.503" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#131850"/>
+      <stop offset="0.08" stop-color="#281753"/>
+      <stop offset="0.2" stop-color="#471558"/>
+      <stop offset="1" stop-color="#a52267"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.496" y1="-0.003" x2="0.496" y2="0.999" gradientUnits="objectBoundingBox">
+      <stop offset="0.1" stop-color="#df2808"/>
+      <stop offset="0.27" stop-color="#e33a06"/>
+      <stop offset="0.76" stop-color="#ee6a02"/>
+      <stop offset="1" stop-color="#f27c00"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="-0.005" y1="0.5" x2="0.997" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0.05" stop-color="#9b0f2c"/>
+      <stop offset="0.19" stop-color="#a90c30"/>
+      <stop offset="0.5" stop-color="#c40538"/>
+      <stop offset="0.78" stop-color="#d4013d"/>
+      <stop offset="1" stop-color="#da003f"/>
+    </linearGradient>
+  </defs>
+  <rect id="Rectangle_1621" data-name="Rectangle 1621" width="150" height="76" transform="translate(0 0)" fill="rgba(123,27,103,0)"/>
+  <path id="Shape" d="M20.611,25.054c-6.491,0-10.48,4.766-10.48,11.14.082,7.045,5,11.042,10.851,11.042a14.393,14.393,0,0,0,7.127-1.619,1.521,1.521,0,0,0,.677-1.519V41.231a14.031,14.031,0,0,1-5.923,1.448c-3.229,0-6.131-1.4-6.773-4.666H31a9.674,9.674,0,0,0,.091-1.5C31.048,30.109,27.664,25.054,20.611,25.054Zm-4.638,9.432c.234-2.9,2.261-4.9,4.712-4.9,2.83,0,4.44,1.973,4.683,4.9h-9.4Z" transform="translate(11.064 28.195)" fill="#fff"/>
+  <path id="Shape-2" data-name="Shape" d="M11.568,30.246a7.12,7.12,0,0,1,5.074,2.027L20.1,28.564A11.483,11.483,0,0,0,.365,36.025c0,7.233,5.081,11.214,11,11.214a14.282,14.282,0,0,0,7.064-1.584,1.537,1.537,0,0,0,.677-1.519V41.188a13.807,13.807,0,0,1-5.886,1.456c-3.817,0-6.891-1.981-6.891-6.619C6.333,32.807,8.547,30.246,11.568,30.246Z" transform="translate(-0.365 28.193)" fill="#fff"/>
+  <path id="Shape-3" data-name="Shape" d="M46.353,25.056A11.157,11.157,0,0,0,34.877,36.242c0,6.248,4.92,11,11.4,11S57.936,42.39,57.936,36.062,52.9,25.056,46.353,25.056Zm0,17.425a6.2,6.2,0,0,1-5.96-6.42A5.818,5.818,0,0,1,46.28,29.9a6.077,6.077,0,0,1,6.005,6.331,5.875,5.875,0,0,1-5.931,6.257Z" transform="translate(40.023 28.193)" fill="#fff"/>
+  <path id="Shape-4" data-name="Shape" d="M71.6,25.088a8.387,8.387,0,0,0-6.736,3.073,8.548,8.548,0,0,0-6.819-3.073,6.943,6.943,0,0,0-5.56,2.6V25.025c-.968.117-3.229.36-4.631,1.691a2.6,2.6,0,0,0-.768,1.979V46.782h5.426V33.118c0-1.81,1.81-3.221,4.123-3.221a4.957,4.957,0,0,1,2.65.679A3.08,3.08,0,0,1,60.7,33.4V46.782H66.01V33.118c0-1.81,1.808-3.221,4.115-3.221a4.948,4.948,0,0,1,2.659.679A3.077,3.077,0,0,1,74.194,33.4V46.782h5.426V31.462C79.611,27.881,76.075,25.088,71.6,25.088Z" transform="translate(54.303 28.162)" fill="#fff"/>
+  <path id="Shape-5" data-name="Shape" d="M36.456,30.249a7.139,7.139,0,0,1,5.074,2.027L45,28.567a11.493,11.493,0,0,0-19.758,7.461c0,7.233,5.091,11.214,11.014,11.214a14.222,14.222,0,0,0,7.053-1.584A1.545,1.545,0,0,0,44,44.139V41.192a13.87,13.87,0,0,1-5.886,1.456c-3.826,0-6.891-1.981-6.891-6.619C31.221,32.81,33.428,30.249,36.456,30.249Z" transform="translate(28.75 28.189)" fill="#fff"/>
+  <path id="Shape-6" data-name="Shape" d="M21.219,25.809V50.922H26.7V21.495c-.6.154-3.275.805-4.675,2.253a2.957,2.957,0,0,0-.805,2.062Z" transform="translate(24.039 24.031)" fill="#fff"/>
+  <path id="Path_5562" data-name="Path 5562" d="M119,564.468l16.153,9.313V555.3Z" transform="translate(-1.16 -527.506)" fill="#dc1965"/>
+  <path id="Path_5563" data-name="Path 5563" d="M119,536.2v18.481l16.153-9.168Z" transform="translate(-1.16 -536.2)" fill="#ffab08"/>
+  <path id="Path_5564" data-name="Path 5564" d="M135.153,542.6h0L119,551.768l16.153,9.313Z" transform="translate(-1.16 -533.287)" fill="#f27c00"/>
+  <path id="Path_5565" data-name="Path 5565" d="M146.107,567.381V548.9L130.1,558.213Z" transform="translate(3.893 -530.419)" fill="url(#linear-gradient)"/>
+  <path id="Path_5566" data-name="Path 5566" d="M130.1,561.081h0l16.007-9.313L130.1,542.6Z" transform="translate(3.893 -533.287)" fill="url(#linear-gradient-2)"/>
+  <path id="Path_5567" data-name="Path 5567" d="M146.107,564.468h0L130.1,555.3v18.481Z" transform="translate(3.893 -527.506)" fill="url(#linear-gradient-3)"/>
+</svg>

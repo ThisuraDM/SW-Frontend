@@ -1,0 +1,10 @@
+<SW-bc-stock-request-other-store
+    *ngIf="displayedScreen === 'main'"
+    (confirmClick)="onConfirmClick($event)">
+</SW-bc-stock-request-other-store>
+
+<SW-bc-view-stock-request-summary
+    *ngIf="displayedScreen === 'view-summary'"
+    (returnToPreviousScreen)="displayedScreen = 'main'"
+    [requestId]="requestId">
+</SW-bc-view-stock-request-summary>

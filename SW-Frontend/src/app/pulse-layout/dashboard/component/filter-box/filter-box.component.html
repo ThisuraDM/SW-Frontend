@@ -1,0 +1,95 @@
+<sbpro-card [classes]="['h-100']">
+    <div
+        class='
+            card card-body
+            bg-gradient-primary-to-secondary
+            h-100
+            d-flex
+            flex-column
+            justify-content-center
+            py-5 py-xl-4
+        '
+    >
+        <div class='row gx-4 align-items-center'>
+            <div class='col-xl-12 col-xxl-12'>
+                <div class='row'>
+                    <div class='col-md-8'>
+                        <div class='text-white text-lg fw-bolder'>Monthly Performance</div>
+                        <div class='text-white-75 small'>Select filter view data</div>
+                        <div class='row mt-2'>
+                            <div class='col-md-4 col-sm-12 col-12 mb-2' *ngIf='region'>
+                                <div>
+                                    <div class='dropdown-label'>Region</div>
+                                    <ng-multiselect-dropdown
+                                        class='container p-0'
+                                        [placeholder]="'Region'"
+                                        [settings]='regionSettings'
+                                        [data]='regionList'
+                                        [(ngModel)]='selectedRegion'
+                                        (onSelect)='onRegionSelect($event)'
+                                        (onDeSelect)='onRegionDeSelect()'
+                                    >
+                                    </ng-multiselect-dropdown>
+                                </div>
+                                <span *ngIf='regionEmpty' class='small fw-500 text-danger'
+                                >Please select a region *</span
+                                >
+                            </div>
+                            <div class='col-md-4 col-sm-12 col-12 mb-2' *ngIf='outlet'>
+                                <div>
+                                    <div class='dropdown-label'>Outlet</div>
+                                    <ng-multiselect-dropdown
+                                        class='container p-0'
+                                        [placeholder]="'Outlet'"
+                                        [settings]='outletSettings'
+                                        [data]='outletList'
+                                        [(ngModel)]='selectedOutlets'
+                                        (onSelect)='onOutletChange()'
+                                        (onDeSelect)='onOutletChange()'
+                                    >
+                                    </ng-multiselect-dropdown>
+                                </div>
+                                <span *ngIf='outletsEmpty' class='small fw-500 text-danger'
+                                >Please select an outlet *</span
+                                >
+                            </div>
+                            <div class='col-md-4 col-sm-12 col-12 mb-2' *ngIf='store'>
+                                <div>
+                                    <div class='dropdown-label'>Store</div>
+                                    <ng-multiselect-dropdown
+                                        class='container p-0'
+                                        [placeholder]="'Store'"
+                                        [settings]='storeSettings'
+                                        [data]='storeList'
+                                        [(ngModel)]='selectedStores'
+                                        (onSelect)='onStoreChange()'
+                                        (onDeSelect)='onStoreChange()'
+                                    >
+                                    </ng-multiselect-dropdown>
+                                </div>
+                                <span *ngIf='storeEmpty' class='small fw-500 text-danger'
+                                >Please select a store *</span
+                                >
+                            </div>
+                            <div class='col-md-4 col-sm-12 mb-2' *ngIf='date'>
+                                <SW-month-picker
+                                    (selectYearAndMonth)='setYearAndMonth($event)'
+                                ></SW-month-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-4 d-none d-md-block'>
+                        <div class='row'>
+                            <img
+                                class='img-fluid'
+                                style='width: auto'
+                                src='../../../../../assets/img/illustrations/data-report.svg'
+                                alt='Data Report Icon'
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</sbpro-card>

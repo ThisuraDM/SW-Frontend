@@ -1,0 +1,182 @@
+<div class='container-xl px-4 mt-3'>
+    <div class="row gx-4">
+        <div class="col-md-12">
+            <sbpro-card>
+                <div class="card-header">
+
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>Transfer Information</div>
+                        <div class="d-flex flex-row pending-request-button"
+                            (click)="onPendingRequestClick(historicalDataModal, {centered: true, size: 'lg'})">
+                            <div class="h5 card-title mb-0 text-primary"> <span class="result-header-600">Status:
+                                </span>{{status == 'Inbound-Picking' ? 'PICKUP IN PROGRESS' : status.toUpperCase()}}</div>
+                                
+                            <i-feather class="flex-shrink-0 text-primary mt-1" name="chevron-right"></i-feather>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                <div>Transfer ID:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">
+                                    {{stockTransferDetails?.request_id}}</div>
+                            </div>
+
+                            <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                <div>Updated Date</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">
+                                    {{stockTransferDetails?.last_status_updated_date | date}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                <div>Transferred Date</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">
+                                    {{stockTransferDetails?.approved_date | date}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+
+                </div>
+            </sbpro-card>
+        </div>
+
+        <div class="col-12">
+            <sbpro-card>
+                <div class="card-header">
+                    Stock List Received
+                </div>
+                <div class="card-body">
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap mb-3'>
+                        <div>Here is the summary of item(s) received from Device Management Team</div>
+                    </div>
+                    <div *ngIf="requestorPage == 2 && !checkAllVerified()"  class='alert alert-warning alert-clr-warning' role='alert'>
+                        <div class='align-items-center justify-content-between'>
+                            <div class='col-auto'>
+                                <ol class='breadcrumb rounded'>
+                                    <li>
+                                        <span>
+                                            <svg class='icon text-warning' style="margin-right: 10px;"
+                                                aria-hidden='true' width='20' height='20'>
+                                                <use
+                                                    xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#error-filled'>
+                                                </use>
+                                            </svg> Looks like 1 or more item(s) are still not acknowledged by you. Please click on Start Scan to proceed.
+                                        </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="requestorPage == 2 && checkAllVerified()" class='alert alert-success alert-clr-success' role='alert'>
+                        <div class='align-items-center justify-content-between'>
+                            <div class='col-auto'>
+                                <ol class='breadcrumb rounded'>
+                                    <li>
+                                        <span>
+                                            <svg class='icon text-success' style="margin-right: 10px;"
+                                                aria-hidden='true' width='20' height='20'>
+                                                <use
+                                                    xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#error-filled'>
+                                                </use>
+                                            </svg> The stock request is ready to be acknowledged. Please acknowledge below to proceed.
+                                        </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <sbpro-card class="mb-3" *ngFor="let item of tableDataList; let indexOfelement=index;">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="result-header-600">{{item.item_name}}
+                                    <span
+                                        *ngIf="userType === 'destination-user' && requestorPage == 2 && !item.isVerified"
+                                        class="badge bg-warning-soft text-warning ms-auto">Pending
+                                        Acknowledgement</span>
+                                    <span
+                                        *ngIf="userType === 'destination-user' && requestorPage == 2 && item.isVerified"
+                                        class="badge bg-success-soft text-success ms-auto">Confirmed</span>
+                                </div>
+                                <div *ngIf="requestorPage == 2 && !item.isVerified"
+                                    class='d-flex justify-content-end smaller-button'>
+                                    <button class='btn btn-primary search-button-width' type='button'
+                                        (click)="onStartAcknowledgeClick(item)">Start Scan
+                                    </button>
+                                </div>
+                                <div *ngIf="requestorPage == 2 && item.isVerified"
+                                    class='d-flex justify-content-end smaller-button'>
+                                    <button class='btn btn-primary search-button-width' type='button'
+                                        (click)="onStartAcknowledgeClick(item)">Edit Scan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                        <div>Item Name:</div>
+                                        <div class="text-overflow-ellipsis text-black text-bold-600">{{item.item_name}}
+                                        </div>
+                                    </div>
+                                    <div
+                                        class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                                        <div>Transfer Quantity:</div>
+                                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                                            {{item.requested_quantity}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                        <div>Sap Material Code</div>
+                                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                                            {{item.sap_material_code}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </sbpro-card>
+                    <div class="d-flex flex-row mb-3" style="background-color: #f9f9f9;">
+                        <span class="text-black result-header-600" style="margin: 10px;">Remarks:</span>
+                        <span style="margin: 10px;"
+                            class="text-black fw-bold text-align-left remark-margin word-wrap">{{stockTransferDetails?.remarks}}</span>                 
+                    </div>
+
+                    <div class='d-flex justify-content-end'>
+                        <button class="btn btn-primary me-2 smaller-button mb-2"                      
+                            [disabled]="disableSubmit || !checkAllVerified()" type="button" (click)="onAcknowledgeClick()">Acknowledge
+                        </button>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #historicalDataModal>
+    <SW-historical-data [stockTransferDetails]="stockTransferDetails"></SW-historical-data>
+</ng-template>
+
+<ng-template #modalAcknowledge let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Success!</span></h5>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>{{stockTransferDetails.request_id}} has been succesfully acknowledged.</div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-primary' type='button' (click)='submitClose()'>Close</button>
+    </div>
+</ng-template>

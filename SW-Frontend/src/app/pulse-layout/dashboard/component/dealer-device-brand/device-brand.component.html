@@ -1,0 +1,33 @@
+<div class='text text-black text-lg fw-500 mb-2'>Device By Brand</div>
+<div class='text-75 small' style='margin-top:5px;'>Hover on the chart to view respective model.</div>
+<br>
+
+<div style='margin-bottom: 2rem !important;' class='row mb-4'>
+    <div class='col-md-6'>
+        <div class='chart-pie mb-4'>
+            <div class='chart-pie' [style.height]='height' [style.width]='width'>
+                <canvas #myPieChart></canvas>
+            </div>
+            <div class='small text-center fw-600 mt-4'>Device by Brand for</div>
+            <div class='small text-center text-primary '><strong>{{dataPeriod}}</strong></div>
+        </div>
+    </div>
+    <div class='col-md-6'>
+        <div class='list-group list-group-flush' *ngFor='let label of deviceSellingBrandDataWithColorList'>
+            <div class='list-group-item d-flex align-items-center justify-content-between small px-0 py-2'>
+                <div class='me-3'>
+                    <fa-icon class='me-1' [ngStyle]='{color: label.colour}' [icon]='["fas", "circle"]'></fa-icon>
+                    {{label.brand}}</div>
+                <div class='text-dark'><strong>{{label.count}}</strong></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #noDeviceByBrand>
+    <div class='row gx-4'>
+        <div class='col-md-12'>
+            <SW-no-data height='250'></SW-no-data>
+        </div>
+    </div>
+</ng-template>

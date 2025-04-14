@@ -1,0 +1,230 @@
+<sbpro-card-navigation class='mb-4' [navNames]='[ "Past","Current",]' [templates]='[ activitiesPill,overviewPill]' [selectedIndex]="1"
+    [cardHeader]="'Collection List'" [isCardHeaderVisible]="true" navType='tabbed' (onNavItemClick)="$event==='Past'?this.loadPage('current'):null">
+    <ng-template #overviewPill>
+        <div class='row' *ngIf="currentCollectionList.length > 0">
+            <div class='col-md-12'>
+                <div class="dataTable-top">
+                    <div class="dataTable-dropdown"><label>
+                            <select class="dataTable-selector" name='pageSize' [(ngModel)]='page_size'
+                                (ngModelChange)="loadCLPage(page_number)">
+                                <option value="5">5</option>
+                                <option value="10" selected="">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                            </select> entries per page</label></div>
+                    <div class="dataTable-search col-md-2 col-sm-12">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row' *ngIf="currentCollectionList.length > 0">
+            <div class='col-xl-12'>
+                <div *ngIf='loaded else skeletonLoader' class="dataTable-container">
+                    <table id="datatablesSimple" class="dataTable-table">
+                        <thead>
+                            <tr>
+                                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                                        [ngClass]="SortHeaderName == 'bank_in_type'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                                        (click)="sortCollectionTable(-1*sortOrder,'bank_in_type')">Bank in Type</a>
+                                </th>
+                                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                                        [ngClass]="SortHeaderName == 'bank_in_amount'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                                        (click)="sortCollectionTable(-1*sortOrder,'bank_in_amount')">Amount</a>
+                                </th>
+                                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                                        [ngClass]="SortHeaderName == 'bank_in_time'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                                        (click)="sortCollectionTable(-1*sortOrder,'bank_in_time')">Transaction Time</a>
+                                </th>
+                                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                                        [ngClass]="SortHeaderName == 'reference_id'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                                        (click)="sortCollectionTable(-1*sortOrder,'reference_id')">Reference ID</a>
+                                </th>
+                                <th data-sortable=""><a class="dataTable-sorter" style="text-align:center!important;padding-right: 1rem !important">Actions</a></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="currentCollectionList.length > 0">
+                            <tr *ngFor='let collection of currentCollectionList let i = index'>
+                                <td>{{collection.bank_in_type}}</td>
+                                <td>{{collection.bank_in_amount| number : '1.2-2'}}</td>
+                                <td>{{collection.bank_in_time | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{collection.reference_id}}</td>
+                                <td class="pointer" (click)="onDeleteCollection(collection.id)" style="text-align:center!important;padding-right: 1rem !important">Delete
+                                    <svg class='icon text-black ml-1 mb-1' aria-hidden='true' width='18' height='18'>
+                                        <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#trash'></use>
+                                    </svg>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-template #skeletonLoader>
+                    <div class='card-body'>
+                        <div class='d-flex justify-content-center'>
+                            <SW-skeleton-loader *ngIf='!loaded' cWidth='330' cHeight='200'></SW-skeleton-loader>
+                        </div>
+                        <div class='d-flex justify-content-center'>
+                            <div class='pt-3'>
+                                <SW-skeleton-loader *ngIf='!loaded' cWidth='200' cHeight='30'>
+                                </SW-skeleton-loader>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class='row  pt-2'>
+                    <div class='col-sm-12 col-md-6'>
+
+                    </div>
+                    <div class='col-sm-12 col-md-6 d-flex justify-content-end'>
+                        <div class='row d-flex justify-content-end'>
+                            <div class='col-sm-12 col-md-auto '>
+                                <ngb-pagination (pageChange)='loadCLPage($event)' [collectionSize]='total_elements'
+                                    [maxSize]='3' [(page)]='page_number' [pageSize]='page_size'>
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row' *ngIf="currentCollectionList.length > 0">
+            <div class='col-xl-3  col-sm-12 col-xs-12 col-12'>
+                <button class='btn btn-primary btn-sub-col' type='button' (click)="openConfirmSubmit()"
+                    [disabled]="fileSizesExceeded">Submit</button>
+            </div>
+        </div>
+        <div class="row" *ngIf="!currentCollectionList || currentCollectionList.length == 0">
+            No pending threshold declarations.
+        </div>
+    </ng-template>
+    <ng-template #activitiesPill>
+
+        <div class="dataTable-top">
+            <div class="dataTable-dropdown"><label>
+                    <select class="dataTable-selector" name='pageSize' [(ngModel)]='pageSize'
+                        (ngModelChange)="loadPage('first')">
+                        <option value="5">5</option>
+                        <option value="10" selected="">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select> entries per page</label></div>
+            <div class="dataTable-search col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 col-12'">
+                <div>
+                    <div class='dropdown-label product-label'>Product</div>
+                    <select class='form-select form-select-111 custom-select' name='pageSize'
+                        (ngModelChange)="loadPage('first')" [(ngModel)]='dateRangeSelected'>
+                        <option value="0" class='dtxt-c'>Current Month</option>
+                        <option value="1" class='dtxt-c'>Past Month</option>
+                        <option value="2" class='dtxt-c'>Past 6 Months</option>
+                        <option value="3" class='dtxt-c'>Past 1 Year</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="table-responsive">
+
+            <div *ngIf='loaded else skeletonLoader' class="dataTable-container">
+                <table id="datatablesSimple" class="dataTable-table">
+                    <thead>
+                        <tr>
+                            <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                                    [ngClass]="SortHeaderName == 'requested_date'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                                    (click)="sortTable(-1*sortOrder,'requested_date')">Date</a>
+                            </th>
+                            <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                                    [ngClass]="SortHeaderName == 'threshold_amount'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                                    (click)="sortTable(-1*sortOrder,'threshold_amount')">Threshold Requested (RM)</a>
+                            </th>
+                            <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                                    [ngClass]="SortHeaderName == 'transaction_id'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                                    (click)="sortTable(-1*sortOrder,'transaction_id')">Transaction ID</a>
+                            </th>
+                            <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                                    [ngClass]="SortHeaderName == 'status'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                                    (click)="sortTable(-1*sortOrder,'status')">Status</a>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor='let outlet of tablePastDataList let i = index'>
+                            <td>{{PastThresholDate(outlet.requested_date)||''}}</td>
+                            <td>RM {{outlet.threshold_amount||0 | number : '1.2-2'}}</td>
+                            <td>{{outlet.transaction_id}}</td>
+                            <td>{{outlet.status}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='!tablePastDataList.length' [height]="224"
+                    [message]="'Unable to retrieve information.'">
+                </SW-no-data>
+            </div>
+            <ng-template #skeletonLoader>
+                <div class='card-body'>
+                    <div class='d-flex justify-content-center'>
+                        <SW-skeleton-loader *ngIf='!loaded' cWidth='330' cHeight='200'></SW-skeleton-loader>
+                    </div>
+                    <div class='d-flex justify-content-center'>
+                        <div class='pt-3'>
+                            <SW-skeleton-loader *ngIf='!loaded' cWidth='200' cHeight='30'></SW-skeleton-loader>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <div class="row dataTable-bottom">
+            <div class="col-md-6 dataTable-info">
+
+            </div>
+            <div class='col-md-6 d-flex justify-content-end'>
+                <div class="pagination">
+                    <a (click)="loadPage('prev')" class="pagination-next"
+                        [ngClass]="pageNo-1<0 || !loaded ? 'link-disabled' : 'link-active'">«</a>
+                    <a [ngClass]="'link-disabled'">{{pageNo+1}}</a>
+                    <a (click)="loadPage('next')" class="pagination-prev"
+                        [ngClass]="tablePastDataList.length == 0 || tablePastDataList.length<pageSize || !loaded? 'link-disabled' : 'link-active'">»</a>
+                </div>
+            </div>
+
+        </div>
+    </ng-template>
+</sbpro-card-navigation>
+
+<ng-template #modalConfirmTopUp let-modal>
+    <div class='modal-header'>
+        <h3 class='modal-title fw-bolder'>Confirm Threshold Request</h3>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>Are you sure you want to submit the Threshold?</div>
+        <div class='row'>
+            <div class='col-xl-6 col-lg-6 col-md-6'>
+                <div class='card border-top-0 border-bottom-0 border-end-0 border-start-lg border-primary h-auto'>
+                    <div class='card-body'>
+                        <div class='d-flex align-items-center '>
+                            <div class='flex-grow-1 '>
+                                <div class='card-body'>
+                                    <div class='d-flex align-items-center '>
+                                        <div class='flex-grow-1 '>
+                                            <div class='fw-bold text-primary'>Total</div>
+                                            <div class='h4 mb-0 fw-bold'>RM {{total|number : '1.2-2'}}</div>
+                                            <div class='text-xs fw-bold'>Threshold Request</div>
+                                        </div>
+                                        <div class='ms-2'>
+                                            <fa-icon class='fa-2x text-gray-200' [icon]='["fas", "tag"]'></fa-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-outline-primary" type="button" (click)='modal.close("Save Click")'>Cancel</button>
+        <button class="btn btn-primary ml-3" type="submit" [disabled]="thesholdSubmitConfirmDisabled" (click)='onSubmitCurrentThresholds()'>Confirm</button>
+    </div>
+</ng-template>

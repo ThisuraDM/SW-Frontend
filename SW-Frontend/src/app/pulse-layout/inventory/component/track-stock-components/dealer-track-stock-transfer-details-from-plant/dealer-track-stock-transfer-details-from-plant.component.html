@@ -1,0 +1,184 @@
+<div class='container-xl px-4 mt-3'>
+    <div class="row gx-4">
+        <div class="col-md-5">
+            <sbpro-card>
+                <div class="card-header">
+                    Request Information
+                </div>
+                <div class="card-body">
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                        <div>Request ID:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{stockTransferDetails?.request_id}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                        <div>Sales Order ID:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{salesOrderID}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                        <div>Approved Date</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{stockTransferDetails?.approved_date}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                        <div>Updated Date</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{stockTransferDetails?.updated_date}}</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="result-header-600">Status:</div>
+                        <div class="d-flex flex-row pending-request-button"
+                             (click)="onCurrentStatusClick(historicalDataModal, {centered: true, size: 'lg'})">
+                            <div class="h5 card-title mb-0 text-primary">{{status.toUpperCase()}}</div>
+                            <i-feather class="flex-shrink-0 text-primary mt-1" name="chevron-right"></i-feather>
+                        </div>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+
+        <div class="col-md-7">
+            <sbpro-card>
+                <div class="card-header">
+                    Track Stock Movement
+                </div>
+                <div class="card-body">
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                        <div>Order Create Date:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{stockTransferDetails?.create_date}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                        <div>Delivery Date:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{stockTransferDetails?.transfer_date}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                        <div>Delivery Status:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{status}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                        <div>Ship Via:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{''}}</div>
+                    </div>
+                </div>
+                <!-- [ngClass]="{'disable-link': statusUppercase === 'DO ISSUED', 'text-primary pointer': statusUppercase === 'DO ISSUED'}" -->
+                <div class="card-footer card-footer-height">
+                    <div class="row d-flex align-items-center justify-content-between action-bar-margin">
+                        <div class="col-md-8 d-flex d-inline-flex">
+                             <div class="mb-0 me-3 text-bold-600 small"
+                             [ngClass]="{'disable-link': isInvoiceDisable, 'text-primary pointer': !isInvoiceDisable}"
+                             (click)="!isInvoiceDisable ? onDownloadLink('SALES_INVOICE') : null">
+                                Download Invoice
+                            </div>
+                            <div class="mb-0 text-bold-600 small"
+                                 [ngClass]="{'disable-link': isDODisable, 'text-primary pointer': !isDODisable}"
+                               (click)="!isDODisable ? onDownloadLink('DELIVERY_ORDER') : null">
+                                Download Delivery Order
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <button class="btn btn-primary view-more-button" type="button" (click)="viewMoreClick.emit(true)">View More</button>
+                        </div>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Request Stock List
+                </div>
+                <div class="card-body">
+                    <div class='col-md-12 table-responsive'>
+                        <table class="table border rounded mt-0 my-3 w-100">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th class='small' scope='col'>Item Name</th>
+                                <th class='small' scope='col'>SAP Material Code</th>
+                                <th class='small' scope='col'>Requested QTY</th>
+                                <th class='small' scope='col'>Approved QTY</th>
+                            </tr>
+                            </thead>
+                            <tbody *ngIf='tableDataList?.length'>
+                            <tr
+                                *ngFor='let outlet of tableDataList'>
+                                <td class='small'>{{outlet.item_name }}</td>
+                                <td class='small'>{{outlet.sap_material_code }}</td>
+                                <td class='small'>{{outlet.requested_quantity }}</td>
+                                <td class='small'>{{outlet.approved_quantity }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <SW-no-data *ngIf='!tableDataList?.length' [height]="224" [message]="'Unable to load data.'">
+                        </SW-no-data>
+                    </div>
+                    <div class="d-flex justify-content-end mt-2 mb-2 me-2 mr-2">
+                        <div class="col-12 col-md-5">
+                            <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                <div>Total (Not Including Tax):</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">RM
+                                    {{(stockTransferDetails?.grand_total_amount || 0) | currency : '' : ''}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                                <div>Service Tax (0%):</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">RM {{0 | currency : '' :
+                                    ''}}</div>
+                            </div>
+                            <hr>
+                            <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                <div>Grand Total:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">RM
+                                    {{(stockTransferDetails?.grand_total_amount || 0) | currency : '' : ''}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 ms-2 w-100">
+                        <div class="col-md-4">
+                            <!-- <button class="btn btn-outline-danger cancel-request-button mb-2"
+                                    [disabled]="statusUppercase !== 'SO APPROVED'"
+                                    type="button" (click)="onCancelRequestClick()">Cancel Request</button> -->
+                        </div>
+    
+                        <div class="col-md-8 text-align-right">
+                            <button class="btn btn-primary me-2 smaller-button mb-2"
+                                    *ngIf="statusUppercase === 'SO APPROVED'"
+                                    type="button" (click)="onAcceptRejectClick(stockTransfersAcceptRejectModal, {backdrop: 'static', centered: true})">
+                                Accept / Reject
+                            </button>
+    
+                            <!-- <button class="btn btn-primary me-2 smaller-button mb-2"
+                                    *ngIf="statusUppercase === 'SO ACCEPTED'"
+                                    type="button" (click)="startAcknowledgeClick.emit(true)">Start Acknowledge
+                            </button> -->
+                            <!-- <button class="btn btn-primary smaller-button me-2 mb-2" type="button" (click)="onGetTotalClick()">
+                                Get Total
+                            </button> -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #historicalDataModal>
+    <SW-historical-data
+        [isBlueCubeUser]="false"
+        [dealerStockTransferDetails]="stockTransferDetails">
+    </SW-historical-data>
+</ng-template>
+
+<ng-template #stockTransfersAcceptRejectModal let-acceptRejectModal>
+    <div class="modal-header">
+        <h5 class="modal-title"><span class="text-danger">Alert!</span></h5>
+    </div>
+    <div class="modal-body">
+        Your stock order have been approved, would you like to accept or reject it?
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-outline-primary popup-button" type="button" (click)="onPopupAcceptRejectClick('C')">Reject</button>
+        <button class="btn btn-primary popup-button" type="button" (click)="onPopupAcceptRejectClick('A')">Accept</button>
+    </div>
+</ng-template>

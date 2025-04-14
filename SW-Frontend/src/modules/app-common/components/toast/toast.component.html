@@ -1,0 +1,12 @@
+<div class='toast show mb-1' [ngClass]='classes' role='alert' aria-live='assertive' aria-atomic='true'
+     data-delay='7500'>
+    <div class='toast-header mb-1 mt-2' [ngClass]='headerClasses'>
+        <strong class='me-auto text-lg'>{{header}}</strong>
+        <button class="btn-close" type="button" aria-label="Close" (click)="toastService.remove(toastID)">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class='toast-body' [ngClass]='bodyClasses'>
+        <div class='mb-2 mt-2'>{{body}}</div>
+    </div>
+</div>

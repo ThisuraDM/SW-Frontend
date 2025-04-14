@@ -1,0 +1,33 @@
+@import '../../../../../styles/core/variables';
+
+.bsDetails {
+    //display: flex;
+    //justify-content: flex-end;
+    float: right;
+    width: 130px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+}
+
+.select-label {
+    position: absolute;
+    left: 2.5rem;
+    margin-top: 4px;
+    color: $gray-600;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.form-select {
+    padding: 1.4rem 3.375rem 0.875rem 1.125rem !important
+}
+
+.dtxt-c{
+    color: #424d52;
+}

@@ -1,0 +1,73 @@
+<!-- KPI information card-->
+<div class='card'>
+    <div class='card-body' *ngIf='loaded else skeletonLoader'>
+        <div class='h-100 d-flex flex-row justify-content-around mb-3 px-0'>
+            <div class='w-100 d-flex justify-content-center align-items-center px-2'>
+                <SW-kpi-info-pie-chart
+                    [value]='getOverflowPercentageValue(kpiInformation!.percentage ?? 0)'></SW-kpi-info-pie-chart>
+            </div>
+            <div class='w-100 d-flex flex-column justify-content-start product-container'>
+                <div style='margin-bottom: 0.2rem'>
+                    <span style='font-size: 1rem' class='text-primary fw-600 bsDetails' title="{{kpiInformation.product_name}}">{{kpiInformation.product_name}}</span>
+                </div>
+                <span style='font-size: 1.5rem'
+                      class='text-black-75 line-height-normal fw-bolder'>{{kpiInformation.percentage ?? 0 | number: '1.0-0'}}
+                    %</span>
+                <span style='font-size: 1.5rem'
+                      class='text-black-75 line-height-normal fw-bolder'>{{kpiInformation.sales ?? 0 | number: '1.0-0'}}</span>
+                <span style='font-size: 0.85rem' class='text-gary-600 fw-600'>{{kpiInformation.registration}}</span>
+            </div>
+        </div>
+        <div class='h-100 d-flex flex-row justify-content-start'>
+            <div class='w-100 d-flex align-items-center ml-5'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><defs><style>.a{fill:#009bdf;}</style></defs><path class="a" d="M18.086,26.324v7.817a.624.624,0,0,1-.623.623H.623A.624.624,0,0,1,0,34.141V17.3a.624.624,0,0,1,.623-.623H8.44a.616.616,0,0,1,.589.434.5.5,0,0,1,.034.189l-.017,7.777a.619.619,0,0,0,.617.623h7.8a.5.5,0,0,1,.189.034A.615.615,0,0,1,18.086,26.324Z" transform="translate(0 -14.764)"/><path class="a" d="M104.48.623v7.8a.624.624,0,0,1-.623.623h-7.8a.624.624,0,0,1-.623-.623V.623A.624.624,0,0,1,96.057,0h7.8A.624.624,0,0,1,104.48.623Z" transform="translate(-84.48)"/></svg>
+                <div class='d-flex flex-wrap justify-content-start ms-2 flex-column'>
+                    <span class='text-black text-lg fw-bolder'>{{kpiInformation.variance ?? 0 | number: '1.0-0'}}</span>
+                    <span style='font-size: 0.75rem' class='text-gary-600 fw-600'>Variance</span>
+                </div>
+            </div>
+            <div class='w-100 d-flex align-items-center ml-5'>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><defs><style>.a{fill:#009bdf;}</style></defs><g transform="translate(0 -0.001)"><g transform="translate(0 0.001)"><g transform="translate(0 0)"><path class="a" d="M10.422,9.6s0-.008-.008-.011L7.071,6.243v-2.1A.586.586,0,0,0,6.9,3.728L3.383.173a.586.586,0,0,0-1,.414V2.345H.586a.586.586,0,0,0-.414,1L3.727,6.9a.585.585,0,0,0,.414.172h2.1l3.344,3.344s.008,0,.011.008a.583.583,0,0,0,.825-.825Z" transform="translate(0 -0.001)"/></g></g><g transform="translate(0 0.001)"><g transform="translate(0 0)"><path class="a" d="M10,0A9.912,9.912,0,0,0,5.81.979l1.8,1.8A7.636,7.636,0,1,1,2.778,7.606l-1.8-1.8A9.914,9.914,0,0,0,0,10,10,10,0,1,0,10,0Z" transform="translate(-0.003 -0.002)"/></g></g><g transform="translate(4.727 4.728)"><path class="a" d="M126.275,121a5.211,5.211,0,0,0-1.758.324v.706l1.355,1.355a2.884,2.884,0,0,1,.4-.041,2.93,2.93,0,1,1-2.93,2.93,2.883,2.883,0,0,1,.041-.4l-1.355-1.355h-.706a5.211,5.211,0,0,0-.324,1.758A5.273,5.273,0,1,0,126.275,121Z" transform="translate(-121.002 -121.001)"/></g></g></svg>
+                <div class='d-flex flex-wrap justify-content-start ms-2 flex-column'>
+                    <span
+                        class='text-black text-lg fw-bolder'>{{kpiInformation.total_target ?? 0 | number: '1.0-0'}}</span>
+                        <span style='font-size: 0.75rem' class='text-gary-600 fw-600'>Total target</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #skeletonLoader>
+    <div class='card-body'>
+        <div class='h-100 d-flex flex-row justify-content-around mb-4 px-0'>
+            <div class='w-100 d-flex justify-content-center align-items-center px-0'>
+                <SW-skeleton-loader cWidth='100' cHeight='100' circle='true'></SW-skeleton-loader>
+            </div>
+            <div class='w-100 d-flex flex-column justify-content-start'>
+                <div style='margin-bottom: 0.4rem'>
+                    <SW-skeleton-loader cWidth='100' cHeight='20'></SW-skeleton-loader>
+                </div>
+                <SW-skeleton-loader cWidth='100' cHeight='40'></SW-skeleton-loader>
+                <SW-skeleton-loader cWidth='100' cHeight='30'></SW-skeleton-loader>
+                <SW-skeleton-loader cWidth='100' cHeight='20'></SW-skeleton-loader>
+            </div>
+        </div>
+        <div class='h-100 d-flex flex-row justify-content-start'>
+            <div class='w-100 d-flex align-items-center'>
+                <SW-skeleton-loader cWidth='40' cHeight='40'></SW-skeleton-loader>
+                <div class='d-flex flex-wrap justify-content-start ms-1'>
+                    <SW-skeleton-loader cWidth='60' cHeight='20'></SW-skeleton-loader>
+                    <SW-skeleton-loader cWidth='60' cHeight='10'></SW-skeleton-loader>
+                </div>
+            </div>
+            <div class='w-100 d-flex align-items-center'>
+                <SW-skeleton-loader cWidth='40' cHeight='40'></SW-skeleton-loader>
+                <div class='d-flex flex-wrap justify-content-start ms-1'>
+                    <SW-skeleton-loader cWidth='60' cHeight='20'></SW-skeleton-loader>
+                    <SW-skeleton-loader cWidth='60' cHeight='10'></SW-skeleton-loader>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,98 @@
+<sbpro-card>
+    <div class='card-header'>Outlet Ranking</div>
+    <div class='card-body' *ngIf='loaded else skeletonLoader'>
+        <div class='col-lg-7 col-md-8 col-xs-12'>
+            <div class='text-75 small'> Select the data filter</div>
+            <div>
+                <div class='dropdown-label' style='margin-top: 10px;'>Product</div>
+                <select class='form-select form-select-111 custom-select' name='pageSize' (change)='productChange()'
+                        [(ngModel)]='selectedProductId'>
+                    <option class='dtxt-c' *ngFor='let product of products; let i = index'
+                            [value]='product.id'>{{product.display_name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class='alert alert-primary dashboard-alert' role='alert'>
+            <div class='row'>
+                <div class='col-auto'>
+                    <div class='text-75 small mt-txt dtxt-c'>Sort by</div>
+                </div>
+                <div class='col-auto'>
+                    <select class='form-select form-select2 sortDD' name='pageSize' (change)='sortByChange()'
+                            [(ngModel)]='sortBy'>
+                        <option value='sales'>Volume</option>
+                        <option value='target'>Target</option>
+                        <option value='achieved_percentage'>% Target</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-12'>
+            <table class='table outletTable table-striped border rounded'>
+                <thead>
+                <tr>
+                    <th class='p-2' scope='col'></th>
+                    <th class='p-2' scope='col'></th>
+                    <th class='p-2' scope='col'>Volume</th>
+                    <th class='p-2' scope='col'>Target</th>
+                    <th class='p-2' scope='col'>%Target</th>
+                </tr>
+                </thead>
+                <tbody *ngIf='outletRanking?.content?.length'>
+                <tr *ngFor='let outlet of outletRanking?.content let i = index'>
+                    <td class='p-2 border-top-0 fw-700'>{{((i + 1) + (outletRanking.number * outletRanking.size)) - outletRanking.size }}</td>
+                    <td class='p-2 border-top-0'>{{outlet.outlet_name}}</td>
+                    <td class='p-2 border-top-0 tdTxtAlign'>{{outlet.sales }}</td>
+                    <td class='p-2 border-top-0 tdTxtAlign'>{{outlet.target ?? 0 | number: '1.0-0'}}</td>
+                    <td class='p-2 border-top-0 tdTxtAlign'>{{outlet.achieved_percentage ?? 0 | number: '1.0-0'}}%</td>
+                </tr>
+                </tbody>
+            </table>
+            <div *ngIf='!outletRanking?.content.length' style='height: 224px'
+                 class='col-md-12 d-flex justify-content-center align-content-center flex-wrap bg-gray-100 text-lg fw-700'>
+                No data :(
+            </div>
+        </div>
+        <div class='row  pt-2'>
+            <div class='col-sm-12 col-md-6'>
+                <label
+                    class='small mb-2'>Showing {{(outletRanking.number * outletRanking.size) - outletRanking.size + 1}}
+                    to {{(outletRanking.number * outletRanking.size) + (outletRanking.number_of_elements - outletRanking.size)}}
+                    of {{outletRanking.total_elements}}
+                    entries</label>
+            </div>
+            <div class='col-sm-12 col-md-6 d-flex justify-content-end'>
+                <div class='row d-flex justify-content-end'>
+                    <div class='col-sm-12 col-md-auto '>
+                        <ngb-pagination (pageChange)='loadPage($event)'
+                                        [collectionSize]='outletRanking.total_elements'
+                                        [maxSize]='3'
+                                        [(page)]='outletRanking.number'
+                                        [pageSize]='outletRanking.size'>
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</sbpro-card>
+
+<ng-template #skeletonLoader>
+    <div class='card-body'>
+        <div class='col-xxl-5 col-xl-4 col-lg-6 col-xs-12 col-12'>
+            <SW-skeleton-loader cWidth='140' cHeight='20'></SW-skeleton-loader>
+            <SW-skeleton-loader cWidth='200' cHeight='50'></SW-skeleton-loader>
+        </div>
+        <SW-skeleton-loader cWidth='360' cHeight='50'></SW-skeleton-loader>
+        <SW-skeleton-loader cWidth='360' cHeight='300'></SW-skeleton-loader>
+        <div class='d-flex justify-content-between align-items-center pt-2'>
+            <SW-skeleton-loader cWidth='140' cHeight='20'></SW-skeleton-loader>
+            <div class='d-flex align-items-end pag'>
+                <SW-skeleton-loader class='me-1' cWidth='40' cHeight='40'></SW-skeleton-loader>
+                <SW-skeleton-loader class='me-1' cWidth='40' cHeight='40'></SW-skeleton-loader>
+                <SW-skeleton-loader class='me-1' cWidth='40' cHeight='40'></SW-skeleton-loader>
+            </div>
+        </div>
+    </div>
+</ng-template>
+

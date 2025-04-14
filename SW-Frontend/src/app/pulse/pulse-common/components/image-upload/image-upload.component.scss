@@ -1,0 +1,9 @@
+.displace-icon{
+    position: absolute;
+    @media(min-width: 1200px) {
+        right: 21%;
+    }
+    right: 5%;
+    transform: translateY(-155%);
+    cursor: pointer;
+}

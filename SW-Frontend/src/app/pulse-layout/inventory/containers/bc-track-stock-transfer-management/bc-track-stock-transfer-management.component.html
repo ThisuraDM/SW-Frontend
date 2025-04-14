@@ -1,0 +1,79 @@
+<SW-track-stock-horizontal-heading-bar *ngIf="displayScreen !== 'Search'"
+                        (backClick)="displayScreen = $event" [inputData]="setHeadingBarInputData()">
+</SW-track-stock-horizontal-heading-bar>
+<div class="container-xl px-4 mt-4" *ngIf="displayScreen === 'Search'">
+    <div class="row gx-4 mb-2">
+        <div class='col-12'>
+            <sbpro-card-navigation sbproTocItem="Tabs" [navNames]='["Other Store", "Warehouse"]'
+                [isCardHeaderVisible]="true" [cardHeader]="'Search and Request Stock'"
+                [templates]="[otherStore, warehouse]">
+                <ng-template #otherStore>
+                    <SW-bc-search-and-view-stock-transfer-requests-bc-bc
+                    (transferSelect)="onSelectTransferRequestBCBC($event)">
+                </SW-bc-search-and-view-stock-transfer-requests-bc-bc>
+
+                </ng-template>
+
+                <ng-template #warehouse>
+                    <SW-bc-search-and-view-stock-transfer-requests-wh-bc
+                    (transferSelect)="onSelectTransferRequestWHBC($event)">
+                </SW-bc-search-and-view-stock-transfer-requests-wh-bc>
+                </ng-template>
+            </sbpro-card-navigation>
+        </div>
+    </div>
+</div>
+
+<SW-bc-view-stock-transfer-details-bc-to-bc
+    *ngIf="isBCToBC&&(displayScreen === 'View Details' || displayScreen === 'Acknowledge' || displayScreen === 'Approve/Reject' || displayScreen === 'Update')"
+    (backClick)="onBackClick()" (approveRejectClick)="onApproveRejectClick()"
+    (transferSerialNumberClick)="onTransferSerialNumberClick($event)"
+    (startAcknowledgeClick)="onStartAcknowledgeClick($event)" [status]="selectedRow?.transferStatus"
+    [screenType]="selectedRow?.navigateOption" [requestId]="selectedRow?.transferId">
+</SW-bc-view-stock-transfer-details-bc-to-bc>
+
+<SW-stock-transfer-request-acceptance *ngIf="displayScreen === 'START_APPROVE_REJECT'"
+    (rejectClick)="displayScreen = selectedRow?.navigateOption" (approveClick)="onApproveClick()"
+    [requestId]="selectedRow?.transferId">
+</SW-stock-transfer-request-acceptance>
+
+<SW-acceptance-stock-transfer-summary *ngIf="displayScreen === 'START_APPROVE_REJECT_SUMMARY'"
+    (doneClick)="displayScreen = selectedRow?.navigateOption"
+    (transferSerialNumberClick)="onTransferSerialNumberClick($event)"
+    [requestId]="selectedRow?.transferId">
+</SW-acceptance-stock-transfer-summary>
+
+<SW-bc-transfer-stock-to-destination-bc-and-view-summary *ngIf="displayScreen === 'START_TRANSFER_STOCK'"
+    (doneClick)="onStockTransferDoneClick()" (backClick)="displayScreen = selectedRow?.navigateOption"
+    [requestId]="selectedRow?.transferId" [storeId]="selectedRow?.transferFromStoreId"  [itemRow]="itemRow" (summaryClick)="onViewSummaryOnStockTransferSerials()">
+</SW-bc-transfer-stock-to-destination-bc-and-view-summary>
+
+<SW-bc-transfer-stock-view-summary *ngIf="displayScreen === 'START_TRANSFER_STOCK_SUMMARY'"
+    (doneClick)="onViewSummaryDoneClick()" [requestId]="selectedRow?.transferId">
+</SW-bc-transfer-stock-view-summary>
+
+<SW-acknowledge-stock-transfer
+    *ngIf="displayScreen === 'START_ACKNOWLEDGE'||displayScreen ==='ACKNOWLEDGE_TRANSFER_STOCK_SUMMARY'"
+    [requestId]="selectedRow?.transferId"
+    [storeId]="selectedRow?.transferFromStoreId"
+    [isBC_BC]="isBCToBC"
+    [viewSummary]="displayScreen ==='ACKNOWLEDGE_TRANSFER_STOCK_SUMMARY'"
+    (onviewAcknowledgeSummaryClick)="onViewAcknowledgeSummaryClick()"
+    (onDoneClick)="onAcknowledgeBackClick()">
+</SW-acknowledge-stock-transfer>
+
+<SW-bc-acknowledge-stock-transfer-by-item
+ *ngIf="displayScreen === 'START_ACKNOWLEDGE_NEW'"
+ [requestId]="selectedRow?.transferId"
+ [storeId]="selectedRow?.transferFromStoreId"
+ [isBC_BC]="isBCToBC"
+ [itemRow]="itemRow"
+ (summaryClick)="onViewSummaryOnStockTransferSerials()">
+</SW-bc-acknowledge-stock-transfer-by-item>
+
+<SW-bc-view-stock-transfer-details-wh-to-bc
+    *ngIf="!isBCToBC&&displayScreen === 'View Details'"
+    [requestId]="selectedRow?.transferId"
+    [status]="selectedRow?.transferStatus"
+    (backClick)="onBackClick()">
+</SW-bc-view-stock-transfer-details-wh-to-bc>

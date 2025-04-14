@@ -1,0 +1,29 @@
+<div class="row m-2">
+    <h3 class="text-primary">Historical Data</h3>
+</div>
+<div class="w-100">
+    <div class='d-flex flex-row gx-4 details-label no-wrap mb-3 ms-2'>
+        <div class="w-50">Created Date:</div>
+        <div class="text-overflow-ellipsis">{{isBlueCubeUser ? stockTransferDetails?.create_date : dealerStockTransferDetails?.create_date}}</div>
+    </div>
+    <div class='d-flex flex-row gx-4 details-label no-wrap mb-3 ms-2'>
+        <div class="w-50">Created By:</div>
+        <div class="text-overflow-ellipsis">{{isBlueCubeUser ? stockTransferDetails?.create_user : dealerStockTransferDetails?.create_user}}</div>
+    </div>
+    <div class='d-flex flex-row gx-4 details-label no-wrap mb-3 ms-2'>
+        <div class="w-50">Approved Date:</div>
+        <div class="text-overflow-ellipsis">{{isBlueCubeUser ? stockTransferDetails?.approved_date : dealerStockTransferDetails?.approved_date}}</div>
+    </div>
+    <div class='d-flex flex-row gx-4 details-label no-wrap mb-3 ms-2'>
+        <div class="w-50">Approved By:</div>
+        <div class="text-overflow-ellipsis">{{isBlueCubeUser ? stockTransferDetails?.approved_user : dealerStockTransferDetails?.approved_user}}</div>
+    </div>
+    <div class='d-flex flex-row gx-4 details-label no-wrap mb-3 ms-2'>
+        <div class="w-50">Transfered Date:</div>
+        <div class="text-overflow-ellipsis">{{isBlueCubeUser ? stockTransferDetails?.transfer_date : dealerStockTransferDetails?.transfer_date}}</div>
+    </div>
+    <div class='d-flex flex-row gx-4 details-label no-wrap mb-3 ms-2'>
+        <div class="w-50">Transfered By:</div>
+        <div class="text-overflow-ellipsis">{{isBlueCubeUser ? stockTransferDetails?.transfer_user : dealerStockTransferDetails?.transfer_user}}</div>
+    </div>
+</div>

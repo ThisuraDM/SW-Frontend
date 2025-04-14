@@ -1,0 +1,50 @@
+<SW-track-stock-horizontal-heading-bar *ngIf="displayScreen !== 'Search'"
+                        (backClick)="displayScreen = $event" [inputData]="setHeadingBarInputData()">
+</SW-track-stock-horizontal-heading-bar>
+<div class="container-xl px-4 mt-4" *ngIf="displayScreen === 'Search'">
+    <div class="row gx-4 mb-2">
+        <div class='col-12'>
+            <sbpro-card>
+                <div class="card-header">
+                    Stock Acknowledgement
+                </div>
+                <div class="card-body">
+                <SW-ccp-dealer-stock-acknowledge-requests
+                 (transferSelect)="onSelectTransferRequestBCBC($event)"
+                 (viewSummaryCCPDealerAcknowledge)="onViewCCPDealerAcknowledgeSummary($event)"        
+                 >
+                </SW-ccp-dealer-stock-acknowledge-requests>
+                </div>                   
+            </sbpro-card>
+        </div>
+    </div>
+</div>
+
+<SW-ccp-dealer-stock-acknowledge-items
+    *ngIf="isBCToBC&&(displayScreen === 'View Details' || displayScreen === 'Acknowledge' || displayScreen === 'Approve/Reject' || displayScreen === 'Update')"
+    (backClick)="onBackClick()" (approveRejectClick)="onApproveRejectClick()"
+    (transferSerialNumberClick)="onTransferSerialNumberClick($event)"
+    (startAcknowledgeClick)="onStartAcknowledgeClick($event)" [status]="selectedRow?.transferStatus"
+    [screenType]="selectedRow?.navigateOption" [requestId]="selectedRow?.transferId" [outletId]="selectedRow?.transferToStoreId"
+    (viewSummaryCCPDealerAcknowledgeInit)="onViewCCPDealerAcknowledgeSummaryInit($event)" >
+</SW-ccp-dealer-stock-acknowledge-items>
+
+<SW-ccp-dealer-stock-acknowledge-serials
+ *ngIf="displayScreen === 'START_ACKNOWLEDGE'"
+ [requestId]="selectedRow?.transferId"
+ [storeId]="selectedRow?.transferFromStoreId"
+ [isBC_BC]="isBCToBC"
+ [itemRow]="itemRow"
+ (summaryClick)="onViewSummaryOnStockTransferSerials()">
+</SW-ccp-dealer-stock-acknowledge-serials>
+
+<SW-ccp-dealer-stock-acknowledge-summary
+*ngIf="displayScreen === 'ACKNOWLEDGE_TRANSFER_STOCK_SUMMARY'"
+[requestId]="selectedRow?.transferId"
+[summaryRequestId]="summaryRequestId"
+(backClick)="onBackClick()"
+>
+</SW-ccp-dealer-stock-acknowledge-summary>
+  
+
+

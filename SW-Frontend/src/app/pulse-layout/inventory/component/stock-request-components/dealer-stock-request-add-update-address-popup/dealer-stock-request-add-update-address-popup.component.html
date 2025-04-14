@@ -1,0 +1,148 @@
+<sbpro-card>
+    <div class="card-header">
+        <span class="text-primary" *ngIf="defaultAddressDetails">Edit Address</span>
+        <span class="text-primary" *ngIf="!defaultAddressDetails">Add New Address</span>
+    </div>
+    <div class="card-body">
+
+        <div class="row mb-3" *ngIf="!defaultAddressDetails">
+            <span class="result-header">Enter your new address details</span>
+        </div>
+
+        <form [formGroup]="addressForm" (ngSubmit)='onSaveAddress()' class='needs-validation'>
+
+            <div class='row'>
+                <div class='mb-3 col-md-6'>
+                    <label class='small mb-1 dropdown-label' for='name'>Name</label>
+                    <input
+                        [ngClass]="{'is-invalid': addressForm.controls.name.touched && addressForm.controls.name.invalid}"
+                        class='form-control form-control-custom custom-input' id='name' formControlName='name' type='text'
+                        placeholder='Enter Name' maxlength='100'>
+                    <small id="passwordHelpBlock" class="form-text text-muted text-gray-500">
+                        Label this address for easy reference
+                    </small>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.name.invalid && addressForm.controls.name.errors?.maxlength'>
+                        Max length exceeded
+                    </div>
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class='mb-3 col-md-6 form-group' >
+                    <label class='small mb-1 dropdown-label' for='addressLine1'>Address Line 1</label>
+                    <input
+                        [ngClass]="{'is-invalid': addressForm.controls.addressLine1.touched && addressForm.controls.addressLine1.invalid,
+                        'is-valid': addressForm.controls.addressLine1.valid}"
+                        class='form-control form-control-custom custom-input' id='addressLine1' formControlName='addressLine1' type='text'
+                        placeholder='Enter Address Line 1' required>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.addressLine1.invalid && addressForm.controls.addressLine1.errors?.required'>
+                        Value is required
+                    </div>
+                    <div class='valid-feedback'
+                         *ngIf='addressForm.controls.addressLine1.errors?.maxlength < addressForm.controls.addressLine1.value.length'>
+                        <p>{{35 - addressForm.controls.addressLine1.value.length}} characters left</p>
+                    </div>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.addressLine1.errors?.maxlength'>
+                        <p>{{addressForm.controls.addressLine1.value.length - 35}} characters over</p>
+                    </div>
+                </div>
+                <div class='mb-3 col-md-6 form-group'>
+                    <label class='small mb-1 dropdown-label' for='addressLine2'>Address Line 2</label>
+                    <input
+                        [ngClass]="{'is-invalid': addressForm.controls.addressLine2.touched && addressForm.controls.addressLine2.invalid,
+                        'is-valid': addressForm.controls.addressLine2.valid}"
+                        class='form-control form-control-custom custom-input' id='addressLine2' formControlName='addressLine2' type='text'
+                        placeholder='Enter Address Line 2' required>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.addressLine2.invalid && addressForm.controls.addressLine2.errors?.required'>
+                        Value is required
+                    </div>
+                    <div class='valid-feedback'
+                         *ngIf='addressForm.controls.addressLine2.errors?.maxlength < addressForm.controls.addressLine2.value.length'>
+                        <p>{{35 - addressForm.controls.addressLine2.value.length}} characters left</p>
+                    </div>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.addressLine2.errors?.maxlength'>
+                        <p>{{addressForm.controls.addressLine2.value.length - 35}} characters over</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class='mb-3 col-md-6'>
+                    <label class='small mb-1 dropdown-label' for='postalCode'>PostCode</label>
+                    <input
+                        [ngClass]="{'is-invalid': addressForm.controls.postalCode.touched && addressForm.controls.postalCode.invalid}"
+                        class='form-control form-control-custom custom-input' id='postalCode' formControlName='postalCode' type='text'
+                        placeholder='Enter Postal Code' min="0" maxlength='100' required>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.postalCode.invalid && addressForm.controls.postalCode.errors?.required'>
+                        Value is required
+                    </div>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.postalCode.invalid && addressForm.controls.postalCode.errors?.maxlength'>
+                        Max length exceeded
+                    </div>
+                    <div class='invalid-feedback'
+                    *ngIf='addressForm.controls.postalCode.invalid && addressForm.controls.postalCode.errors?.pattern'>
+                        Invalid number format
+               </div>
+                </div>
+                <div class='mb-3 col-md-6'>
+                    <label class='small mb-1 dropdown-label' for='city'>City</label>
+                    <input
+                        [ngClass]="{'is-invalid': addressForm.controls.city.touched && addressForm.controls.city.invalid}"
+                        class='form-control form-control-custom custom-input' id='city' formControlName='city' type='text'
+                        placeholder='Enter City' maxlength='100' required>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.city.invalid && addressForm.controls.city.errors?.required'>
+                        Value is required
+                    </div>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.city.invalid && addressForm.controls.city.errors?.maxlength'>
+                        Max length exceeded
+                    </div>
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class='mb-3 col-md-6'>
+                    <label class='small mb-1 dropdown-label' for='state'>State</label>
+                    <select
+                        [ngClass]="{'is-invalid': addressForm.controls.state.touched && addressForm.controls.state.invalid}"
+                        class='form-select form-select-custom custom-select' id='state' formControlName='state' required>
+                        <option class='custom-select-option' ngbDropdownItem *ngFor='let item of stateList'
+                                [value]="item.identifier">
+                            {{item.name}}
+                        </option>
+                    </select>
+                    <div class='invalid-feedback'
+                         *ngIf='addressForm.controls.state.invalid && addressForm.controls.state.errors?.required'>
+                        Value is required
+                    </div>
+                </div>
+                <div class='mb-3 col-md-6'>
+                    <label class='small mb-1 dropdown-label' for='country'>Country</label>
+                    <div class="input-group">
+                        <input
+                            class='form-control form-control-custom custom-input country-input' id='country' formControlName='country' type='text'
+                            maxlength='100'>
+                        <i-feather class="country-icon" name="slash" size="50"></i-feather>
+                    </div>
+                </div>
+            </div>
+
+            <div class='d-flex justify-content-between my-2'>
+                <button class="btn btn-outline-primary me-2 smaller-button" type="button"
+                    (click)="cancelClick.emit()">
+                    Cancel
+                </button>
+                <button class='btn btn-primary smaller-button' type='submit'>Save
+                </button>
+            </div>
+        </form>
+    </div>
+</sbpro-card>

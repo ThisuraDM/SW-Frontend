@@ -1,0 +1,38 @@
+<sbpro-card>
+    <div class='card-header'>Incentive</div>
+    <div class='card-body'>
+        <div class='alert alert-primary dashboard-alert' role='alert'>
+            <div class='row align-items-center justify-content-between'>
+                <div class='col-auto'>
+                    <ol class='breadcrumb mt-4 mb-0 rounded fs'>
+                        <li class='breadcrumb-item'>
+                            <span class='text-dark fw-500'>Incentive(RM)</span>
+                            <span class='text-gray-600'> / Total</span>
+                        </li>
+                    </ol>
+                </div>
+                <div class='col-auto d-flex flex-row justify-content-end'>
+                    <span class='small me-2 my-2 flex-end text-black btntxt'>Sort by</span>
+                    <a class='btn p-3 alert-btn' (click)='onYearlyClick()'
+                       [ngClass]="yearStatus ? 'btn-primary' : 'btn-light'">1 Year</a>
+                    <a class='btn p-3 alert-btn' (click)='onMonthlyClick()'
+                       [ngClass]="monthStatus ? 'btn-primary' : 'btn-light'">6 Months</a>
+                </div>
+            </div>
+
+        </div>
+        <div class='chart-area' [style.height]="'350px'" [style.width]='width'>
+            <canvas #myAreaChart></canvas>
+        </div>
+
+        <div class='small text-center p-4'>Incentive for <span class='text-primary'><strong>{{selectedOutletName}}</strong></span></div>
+    </div>
+</sbpro-card>
+
+<ng-template #noIncentiveData>
+    <div class='row gx-4'>
+        <div class='col-md-12'>
+            <SW-no-data height='300'></SW-no-data>
+        </div>
+    </div>
+</ng-template>

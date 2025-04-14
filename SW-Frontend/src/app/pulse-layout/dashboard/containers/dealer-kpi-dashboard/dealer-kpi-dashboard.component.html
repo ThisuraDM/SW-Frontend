@@ -1,0 +1,59 @@
+<sbpro-dashboard-head title='{{title}}'
+                      [showDate]='true'
+                      [light]='true'
+                      [simplified]='true'>
+</sbpro-dashboard-head>
+
+<div class='container-xl px-4 mt-xl-3'>
+    <div class='col-xxl-12 col-xl-12 mb-4'>
+        <SW-filter-box [date]='true' [store]='true'
+                          (storeSelect)='setStores($event)'
+                          (monthSelect)='setMonths($event)'
+                          (requiredFieldEmpty)='setRequiredFieldEmpty($event)'>
+        </SW-filter-box>
+    </div>
+    <div class='col-xxl-12 col-xl-12 mb-4'>
+        <div class='alert alert-primary dashboard-alert' role='alert'>
+            <div class='row align-items-center justify-content-between'>
+                <div class='col-auto'>
+                    <ol class='breadcrumb mt-4 mb-0 py-2 rounded'>
+                        <li>
+                            <span class='txt-c'>Data as of <span
+                                class='dtxt-c'>{{dashboardDate}}</span></span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf='!requiredFieldEmpty else noData'>
+        <div class='row gx-4' *ngIf='kpiInformationList.length else noData'>
+            <div class='col-lg-3 col-md-6 mb-4' *ngFor='let kpiInformation of kpiInformationList'>
+                <SW-kpi-info-card [kpiInformation]=kpiInformation [loaded]='loadedKpiInfoCard'></SW-kpi-info-card>
+            </div>
+        </div>
+        <div class='row gx-2'>
+            <div class='col-xxl-12 col-xl-12'>
+                <SW-historical-performance [selectedOutlet]='selectedOutlet' [selectedOutletName]='selectedOutletName'></SW-historical-performance>
+            </div>
+        </div>
+        <div class='row gx-2'>
+            <div class='col-xxl-12 col-xl-12'>
+<!--                <SW-device-activations [selectedMonth]='selectedMonth'-->
+<!--                                          [selectedOutlet]='selectedOutlet'></SW-device-activations>-->
+            </div>
+        </div>
+        <div class='row gx-2'>
+            <div class='col-lg-4 col-md-4'>
+<!--                <SW-daily-required-trend [selectedOutlet]='selectedOutlet'-->
+<!--                                            [dashboardDate]='dashboardDate'></SW-daily-required-trend>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #noData>
+    <div class='mt-5 mb-5'>
+        <SW-no-data height='500'></SW-no-data>
+    </div>
+</ng-template>

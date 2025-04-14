@@ -1,0 +1,621 @@
+<div class='container-xl px-4 mt-3' *ngIf="displayedScreen === 'wizard'">
+    <!-- Wizard card example with navigation-->
+    <div class='card'>
+        <div class='card-header border-bottom'>
+            <!-- Wizard navigation-->
+            <div class='nav nav-pills nav-justified flex-column flex-xl-row nav-wizard' id='cardTab' role='tablist'>
+                <!-- Wizard navigation item 1-->
+                <a class='nav-item nav-link' id='wizard1-tab'
+                   [ngClass]='{active: step === "submission-details"}'
+                   data-toggle='tab' role='tab' aria-controls='wizard1'
+                   aria-selected='true'>
+                    <div class='wizard-step-icon'>1</div>
+                    <div class='wizard-step-text'>
+                        <div class='wizard-step-text-name'>Submission Details</div>
+                        <div class='wizard-step-text-details'>Outlet details for submission</div>
+                    </div>
+                </a>
+                <!-- Wizard navigation item 2-->
+                <a class='nav-item nav-link' id='wizard2-tab'
+                   [ngClass]='{active: step === "customer-details"}'
+                   data-toggle='tab' role='tab' aria-controls='wizard2'
+                   aria-selected='true'>
+                    <div class='wizard-step-icon'>2</div>
+                    <div class='wizard-step-text'>
+                        <div class='wizard-step-text-name'>Customer Details</div>
+                        <div class='wizard-step-text-details'>Customer and product details</div>
+                    </div>
+                </a>
+                <!-- Wizard navigation item 3-->
+                <a class='nav-item nav-link' id='wizard3-tab'
+                   [ngClass]='{active: step === "receipt-details"}'
+                   data-toggle='tab' role='tab'
+                   aria-controls='wizard3' aria-selected='true'>
+                    <div class='wizard-step-icon'>3</div>
+                    <div class='wizard-step-text'>
+                        <div class='wizard-step-text-name'>Receipt Details</div>
+                        <div class='wizard-step-text-details'>Receipt and payment details</div>
+                    </div>
+                </a>
+                <!-- Wizard navigation item 4-->
+                <a class='nav-item nav-link' id='wizard4-tab'
+                   [ngClass]='{active: step === "review-submission"}'
+                   data-toggle='tab' role='tab' aria-controls='wizard4'
+                   aria-selected='true'>
+                    <div class='wizard-step-icon'>4</div>
+                    <div class='wizard-step-text'>
+                        <div class='wizard-step-text-name'>Review Submission</div>
+                        <div class='wizard-step-text-details'>Review and submit changes</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class='card-body'>
+            <div class='tab-content' id='cardTabContent'>
+                <!-- Wizard tab pane item 1-->
+                <div class='tab-pane py-5 fade' id='wizard1'
+                     [ngClass]='{active: step === "submission-details", show: step === "submission-details"}'
+                     role='tabpanel'
+                     aria-labelledby='wizard1-tab'>
+                    <div class='row gx-4 justify-content-center'>
+                        <div class='col-xxl-8 col-xl-8'>
+                            <h3 class='text-primary'>Step 1</h3>
+                            <h5 class='card-title'>Enter your outlet and account information</h5>
+                            <form [formGroup]='step1Form' (ngSubmit)='onStep1NextButtonClick()'
+                                  class='needs-validation'>
+                                <div class='row'>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='bankInTo'>Bank in to</label>
+                                        <select ngbDropdown
+                                                [ngClass]="{'is-invalid': step1Form.controls.bankInTo.touched && step1Form.controls.bankInTo.invalid}"
+                                                class='form-select' id='bankInTo' formControlName='bankInTo'>
+                                            <option [value]='null' hidden selected>Select</option>
+                                            <option ngbDropdownItem *ngFor='let bank of bankList' [value]='bank.id'>
+                                                {{bank.bank_name}}
+                                            </option>
+                                        </select>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step1Form.controls.bankInTo.invalid && step1Form.controls.bankInTo.errors?.required'>
+                                            Value is required
+                                        </div>
+                                    </div>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='sourceOfPayment'>Source of Payment</label>
+                                        <select ngbDropdown
+                                                [ngClass]="{'is-invalid': step1Form.controls.sourceOfPayment.touched && step1Form.controls.sourceOfPayment.invalid}"
+                                                class='form-select' id='sourceOfPayment'
+                                                formControlName='sourceOfPayment'>
+                                            <option [value]='null' hidden selected>Select</option>
+                                            <option ngbDropdownItem *ngFor='let source of paymentSourceList'
+                                                    [value]='source.id'>
+                                                {{source.payment_source_name}}
+                                            </option>
+                                        </select>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step1Form.controls.sourceOfPayment.invalid && step1Form.controls.sourceOfPayment.errors?.required'>
+                                            Value is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='outletStoreCodeId'>Outlet Store Code ID</label>
+                                        <input class='form-control' id='outletStoreCodeId'
+                                               formControlName='outletStoreCodeId' type='text' readonly />
+                                    </div>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='outletName'>Outlet Name</label>
+                                        <input
+                                            class='form-control' id='outletName' type='text'
+                                            formControlName='outletName' readonly />
+                                    </div>
+                                </div>
+
+                                <div class='row'>
+                                    <div class='col-md-6 mb-3 mb-md-0'>
+                                        <label class='small mb-1 w-100'>CNU Collection Date</label>
+                                        <input
+                                            [ngClass]="{'is-invalid': step1Form.controls.cnuCollectionDate.touched && step1Form.controls.cnuCollectionDate.invalid}"
+                                            class='form-select' id='collectionDate' formControlName='cnuCollectionDate'
+                                            ngbDatepicker #d='ngbDatepicker'
+                                            [minDate]='minDate'
+                                            [maxDate]='currentDate'
+                                            readonly (click)='d.toggle()'>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step1Form.controls.cnuCollectionDate.invalid && step1Form.controls.cnuCollectionDate.errors?.required'>
+                                            Value is required
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'></div>
+                                </div>
+                                <div class='d-flex flex-sm-row-reverse flex-xl-row mt-3'>
+                                    <button class='btn btn-primary' type='submit'>Next
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Wizard tab pane item 2-->
+                <div class='tab-pane py-5 fade' id='wizard2'
+                     [ngClass]='{active: step === "customer-details", show: step === "customer-details"}'
+                     role='tabpanel'
+                     aria-labelledby='wizard2-tab'>
+                    <div class='row gx-4 justify-content-center'>
+                        <div class='col-xxl-8 col-xl-8'>
+                            <h3 class='text-primary'>Step 2</h3>
+                            <h5 class='card-title'>Enter customer's details and product purchased</h5>
+                            <form [formGroup]='step2Form' (ngSubmit)='onStep2NextButtonClick()'
+                                  class='needs-validation'>
+                                <div class='row'>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='bankInTo'>Type of Transaction</label>
+                                        <select
+                                            [ngClass]="{'is-invalid': step2Form.controls.typeOfTransaction.touched && step2Form.controls.typeOfTransaction.invalid}"
+                                            class='form-select' id='typeOfTransaction'
+                                            formControlName='typeOfTransaction'>
+                                            <option [value]='null' hidden selected>Select</option>
+                                            <option ngbDropdownItem *ngFor='let item of transactionTypeList'
+                                                    [value]='item.id'>
+                                                {{item.transaction_type_name}}
+                                            </option>
+                                        </select>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.typeOfTransaction.invalid && step2Form.controls.typeOfTransaction.errors?.required'>
+                                            Value is required
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class='my-4' />
+
+                                <div class='row'>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='customerName'>Customer Name</label>
+                                        <input
+                                            [ngClass]="{'is-invalid': step2Form.controls.customerName.touched && step2Form.controls.customerName.invalid}"
+                                            class='form-control' id='customerName' formControlName='customerName'
+                                            type='text'
+                                            placeholder='Enter Customer Name'
+                                            maxlength='100' />
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.customerName.invalid && step2Form.controls.customerName.errors?.required'>
+                                            Value is required
+                                        </div>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.customerName.invalid && step2Form.controls.customerName.errors?.maxlength'>
+                                            Max length exceeded
+                                        </div>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.customerName.invalid && step2Form.controls.customerName.errors?.pattern'>
+                                            Value is invalid
+                                        </div>
+                                    </div>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='iCNumber'>IC Number</label>
+                                        <input formControlName='iCNumber'
+                                               [ngClass]="{'is-invalid': step2Form.controls.iCNumber.touched && step2Form.controls.iCNumber.invalid}"
+                                               class='form-control' id='iCNumber' type='text'
+                                               placeholder='Enter IC Number'
+                                               maxlength='12' />
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.iCNumber.invalid && step2Form.controls.iCNumber.errors?.required'>
+                                            Value is required
+                                        </div>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.iCNumber.invalid && (step2Form.controls.iCNumber.errors?.maxlength || step2Form.controls.iCNumber.errors?.minlength)'>
+                                            Length should be 12
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='registeredMobileNumber'>Registered Mobile
+                                            Number</label>
+                                        <input
+                                            [ngClass]="{'is-invalid': step2Form.controls.registeredMobileNumber.touched && step2Form.controls.registeredMobileNumber.invalid}"
+                                            class='form-control' formControlName='registeredMobileNumber'
+                                            id='registeredMobileNumber' type='text'
+                                            placeholder='Enter Registered Mobile Number' maxlength='11' />
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.registeredMobileNumber.invalid && (step2Form.controls.registeredMobileNumber.errors?.maxlength || step2Form.controls.registeredMobileNumber.errors?.minlength)'>
+                                            Length should be 11
+                                        </div>
+                                    </div>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='sIMCardNumber'>SIM Card Number</label>
+                                        <input
+                                            [ngClass]="{'is-invalid': step2Form.controls.sIMCardNumber.touched && step2Form.controls.sIMCardNumber.invalid}"
+                                            class='form-control' id='sIMCardNumber' formControlName='sIMCardNumber'
+                                            type='text'
+                                            placeholder='Enter SIM Card Number' maxlength='18' />
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.sIMCardNumber.invalid && step2Form.controls.sIMCardNumber.errors?.pattern'>
+                                            value is invalid
+                                        </div>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.sIMCardNumber.invalid && (step2Form.controls.sIMCardNumber.errors?.maxlength || step2Form.controls.sIMCardNumber.errors?.minlength) && !step2Form.controls.sIMCardNumber.errors?.pattern'>
+                                            Length should be 18
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class='row'>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='iMEINumber'>IMEI Number</label>
+                                        <input
+                                            [ngClass]="{'is-invalid': step2Form.controls.iMEINumber.touched && step2Form.controls.iMEINumber.invalid}"
+                                            class='form-control' formControlName='iMEINumber' id='iMEINumber'
+                                            type='text'
+                                            placeholder='Enter IMEI Number' maxlength='15' />
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.iMEINumber.invalid && step2Form.controls.iMEINumber.errors?.pattern'>
+                                            value is invalid
+                                        </div>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.iMEINumber.invalid && (step2Form.controls.iMEINumber.errors?.maxlength || step2Form.controls.iMEINumber.errors?.minlength) && !step2Form.controls.iMEINumber.errors?.pattern'>
+                                            Length should be 15
+                                        </div>
+                                    </div>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='materialCode'>Material Code</label>
+                                        <input
+                                            [ngClass]="{'is-invalid': step2Form.controls.materialCode.touched && step2Form.controls.materialCode.invalid}"
+                                            class='form-control' id='materialCode' formControlName='materialCode'
+                                            type='text'
+                                            placeholder='Enter Material Code' maxlength='30' />
+                                        <div class='invalid-feedback'
+                                             *ngIf='step2Form.controls.materialCode.invalid && step2Form.controls.materialCode.errors?.maxlength'>
+                                            Max length exceeded
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class='row'>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='staffName'>Staff Name</label>
+                                        <input class='form-control' formControlName='staffName' id='staffName'
+                                               type='text'
+                                               readonly />
+                                    </div>
+
+
+                                </div>
+
+                                <div class='d-flex justify-content-between'>
+                                    <button class='btn btn-outline-primary' type='button'
+                                            (click)="step = 'submission-details'">Previous
+                                    </button>
+                                    <button class='btn btn-primary' type='submit'>Next
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Wizard tab pane item 3-->
+                <div class='tab-pane py-5 fade' id='wizard3'
+                     [ngClass]='{active: step === "receipt-details", show: step === "receipt-details"}' role='tabpanel'
+                     aria-labelledby='wizard3-tab'>
+                    <div class='row gx-4 justify-content-center'>
+                        <div class='col-xxl-8 col-xl-8'>
+                            <h3 class='text-primary'>Step 3</h3>
+                            <h5 class='card-title'>Enter transaction payment and receipt details</h5>
+                            <form [formGroup]='step3Form' (ngSubmit)='onStep3NextButtonClick()'>
+                                <div class='row'>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='outletStoreCodeId'>Official Receipt
+                                            Number</label>
+                                        <input
+                                            [ngClass]="{'is-invalid': step3Form.controls.officialReceiptNumber.touched && step3Form.controls.officialReceiptNumber.invalid}"
+                                            class='form-control' id='officialReceiptNumber' maxlength='20'
+                                            formControlName='officialReceiptNumber' type='text' />
+                                        <div class='invalid-feedback'
+                                             *ngIf='step3Form.controls.officialReceiptNumber.invalid && step3Form.controls.officialReceiptNumber.errors?.required'>
+                                            Value is required
+                                        </div>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step3Form.controls.officialReceiptNumber.invalid && step3Form.controls.officialReceiptNumber.errors?.maxlength'>
+                                            Max length exceeded
+                                        </div>
+                                    </div>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='outletName'>Official Receipt Amount</label>
+                                        <div class='input-group'>
+                                            <div class='input-group-prepend'>
+                                                <span class='input-group-text'>RM</span>
+                                            </div>
+                                            <input
+                                                [ngClass]="{'is-invalid': step3Form.controls.officialReceiptAmount.touched && step3Form.controls.officialReceiptAmount.invalid}"
+                                                class='form-control' id='officialReceiptAmount' type='text'
+                                                formControlName='officialReceiptAmount' maxlength='10' />
+                                            <div class='invalid-feedback'
+                                                 *ngIf='step3Form.controls.officialReceiptAmount.invalid && step3Form.controls.officialReceiptAmount.errors?.required'>
+                                                Value is required
+                                            </div>
+                                            <div class='invalid-feedback'
+                                                 *ngIf='step3Form.controls.officialReceiptAmount.invalid && step3Form.controls.officialReceiptAmount.errors?.maxlength'>
+                                                Max length exceeded
+                                            </div>
+                                            <div class='invalid-feedback'
+                                                 *ngIf='step3Form.controls.officialReceiptAmount.invalid && (step3Form.controls.officialReceiptAmount.errors?.min || step3Form.controls.officialReceiptAmount.errors?.pattern)'>
+                                                Value is invalid
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class='row'>
+                                    <div class='col-md-6 mb-3 mb-md-0'>
+                                        <label class='small mb-1 w-100'>Payment Method</label>
+                                        <select
+                                            [ngClass]="{'is-invalid': step3Form.controls.paymentMethod.touched && step3Form.controls.paymentMethod.invalid}"
+                                            (change)='onStep3PaymentMethodChange($any($event.target).value)'
+                                            class='form-select' id='paymentMethod' formControlName='paymentMethod'>
+                                            <option [value]='null' hidden selected>Select</option>
+                                            <option *ngFor='let item of paymentMethodList' [value]='item.id'>
+                                                {{item.payment_method_name}}
+                                            </option>
+                                        </select>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step3Form.controls.paymentMethod.invalid && step3Form.controls.paymentMethod.errors?.required'>
+                                            Value is required
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'></div>
+                                </div>
+
+                                <div class='row' *ngIf='+step3Form.controls.paymentMethod.value === 2'>
+                                    <hr class='my-4' />
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='outletStoreCodeId'>Cheque Number</label>
+                                        <input
+                                            [ngClass]="{'is-invalid': step3Form.controls.chequeNumber.touched && step3Form.controls.chequeNumber.invalid}"
+                                            class='form-control' id='chequeNumber'
+                                            formControlName='chequeNumber' type='text' maxlength='6' />
+                                        <div class='invalid-feedback'
+                                             *ngIf='step3Form.controls.chequeNumber.invalid && step3Form.controls.chequeNumber.errors?.required'>
+                                            Value is required
+                                        </div>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step3Form.controls.chequeNumber.invalid && step3Form.controls.chequeNumber.errors?.pattern'>
+                                            Value is invalid
+                                        </div>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step3Form.controls.chequeNumber.invalid && (step3Form.controls.chequeNumber.errors?.maxlength || step3Form.controls.chequeNumber.errors?.minlength) && !step3Form.controls.chequeNumber.errors?.pattern'>
+                                            Length should be 6
+                                        </div>
+                                    </div>
+                                    <div class='mb-3 col-md-6'>
+                                        <label class='small mb-1' for='outletName'>Bank Name</label>
+                                        <select
+                                            [ngClass]="{'is-invalid': step3Form.controls.bankName.touched && step3Form.controls.bankName.invalid}"
+                                            class='form-select' id='bankName' formControlName='bankName'>
+                                            <option [value]='null' hidden selected>Select</option>
+                                            <option ngbDropdownItem *ngFor='let bank of receiptDetailsBankList'
+                                                    [value]='bank.id'>
+                                                {{bank.receipt_details_bank_name}}
+                                            </option>
+                                        </select>
+                                        <div class='invalid-feedback'
+                                             *ngIf='step3Form.controls.bankName.invalid && step3Form.controls.bankName.errors?.required'>
+                                            Value is required
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class='d-flex justify-content-between mt-3'>
+                                    <button class='btn btn-outline-primary' type='button'
+                                            (click)="step = 'customer-details'">Previous
+                                    </button>
+                                    <button class='btn btn-primary' type='submit'>Next
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Wizard tab pane item 4-->
+                <div class='tab-pane py-5 fade' id='wizard4'
+                     [ngClass]='{active: step === "review-submission", show: step === "review-submission"}'
+                     role='tabpanel'
+                     aria-labelledby='wizard4-tab'>
+
+                    <div class='row gx-4 justify-content-center'>
+                        <div class='col-xxl-8 col-xl-10'>
+
+                            <form [formGroup]='step4Form' (ngSubmit)='onStep4SubmitClick()'>
+
+                                <h3 class='text-primary'>Step 4</h3>
+                                <h5 class='card-title'>Review the following information and submit</h5>
+
+                                <div class='row gx-4'>
+                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                        <div class='col-12 mb-4'>
+                                            <sbpro-card [classes]="['h-100']">
+                                                <div class='card-body'>
+                                                    <div class='step-4-wizard-section'>
+                                                        <div class='step-4-wizard-number'>1</div>
+                                                        <div class='wizard-step-text'>
+                                                            <div class='step-4-wizard-text'>Submission Details</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Bank in to</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.bank_in_to?.bank_name}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Source of Payment</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.source_of_payment?.payment_source_name}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Outlet Store Code ID</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.outlet_store_code_id}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Outlet Name</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.outlet_name}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>CNU Collection Date</div>
+                                                        <div class="text-overflow-ellipsis">
+                                                            {{cnuSubmitDetails?.cnu_collection_date?.day}}/{{cnuSubmitDetails?.cnu_collection_date?.month}}/{{cnuSubmitDetails?.cnu_collection_date?.year}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </sbpro-card>
+                                        </div>
+
+                                        <div class='col-12 mb-4'>
+                                            <sbpro-card [classes]="['h-100']">
+                                                <div class='card-body'>
+                                                    <div class='step-4-wizard-section'>
+                                                        <div class='step-4-wizard-number'>2</div>
+                                                        <div class='wizard-step-text'>
+                                                            <div class='step-4-wizard-text'>Customer Details</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between'>
+                                                        <div>Type of Transaction</div>
+                                                        <div>{{cnuSubmitDetails?.type_of_transaction?.transaction_type_name}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between'>
+                                                        <div>Customer Name</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.customer_name}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between'>
+                                                        <div>IC Number</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.ic_number}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between'>
+                                                        <div>Registered Mobile Number</div>
+                                                        <div>{{cnuSubmitDetails?.registered_mobile_number}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between'>
+                                                        <div>SIM Card Number</div>
+                                                        <div>{{cnuSubmitDetails?.sim_card_number}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between'>
+                                                        <div>IMEI Number</div>
+                                                        <div>{{cnuSubmitDetails?.imei_number}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between'>
+                                                        <div>Material Code</div>
+                                                        <div>{{cnuSubmitDetails?.material_code}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between'>
+                                                        <div>Staff Name</div>
+                                                        <div>{{cnuSubmitDetails?.staff_name}}</div>
+                                                    </div>
+                                                </div>
+                                            </sbpro-card>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                        <div class='col-12 mb-4'>
+                                            <sbpro-card [classes]="['h-100']">
+                                                <div class='card-body' style="height: 220px">
+                                                    <div class='step-4-wizard-section'>
+                                                        <div class='step-4-wizard-number'>3</div>
+                                                        <div class='wizard-step-text'>
+                                                            <div class='step-4-wizard-text'>Receipt Details</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Official Receipt Number</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.official_receipt_number}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Official Receipt Amount</div>
+                                                        <div class="text-overflow-ellipsis">RM {{cnuSubmitDetails?.official_receipt_amount | number : '1.2-2'}}</div>
+                                                    </div>
+                                                    <div class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Payment Method</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.payment_method?.payment_method_name}}</div>
+                                                    </div>
+                                                    <div *ngIf='cnuSubmitDetails?.payment_method?.id === 2'
+                                                         class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Cheque Number</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.cheque_number}}</div>
+                                                    </div>
+                                                    <div *ngIf='cnuSubmitDetails?.payment_method?.id === 2'
+                                                         class='d-flex flex-row gx-4 small text-muted justify-content-between no-wrap'>
+                                                        <div>Bank Name</div>
+                                                        <div class="text-overflow-ellipsis">{{cnuSubmitDetails?.bank_name?.receipt_details_bank_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </sbpro-card>
+                                        </div>
+
+                                        <div class='col-12 mb-4'>
+                                            <sbpro-card [classes]="['h-100']">
+                                                <div class='card-body'>
+                                                    <div class='step-4-wizard-section'>
+                                                        <div class='step-4-wizard-number'>4</div>
+                                                        <div class='wizard-step-text'>
+                                                            <div class='step-4-wizard-text'>Remarks</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class='row'>
+                                                        <div class='mb-3 col-md-6 w-100'>
+                                                            <label class='small mb-1' for='addRemarks'>Add Remarks</label>
+                                                            <textarea
+                                                                [ngClass]="{'is-invalid': step4Form.controls.addRemarks.touched && step4Form.controls.addRemarks.invalid}"
+                                                                class='form-control' id='addRemarks' maxlength='100'
+                                                                formControlName='addRemarks' type='text'></textarea>
+                                                            <div class='invalid-feedback'
+                                                                 *ngIf='step4Form.controls.addRemarks.invalid && step4Form.controls.addRemarks.errors?.maxlength'>
+                                                                Max length exceeded
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </sbpro-card>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class='row gx-4'>
+                                </div>
+
+                                <div class='d-flex justify-content-between'>
+                                    <button class='btn btn-outline-primary' type='button'
+                                            (click)="step = 'receipt-details'">Previous
+                                    </button>
+                                    <button class='btn btn-primary' type='submit'>Submit</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='container-xl px-4 mt-3' *ngIf="displayedScreen === 'after-submit'">
+    <div class='card'>
+        <div class='card-body text-center'>
+            <h3 class='text-primary text-center'>CNU Submitted</h3>
+            <h5 class='card-title bold text-center'>Back Office has captured all the submitted data</h5>
+
+            <img class='img-fluid p-4' src='assets/img/illustrations/undraw-confirmation.svg' alt='' width='400' />
+
+            <h6 class='text-gray-500 text-center'>Please do CPD {{nextDate | date : 'dd/MMM/yyyy'}}</h6>
+
+            <div class='d-flex justify-content-center'>
+                <button class='btn btn-outline-primary me-3' type='button'
+                        (click)='onViewReport();'>View Report
+                </button>
+                <button class='btn btn-primary' type='button' (click)='onSubmitMoreClick()'>Submit More</button>
+            </div>
+        </div>
+    </div>
+</div>

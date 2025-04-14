@@ -1,0 +1,109 @@
+.pending-request-button {
+    cursor: pointer;
+}
+
+.details-label {
+    color: #697479;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.value-margin-top {
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.result-header {
+    color: black;
+    font-weight: bold;
+}
+
+.result-header-600 {
+    color: black;
+    font-weight: 600;
+}
+
+.text-overflow-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-left: 1rem;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.text-black {
+    color: black;
+}
+
+.text-bold-600 {
+    font-weight: 600;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.card-footer-height {
+    @media (min-width: 767px) {
+        height: 3.5rem;
+    }
+
+    @media (max-width: 767px) {
+        height: 4.75rem;
+    }
+
+    @media (max-width: 384px) {
+        height: 6rem;
+    }
+}
+
+.action-bar-margin {
+    margin-top: -0.4rem;
+}
+
+.disable-link {
+    color: #b5c3c4;
+}
+
+.cancel-request-button {
+    height: 35px;
+    @media (min-width: 767px) {
+        width: 75%;
+    }
+
+    @media (max-width: 767px) {
+        width: 100%;
+    }
+}
+
+.view-more-button {
+    height: 35px;
+    @media (min-width: 400px) {
+        width: 100%;
+    }
+    @media (min-width: 1150px) {
+        width: 100%;
+    }
+    @media (max-width: 400px) {
+        width: 80%;
+    }
+}
+
+.smaller-button {
+    height: 35px;
+    @media (min-width: 563px) {
+        width: 30%;
+    }
+
+    @media (max-width: 563px) {
+        width: 100%;
+    }
+}
+
+.popup-button {
+    height: 35px;
+    width: 10rem;
+}

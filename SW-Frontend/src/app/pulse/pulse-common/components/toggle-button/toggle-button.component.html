@@ -1,0 +1,10 @@
+<div class='switcher'>
+    <input type='radio' name='balance' value='yin' id='yin' class='switcher__input' [class]='switcherInput("promo")' [checked]='true' (click)="toggle(value1)" >
+    <label for='yin' class='switcher__label'>{{value1}}</label>
+
+    <input type='radio' name='balance' value='yang' id='yang' class='switcher__input' [class]='switcherInput("Normal")' (click)="toggle(value2)">
+    <label for='yang' class='switcher__label'>{{value2}}</label>
+
+    <span class='switcher__toggle'></span>
+</div>
+

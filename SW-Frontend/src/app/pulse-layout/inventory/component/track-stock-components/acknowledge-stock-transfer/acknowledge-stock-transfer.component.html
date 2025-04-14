@@ -1,0 +1,211 @@
+<div *ngIf='!viewSummary' class='container-xl px-4 mt-4'>
+    <div class='card mb-4'>
+        <div class='card-header'>Acknowledge Detail</div>
+        <div class='card-body'>
+            <div class='row justify-content-between'>
+                <div class='col-sm-12 col-md-6 mb-4'>
+                    <div class='small mb-3'>Any serial number input here will be imported into the table, and will be
+                        check if it is matched with the request, or unmatched items.
+                    </div>
+                </div>
+            </div>
+            <form [formGroup]='acknowledgeForm' (ngSubmit)='onAddAcknowledge()' class='needs-validation'>
+
+                <div class='row'>
+                    <div class='mb-3 col-md-8'>
+                        <label class='small mb-1 dropdown-label'>{{acknowledgeForm.controls.typeOf.value}}</label>
+                        <input class='form-control form-control-custom custom-input' id='typeDetail'
+                               [(ngModel)]='inputSerialOrCode' formControlName='typeDetail' type='text'
+                               [placeholder]="'Enter '+acknowledgeForm.controls.typeOf.value" maxlength='100'>
+                    </div>
+                    <div class='mb-3 col-md-2'>
+                        <button class='mt-2 btn btn-primary col-12' type='submit' (click)='searchFromTable()'>Add
+                        </button>
+                    </div>
+                    <div class='mb-3 col-md-2'>
+                        <button class='mt-2 btn btn-outline-primary col-12' type='button'>Scan via Reader</button>
+                    </div>
+                </div>
+            </form>
+            <div [hidden]="stockWithSerialNumber?.length==0">
+            <h6 class='fw-700 mb-3 mt-1'>Stock with Serial Number</h6>
+            <div class='col-md-12 table-responsive mb-2'>
+                <table class='table border rounded m-0'>
+                    <thead class='thead-dark'>
+                    <tr class='bg-primary text-white'>
+                        <th class='p-3' scope='col'></th>
+                        <th class='p-3' scope='col'>Item Name</th>
+                        <th class='p-3' scope='col'>Material Code</th>
+                        <th class='p-3' scope='col'>Serial Number</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr
+                        *ngFor='let item of stockWithSerialNumber| slice : (pageNumberWithSerial - 1) * 10 : (pageNumberWithSerial - 1) * 10 + 10 let i = index'>
+                        <td class='p-3'>
+                            <svg class='icon text-green' aria-hidden='true' width='24' height='24'
+                                 *ngIf='item.checked'>
+                                <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'></use>
+                            </svg>
+                            <svg class='icon text-gray-300' aria-hidden='true' width='24' height='24'
+                                 *ngIf='!item.checked'>
+                                <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'></use>
+                            </svg>
+                        </td>
+                        <td class='p-3'>
+                            {{item.item_name}}
+                        </td>
+                        <td class='p-3'>
+                            {{item.sap_material_code}}
+                        </td>
+                        <td class='p-3'>
+                            {{item.serial_number}}
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='stockWithSerialNumber?.length==0' [height]='224' [content]="''"
+                               [message]="'Unable to load data'">
+                </SW-no-data>
+            </div>
+            <div class='row dataTable-bottom' *ngIf='stockWithSerialNumber?.length'>
+                <div class='col-md-6 dataTable-info'>Showing {{(pageNumberWithSerial * 10) - 9}} to
+                    {{stockWithSerialNumber?.length
+                    < 10 ? stockWithSerialNumber?.length : 0}} of {{stockWithSerialNumber?.length}} entries
+                </div>
+                <div class='col-md-6 d-flex justify-content-end'>
+                    <ngb-pagination [collectionSize]='stockWithSerialNumber?.length' [maxSize]='3'
+                                    [pageSize]='10' [(page)]='pageNumberWithSerial'>
+                    </ngb-pagination>
+                </div>
+            </div></div>
+
+            <div [hidden]="stockWithMaterialCode?.length==0">
+            <h6 class='fw-700 mb-3 mt-3'>Stock with Material Code (Acknowledge by Quantity)</h6>
+            <div class='col-md-12 table-responsive mb-2'>
+                <table class='table border rounded m-0'>
+                    <thead class='thead-dark'>
+                    <tr class='bg-primary text-white'>
+                        <th class='p-3' scope='col'></th>
+                        <th class='p-3' scope='col'>Item Name</th>
+                        <th class='p-3' scope='col'>SAP Material Code</th>
+                        <th class='p-3' scope='col'>Requested Quantity</th>
+                        <th class='p-3' scope='col'>Transfer Quantity</th>
+                        <th class='p-3' scope='col'>Acknowledge Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr
+                        *ngFor='let item of stockWithMaterialCode| slice : (pageNumberWithSAPCode - 1) * 10 : (pageNumberWithSAPCode - 1) * 10 + 10 let i = index'>
+                        <td class='p-3'>
+                            <svg class='icon text-green' aria-hidden='true' width='24' height='24'
+                                 *ngIf='item.checked'>
+                                <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'>
+                                </use>
+                            </svg>
+                            <svg class='icon text-gray-300' aria-hidden='true' width='24' height='24'
+                                 *ngIf='!item.checked'>
+                                <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'>
+                                </use>
+                            </svg>
+                        </td>
+                        <td class='p-3'>{{item.item_name}}</td>
+                        <td class='p-3'>{{item.sap_material_code}}</td>
+                        <td class='p-3'>{{item.requested_quantity}}</td>
+                        <td class='p-3'>{{item.transfer_quantity}}</td>
+                        <td class='p-3'>
+                            <input type='number' class='form-control col-1 input-h-1' [disabled]="!item.checked" (change)="onTableDataChange($event.target.value,item.sap_material_code)"
+                            [(ngModel)]='item.received_quantity'>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='stockWithMaterialCode?.length==0' [height]='224' [content]="''"
+                               [message]="'Unable to load data'">
+                </SW-no-data>
+            </div>
+            <div class='row dataTable-bottom' *ngIf='stockWithMaterialCode?.length'>
+                <div class='col-md-6 dataTable-info'>Showing {{(pageNumberWithSAPCode * 10) - 9}} to
+                    {{stockWithMaterialCode?.length
+                    < 10 ? stockWithMaterialCode?.length : 0}} of {{stockWithMaterialCode?.length}} entries
+                </div>
+                <div class='col-md-6 d-flex justify-content-end'>
+                    <ngb-pagination [collectionSize]='stockWithMaterialCode?.length' [maxSize]='3'
+                                    [pageSize]='10' [(page)]='pageNumberWithSAPCode'>
+                    </ngb-pagination>
+                </div>
+            </div>
+            </div>
+
+            <h6 class='fw-700 mb-3 mt-5' *ngIf='unmatchedItems.length'>Unmatched Items</h6>
+
+            <div class='row'>
+                <div class='mb-3 col-md-4' *ngFor='let item of unmatchedItems'>
+                    <SW-unmatched-item [itemCode]='item.itemCode' [label]='item.label'>
+                    </SW-unmatched-item>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf='!viewSummary' class='container-xl px-4 mt-4'>
+    <div class='card mb-4'>
+        <div class='card-header'>Summary Report</div>
+        <div class='card-body'>
+            <div class='col-md-12 table-responsive'>
+                <table class='table border rounded m-0'>
+                    <thead class='thead-dark'>
+                    <tr class='bg-primary text-white'>
+                        <th class='p-3' scope='col'>SAP Material Code</th>
+                        <th class='p-3' scope='col'>Transfer Quantity</th>
+                        <th class='p-3' scope='col'>Acknowledge Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr
+                        *ngFor='let item of summaryDetail| slice : (pageNumberSummary - 1) * 10 : (pageNumberSummary - 1) * 10 + 10 let i = index'>
+                        <td class='p-3'>{{item.sap_material_code}}</td>
+                        <td class='p-3'>{{item.transfer_quantity}}</td>
+                        <td class='p-3'>{{item.approved_quantity}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='summaryDetail?.length==0' [height]='224' [content]="''"
+                               [message]="'Unable to load data'">
+                </SW-no-data>
+
+                <div class='row dataTable-bottom mt-2' *ngIf='summaryDetail?.length'>
+                    <div class='col-md-6 dataTable-info'>Showing {{(pageNumberSummary * 10) - 9}} to
+                        {{summaryDetail?.length
+                        < 10 ? summaryDetail?.length : 0}} of {{summaryDetail?.length}} entries
+                    </div>
+                    <div class='col-md-6 d-flex justify-content-end'>
+                        <ngb-pagination [collectionSize]='summaryDetail?.length' [maxSize]='3'
+                                        [pageSize]='10' [(page)]='pageNumberSummary'>
+                        </ngb-pagination>
+                    </div>
+                </div>
+                <div class='card-footer' style='border-top: none;'>
+                    <div class='row'>
+                        <div class='col-md-10'>
+                            <input class='form-control input-h-2' type='text' [(ngModel)]='Remarks'
+                                   placeholder='Remarks'>
+                        </div>
+                        <div class='col-md-1 d-flex justify-content-between'>
+                            <button class='btn btn-primary' type='button' [disabled]="!enableAcknowledge"
+                                    (click)='onAckowledgeClick()'>Acknowledge
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<SW-acknowledge-stock-transfer-summary *ngIf='viewSummary' [acknowledgeRequest]='summaryRequest' [requestId]="requestId"
+                                          [isBC_BC]='isBC_BC' [storeId]='storeId' (onDoneClick)="onDoneClick.emit(true)"
+                                          [origin_outlet_store_name]='acknowledgeResponse?.origin_outlet_name'>
+</SW-acknowledge-stock-transfer-summary>

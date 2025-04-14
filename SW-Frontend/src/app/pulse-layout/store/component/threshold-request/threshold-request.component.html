@@ -1,0 +1,148 @@
+<div class='card h-fix'>
+    <div class='card-header'>Threshold Request</div>
+    <div class='card-body'>
+        <div class='row'>
+            <div class='col-md-3'>
+                <div class='h6 mb-0'> Request History</div>
+                <div class='row'>
+                    <div class='col-xl-12 col-lg-12 col-md-12 mb-12'>
+                        <div
+                            class='card border-top-0 border-bottom-0 border-end-0 border-start-lg border-primary m-top h-auto'>
+                            <div class='card-body'>
+                                <div class='d-flex align-items-center '>
+                                    <div class='flex-grow-1 ' *ngIf="thresholdPreviousDetails?.previous_request&&thresholdPreviousDetails?.previous_request[0]">
+                                        <div class='fw-bold text-primary'>{{thresholdDate(thresholdPreviousDetails?.previous_request[0]?.requested_date)}}</div>
+                                        <div class='h4 mb-0 fw-bolder'>RM {{thresholdPreviousDetails?.previous_request[0]?.threshold_amount||0| number : '1.2-2'}}</div>
+                                        <div class='text-xs fw-bold'>{{thresholdPreviousDetails?.previous_request[0]?.transaction_status||''}}</div>
+                                    </div>
+                                    <div class='flex-grow-1 ' *ngIf="!thresholdPreviousDetails?.previous_request||!thresholdPreviousDetails?.previous_request[0]">
+                                        <div class='fw-bold text-primary'> </div>
+                                        <div class='h4 mb-0 fw-bolder'>RM 0</div>
+                                        <div class='text-xs fw-bold'> </div>
+
+                                    </div>
+                                    <div class='ms-2'>
+                                        <fa-icon class='fa-2x text-gray-200' [icon]='["fas", "tag"]'></fa-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col-xl-12 col-lg-12 col-md-12 mb-12'>
+                        <div
+                            class='card border-top-0 border-bottom-0 border-end-0 border-start-lg border-primary m-top h-auto'>
+                            <div class='card-body'>
+                                <div class='d-flex align-items-center '>
+                                    <div class='flex-grow-1 ' *ngIf="thresholdPreviousDetails?.previous_request&&thresholdPreviousDetails?.previous_request[1]">
+                                        <div class='fw-bold text-primary'>{{thresholdDate(thresholdPreviousDetails?.previous_request[1]?.requested_date)}}</div>
+                                        <div class='h4 mb-0 fw-bolder'>RM {{thresholdPreviousDetails?.previous_request[1]?.threshold_amount||0| number : '1.2-2'}}</div>
+                                        <div class='text-xs fw-bold'>{{thresholdPreviousDetails?.previous_request[1]?.transaction_status||''}}</div>
+
+                                    </div>
+                                    <div class='flex-grow-1 ' *ngIf="!thresholdPreviousDetails?.previous_request||!thresholdPreviousDetails?.previous_request[1]">
+                                        <div class='fw-bold text-primary'></div>
+                                        <div class='h4 mb-0 fw-bolder'>RM 0</div>
+                                        <div class='text-xs fw-bold'> </div>
+
+                                    </div>
+                                    <div class='ms-2'>
+                                        <fa-icon class='fa-2x text-gray-200' [icon]='["fas", "tag"]'></fa-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-9'>
+                <form [formGroup]="collectionForm" (ngSubmit)="onSubmit()">
+                    <div class='h4 mb-0 fw-bolder'>Declaration of Collection</div>
+                    <fieldset>
+                    <div class='row m-top'>
+                        <div class='col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12'>
+                            <label class='small mb-1' for='inputLastName'>Bank in Type</label>
+                            <select
+                                [ngClass]="{'is-invalid': collectionForm.controls.bankInType.touched && collectionForm.controls.bankInType.invalid}"
+                                class='form-select' id='bankInType' formControlName='bankInType'>
+                                <option [value]="null" hidden selected>Select</option>
+                                <option [value]="type.id" *ngFor="let type of bankinTypeList">
+                                    {{type?.bank_in_type_name}}</option>
+                            </select>
+                        </div>
+                        <div class='col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12'>
+                            <label class='small mb-1' for='inputFirstName'>Amount (RM)</label>
+                            <input
+                                [ngClass]="{'is-invalid': collectionForm.controls.amount.touched && collectionForm.controls.amount.invalid}"
+                                class='form-control' formControlName='amount' id='amount' type='text' min='0'
+                                placeholder='' />
+                            <div class='invalid-feedback'
+                                *ngIf='collectionForm.controls.amount.invalid && collectionForm.controls.amount.errors?.required'>
+                                Value is required
+                            </div>
+                            <div class='invalid-feedback'
+                                *ngIf='collectionForm.controls.amount.invalid && collectionForm.controls.amount.errors?.maxlength'>
+                                Max length exceeded
+                            </div>
+                            <div class='invalid-feedback'
+                                *ngIf='collectionForm.controls.amount.invalid && (collectionForm.controls.amount.errors?.min || collectionForm.controls.amount.errors?.pattern)'>
+                                Value is invalid
+                            </div>
+                        </div>
+                        <div class='col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12'>
+                            <label class='small mb-1' for='inputLastName'>Transaction Time</label>
+                            <input
+                                [ngClass]="{'is-invalid': collectionForm.controls.transactionTime.touched && collectionForm.controls.transactionTime.invalid}"
+                                class='form-control time-input' id='transactionTime' formControlName='transactionTime'
+                                readonly (click)='datePicker.click()' >
+                                <input #datePicker class="hidden-date-time-picker"
+                                id='transactionDatePicker' formControlName='transactionDatePicker'
+                                ngbDatepicker #d='ngbDatepicker' [minDate]='minDate' [maxDate]='currentDate' readonly
+                                (click)='d.toggle()' (dateSelect)="d.close();btnTime.click();onDateSelection($event)">
+                                <input type="text" class="hidden-date-time-picker" placement="bottom" #btnTime [ngbPopover]="timePicker" [autoClose]="'outside'">
+                                <ng-template #timePicker>
+                                <ngb-timepicker formControlName="transactionTimePicker" (change)="onTimeSelection()" meridian="false"></ngb-timepicker>
+                                </ng-template>
+                        </div>
+                    </div>
+
+                    <div class='row m-top'>
+                        <div class='col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12'>
+                            <label class='small mb-1' for='inputLastName'>Reference ID</label>
+                            <select
+                                [ngClass]="{'is-invalid': collectionForm.controls.referanceID.touched && collectionForm.controls.referanceID.invalid}"
+                                class='form-select' id='referanceID' formControlName='referanceID'>
+                                <option [value]="null" hidden selected>Select</option>
+                                <option [value]="type.id" *ngFor="let type of referanceIDList">
+                                    {{type?.reference_id_name}}</option>
+                            </select>
+
+                        </div>
+                        <div class='col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12'>
+                            <label class='small mb-1' for='inputLastName'>Payment Channel</label>
+                            <select
+                                [ngClass]="{'is-invalid': collectionForm.controls.paymentChannel.touched && collectionForm.controls.paymentChannel.invalid}"
+                                class='form-select' id='paymentChannel' formControlName='paymentChannel'>
+                                <option [value]="null" hidden selected>Select</option>
+                                <option [value]="type.id" *ngFor="let type of paymentChannelList">
+                                    {{type?.payment_channel_name}}</option>
+                            </select>
+
+                        </div>
+                        <div class='col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 d-flex justify-content-end'>
+                            <button class='btn btn-primary btn-add' type='submit' [disabled]="collectionForm.invalid || isAttachmentSizeExceeded || isthreshold30Exceeded">Add Collection</button>
+
+                        </div>
+                    </div>
+                    <br>
+                    <div class='invalid-feedback invalid-msg' *ngIf="isAttachmentSizeExceeded" >
+                        Maximum size of a file can be only 2MB.
+                    </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

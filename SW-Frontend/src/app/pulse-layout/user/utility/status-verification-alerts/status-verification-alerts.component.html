@@ -1,0 +1,49 @@
+<ng-template #modalDefaultStatic let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-warning'>Confirm!</span> Statement Export</h5>
+    </div>
+
+    <div class='modal-body'>
+        <label class='small mb-3'>Please confirm to proceed with the data as per below:</label>
+        <table>
+            <tbody>
+            <tr>
+                <td>Outlet ID</td>
+                <td><strong class='ms-lg-5'>S21424CLM</strong></td>
+            </tr>
+            <tr>
+                <td>MSISDN</td>
+                <td><strong class='ms-lg-5'>S00123</strong></td>
+            </tr>
+            <tr>
+                <td>Transaction Type</td>
+                <td><strong class='ms-lg-5'>All</strong></td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td><strong class='ms-lg-5'>Last 90 days</strong></td>
+            </tr>
+            <tr>
+                <td><label class='small mt-3 mb-3'>Send email to</label></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                    <div class='form-check'>
+                        <input class='form-check-input' id='customRadio1' type='radio' name='customRadio' />
+                        <label class='form-check-label' for='customRadio1'>Dealer Owner Email</label>
+                    </div>
+                </td>
+                <td><strong class='ms-lg-5'>xxx@xxx.com</strong></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-default' type='button' (click)='modal.close("Close Click")'>Cancel</button>
+        <button class='btn btn-primary' type='button'
+               >Confirm
+        </button>
+    </div>
+</ng-template>

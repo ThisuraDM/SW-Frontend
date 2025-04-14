@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <path fill="currentColor" d="M24 9a15.017 15.017 0 0115 15 15.017 15.017 0 01-15 15A15.017 15.017 0 019 24 15.017 15.017 0 0124 9m0-2A17 17 0 007 24a17 17 0 0017 17 17 17 0 0017-17A17 17 0 0024 7z"/>
+  <circle cx="2" cy="2" r="2" fill="currentColor" transform="translate(22 22)"/>
+  <rect width="10" height="2" fill="currentColor" rx="1" transform="translate(35 23)"/>
+  <rect width="10" height="2" fill="currentColor" rx="1" transform="translate(3 23)"/>
+  <rect width="10" height="2" fill="currentColor" rx="1" transform="rotate(90 -5 30)"/>
+  <rect width="10" height="2" fill="currentColor" rx="1" transform="rotate(90 11 14)"/>
+</svg>

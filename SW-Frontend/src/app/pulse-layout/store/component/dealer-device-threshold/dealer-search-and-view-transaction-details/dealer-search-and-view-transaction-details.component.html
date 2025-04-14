@@ -1,0 +1,145 @@
+<div class="container-xl px-2 mt-4">
+    <div class="row gx-4 px-4 mt-3">
+        <div class='col-12 card h-50 px-0'>
+            <div class='card-header w-100'>
+                <a (click)="onClickBack()" >
+                    <svg class='icon text-black back-arrow ' aria-hidden='true' width='24' height='24'>
+                        <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#arrow-previous'></use>
+                    </svg>
+                </a>
+                <span class="ml-3">Device Threshold Transaction Details</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-xl px-4 mt-4">
+    <div class="row gx-4 mb-2">
+        <div class='col-12'>
+            <sbpro-card [classes]="['w-75']">
+                <div class='card-header'>Search Transaction Details</div>
+                <div class='card-body'>
+                    <form [formGroup]="searchForm" (ngSubmit)='onSearch()' class='needs-validation'>
+
+                        <div class='row mb-2'>
+                            <div class='mb-2 col-md-4'>
+                                <label class='small mb-1 dropdown-label' for='transactionType'>Type of
+                                    Transaction </label>
+                                <select class='form-select form-select-custom custom-select' id='transactionType'
+                                        [ngClass]="{'is-invalid': searchForm.controls.transactionType.touched && searchForm.controls.transactionType.invalid}"
+                                        formControlName='transactionType'>
+                                    <option class='custom-select-option' *ngFor='let type of transactionTypeList'
+                                            ngbDropdownItem
+                                            [value]="type.transaction_type_name">
+                                        {{type.transaction_type_name}}
+                                    </option>
+                                </select>
+                                <div class='invalid-feedback'
+                                     *ngIf='searchForm.controls.transactionType.invalid && searchForm.controls.transactionType.errors?.required'>
+                                    Value is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='mb-2 col-md-4'>
+                                <label class='small mb-1 w-100' for="fromDate">From</label>
+                                <input
+                                    [ngClass]="{'is-invalid': searchForm.controls.fromDate.touched && searchForm.controls.fromDate.invalid}"
+                                    class='form-select' id='fromDate' formControlName='fromDate'
+                                    ngbDatepicker #fromDatePicker='ngbDatepicker'
+                                    [minDate]='minDateFrom'
+                                    [maxDate]='maxDateFrom'
+                                    readonly (click)='fromDatePicker.toggle()'>
+                                <div class='invalid-feedback'
+                                     *ngIf='searchForm.controls.fromDate.invalid && searchForm.controls.fromDate.errors?.required'>
+                                    Value is required
+                                </div>
+                            </div>
+
+                            <div class='mb-2 col-md-4'>
+                                <label class='small mb-1' for='toDate'>To</label>
+                                <input
+                                    [ngClass]="{'is-invalid': searchForm.controls.toDate.touched && searchForm.controls.toDate.invalid}"
+                                    class='form-select' id='toDate' formControlName='toDate'
+                                    ngbDatepicker #toDatePicker='ngbDatepicker'
+                                    [minDate]='minDateTo'
+                                    [maxDate]='maxDateTo'
+                                    readonly (click)='toDatePicker.toggle()'>
+                                <div class='invalid-feedback'
+                                     *ngIf='searchForm.controls.toDate.invalid && searchForm.controls.toDate.errors?.required'>
+                                    Value is required
+                                </div>
+                            </div>
+                            <div class='mb-3 col-md-4'>
+
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <button class='btn btn-primary search-button'>Search</button>
+                        </div>
+
+                    </form>
+                </div>
+            </sbpro-card>
+            <div class="my-2 mb-4">
+                <sbpro-card>
+                    <div class='card-header'>Search Results</div>
+                    <div class='card-body'>
+                        <div class='col-md-12 table-responsive'>
+                            <table class="table border rounded my-3 w-100">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th class='small' scope='col'>Date</th>
+                                    <th class='small' scope='col'>Type</th>
+                                    <th class='small' scope='col'>Reference</th>
+                                    <th class='small' scope='col'>Credit</th>
+                                    <th class='small' scope='col'>Debit</th>
+                                    <th class='small' scope='col'>Available Device Threshold</th>
+                                    <th class='small' scope='col'>Excess Threshold</th>
+                                    <th class='small' scope='col'>Remarks</th>
+
+                                </tr>
+                                </thead>
+                                <tbody *ngIf='searchResults?.length'>
+                                <tr *ngFor='let stockItem of searchResults'>
+                                    <td class='small'>{{formatDate(stockItem.transaction_date)}}</td>
+                                    <td class='small'>{{stockItem.transaction_type || '-'}}</td>
+                                    <td class='small'>{{stockItem.reference_id || '-'}}</td>
+                                    <td class='small'>{{stockItem.credit || '-'}}</td>
+                                    <td class='small'>{{stockItem.debit || '-'}}</td>
+                                    <td class='small'>{{stockItem.available_device_threshold || '-'}}</td>
+                                    <td class='small'>{{stockItem.excess_threshold || '-'}}</td>
+                                    <td class='small'>{{stockItem.remarks || '-'}}</td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                            <SW-no-data *ngIf='!searchResults?.length' [height]="224" [content]="''"
+                                           [message]="errorMessage">
+                            </SW-no-data>
+                        </div>
+                        <div *ngIf='searchResults?.length' class='d-flex justify-content-end my-3'>
+                            <button class='btn btn-primary search-button' type='button' (click)="onExportClick()">Export
+                            </button>
+                        </div>
+                        <div class="row dataTable-bottom" *ngIf='searchResults?.length'>
+                            <div class="col-md-6 dataTable-info">
+                                Showing {{(responseDetails?.number * pageSize) + 1}}
+                                to {{responseDetails?.totalElements < (responseDetails?.number + 1) * pageSize
+                                ? responseDetails?.totalElements : (responseDetails?.number + 1) * pageSize}} of
+                                {{responseDetails?.totalElements}} entries
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-end">
+                                <ngb-pagination (pageChange)='loadPage($event)'
+                                                [collectionSize]='responseDetails?.totalElements' [maxSize]='3'
+                                                [pageSize]='pageSize' [(page)]="pageNumber">
+                                </ngb-pagination>
+                            </div>
+                        </div>
+
+                    </div>
+                </sbpro-card>
+            </div>
+        </div>
+    </div>
+</div>

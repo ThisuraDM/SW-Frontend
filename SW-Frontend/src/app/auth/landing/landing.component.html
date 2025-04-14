@@ -1,0 +1,92 @@
+<div *ngIf="page === 'landing'" class='row custom-height'>
+    <div class='d-flex bg-gradient-primary-to-secondary col-md-3 '>
+        <div class='col-md-12 d-flex flex-column justify-content-between p-5'>
+            <div class='mb-2'>
+                <img src='../../assets/img/logo/LogoSW.svg' alt='SW Logo'>
+            </div>
+            <div class='mb-2'>
+                <div class='text-white mb-3' style='font-size: 30px'>Welcome to <br> SW Backoffice</div>
+                <h2 class='text-white fw-300'>An easier way to manage your daily operations and grow your
+                    business.</h2>
+            </div>
+            <div class='m-player d-none d-md-block'>
+                <lottie-player src='https://assets1.lottiefiles.com/packages/lf20_nokcisto.json'
+                               background='transparent' mode='normal' style='width: 160px'
+                               loop loop autoplay></lottie-player>
+            </div>
+        </div>
+    </div>
+    <div class='d-flex flex-column justify-content-start justify-content-md-center align-items-center col-md-9 px-5 pt-3'>
+        <div class='col-md-6'>
+            <div class='my-3'>
+                <div class='text-md'>Please select your role to proceed.</div>
+            </div>
+            <div class='justify-content-center'>
+                <div (click)='loginWithAd()' class='card bg-primary border-0 rounded-lg mb-3 cursor'>
+                    <div class='card-body'>
+                        <div class='d-flex justify-content-between align-items-center'>
+                            <div class='me-3'>
+                                <h2 class='text-white mb-2'>Bluecube Employee</h2>
+                                <div class='text-white text-md'>Review monthly KPI performance, monitor trends and much more.</div>
+                            </div>
+                            <i-feather class='feather-xl text-white-50' name='arrow-right'></i-feather>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='justify-content-center'>
+                <div (click)='loadAuthUrl()' class='card bg-primary border-0 rounded-lg mb-3 cursor'>
+                    <div class='card-body'>
+                        <div class='d-flex justify-content-between align-items-center'>
+                            <div class='me-3'>
+                                <h2 class='text-white mb-2'>Certified Dealer</h2>
+                                <div *ngIf='!disableDealerButton' class='text-white text-md'>Monitor daily required
+                                    trends, manage cashless transactions with our internal eWallet, and much more.
+                                </div>
+                                <div *ngIf='disableDealerButton' class='text-white text-md'>Best is yet to come! We
+                                    are getting things ready for you.<br> <span style='color: white;'>...</span>
+                                </div>
+                            </div>
+                            <i-feather class='feather-xl text-white-50' name='arrow-right'></i-feather>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="page === 'sudden'">
+    <SW-error-503-sudden-maintenance></SW-error-503-sudden-maintenance>
+</div>
+<div *ngIf="page === 'planned'">
+    <SW-error-503-planned-maintenance [smFromTime]="smFromTime" [smToTime]="smToTime"></SW-error-503-planned-maintenance>
+</div>
+
+<ng-template #modalLoading let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Login Successful! Hang tight...</span></h5>
+    </div>
+    <div class='modal-body'>
+        <div id="layoutError_content">
+            <main>
+                <div class="container-xl px-4">
+                    <div class="row gx-4 justify-content-center">
+                        <div class="col-lg-6 ">
+                            <div class='d-flex justify-content-around mt-2'>
+                                <lottie-player
+                                    src='../assets/img/error/long-loading.json'
+                                    background='transparent' mode='normal' style='width: 240px' loop loop autoplay>
+                                </lottie-player>
+                            </div>
+                         
+                        </div>
+                        <div class="text-center mt-4">
+                            <p class='text-black fw-400'>Hold on...You're being redirected to the PBO Dashboard.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</ng-template>

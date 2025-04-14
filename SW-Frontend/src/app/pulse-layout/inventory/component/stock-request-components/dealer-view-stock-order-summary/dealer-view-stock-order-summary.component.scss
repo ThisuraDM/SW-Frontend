@@ -1,0 +1,52 @@
+.back-arrow{
+    color: #333333;
+    opacity: 1;
+    margin-right: 2rem;
+    cursor: pointer;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.text-black {
+    color: black;
+}
+
+.details-label {
+    color: #697479;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.text-bold-600 {
+    font-weight: 600;
+}
+
+.result-header {
+    color: black;
+    font-weight: bold;
+}
+
+.cancel-request-button {
+    height: 35px;
+    @media (min-width: 767px) {
+        width: 40%;
+    }
+
+    @media (max-width: 767px) {
+        width: 100%;
+    }
+}
+
+.smaller-button {
+    height: 35px;
+    @media (min-width: 563px) {
+        width: 30%;
+    }
+
+    @media (max-width: 563px) {
+        width: 100%;
+    }
+}

@@ -1,0 +1,53 @@
+<SW-track-stock-horizontal-heading-bar *ngIf="displayScreen !== 'RCSP_TRACK_STOCK_DETAILS' && displayScreen !== 'Search'"
+                                          (backClick)="onBackClick($event)" [inputData]="setHeadingBarInputData()">
+</SW-track-stock-horizontal-heading-bar>
+
+<div class="container-xl px-4 mt-4" [hidden]="displayScreen !== 'Search'">
+    <div class="row gx-4 mb-2">
+        <div class='col-12'>
+            <sbpro-card-navigation sbproTocItem="Tabs" *ngIf="!displayScreenRcspDetails" [navNames]='["Reload Cards & Starter Packs", "Device & Accessories"]'
+                [isCardHeaderVisible]="true" [cardHeader]="'Track Stock Transfer'"
+                [templates]="[rcsp, otherStore]">
+                <ng-template #rcsp>
+                    <SW-dealer-rcsp-search-track-stock *ngIf="!displayScreenRcspDetails"
+                                                          (transferSelect)="onSelectTransferRequestRcsp($event)"
+                                                          (transferSelectOutlet)="onSelectTransferRequestOutlet($event)">
+                        ></SW-dealer-rcsp-search-track-stock>
+                </ng-template>
+                <ng-template #otherStore>
+                    <SW-dealer-search-to-track-stock-transfer
+                        (transferSelect)="onSelectTransferRequest($event)"
+                        (transferSelectOutlet)="onSelectTransferRequestOutlet($event)">
+                    </SW-dealer-search-to-track-stock-transfer>
+
+                </ng-template>
+
+                <ng-template #warehouse>
+                </ng-template>
+            </sbpro-card-navigation>
+        </div>
+    </div>
+</div>
+
+<SW-dealer-track-stock-transfer-details-from-plant
+    *ngIf="(displayScreen === 'View Details' || displayScreen === 'Acknowledge' || displayScreen === 'Approve/Reject')"
+    (viewMoreClick)="onTrackStockTransferViewMoreClick()"
+    (startAcknowledgeClick)="onStartAcknowledgeClick()"
+    [salesOrderID]="selectedRow?.salesOrderNo"
+    [requestID]="selectedRow?.stockOrderRequestId"
+    [status]="selectedRow?.stockRequestStatus"
+    [outletID]="selectedOutlet">
+</SW-dealer-track-stock-transfer-details-from-plant>
+
+<SW-dealer-rcsp-search-track-stock-details
+    *ngIf="displayScreenRcspDetails"
+    (backClick)='onBackClick($event)'
+    [selectedRowRcsp]="selectedRowRcsp">
+</SW-dealer-rcsp-search-track-stock-details>
+
+<SW-dealer-stock-transfer-details-track-stock-movement
+    *ngIf="displayScreen === 'VIEW_STOCK_MOVEMENT'"
+    (navigateBackToPreviousScreen)="displayScreen = selectedRow?.navigateOption"
+    [requestID]="selectedRow?.stockRequestId"
+    [status]="selectedRow?.stockRequestStatus">
+</SW-dealer-stock-transfer-details-track-stock-movement>

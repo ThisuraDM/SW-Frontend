@@ -1,0 +1,84 @@
+<sbpro-card>
+    <div class='card card-body h-90 d-flex flex-column justify-content-center '>
+        <div class='row gx-4 align-items-center'>
+            <div class='col-xl-12 col-xxl-12'>
+                <div class='row'>
+                    <div class='col-md-3'>
+                        <div class='row'>
+                            <img class='img-fluid' style='max-width: 165px;' alt='Bluecube'
+                                 src='../../../../../assets/img/logo/bluecube.svg' />
+                        </div>
+                        <div class='row'>
+                            <span class='text text-black text-lg fw-700' style='line-height: 20px'>Nationwide <br> BluecubeIQMS</span>
+                            <span class='small mb-2'>Together we can win this!</span>
+                        </div>
+                    </div>
+                    <div class='col-md-3 mb-md-0 mb-3'>
+                        <div *ngIf='loaded else skeletonLoader' class='card bg-gradient-primary-to-secondary border-0'>
+                            <div class='card-body'>
+                                <div class='d-flex justify-content-between align-items-center'>
+                                    <div class='me-3'>
+                                        <span
+                                            class='text-white text-lg'>{{iqms!.tickets_count ?? 0 | number: '1.0-0'}}</span><br>
+                                        <span class='text-white-50 small'> Tickets Issued</span>
+                                    </div>
+                                    <div class='ms-2'>
+                                        <img src='assets/icons/target-iqms.svg' alt='' width='40' height='40' title='SW Life'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3 mb-md-0 mb-3'>
+                        <div *ngIf='loaded else skeletonLoader' class='card bg-gradient-primary-to-secondary border-0'>
+                            <div class='card-body'>
+                                <div class='d-flex justify-content-between align-items-center'>
+                                    <div class='me-3'>
+                                        <span
+                                            class='text-white text-lg'>{{iqms!.avg_waiting_time ?? 0 | number: '1.0-1'}}
+                                            mins</span><br>
+                                        <span class='text-white-50 small'> Waiting Time</span>
+                                    </div>
+                                    <div class='ms-2'>
+                                        <img src='assets/icons/target-iqms.svg' alt='' width='40' height='40' title='SW Life'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3 mb-md-0 mb-3'>
+                        <div *ngIf='loaded else skeletonLoader' class='card bg-gradient-primary-to-secondary border-0'>
+                            <div class='card-body'>
+                                <div class='d-flex justify-content-between align-items-center'>
+                                    <div class='me-3'>
+                                        <span
+                                            class='text-white text-lg'>{{iqms!.avg_serving_time ?? 0 | number: '1.0-1'}}
+                                            mins</span><br>
+                                        <span class='text-white-50 small'> Serving Time</span>
+                                    </div>
+                                    <div class='ms-2'>
+                                        <img src='assets/icons/target-iqms.svg' alt='' width='40' height='40' title='SW Life'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</sbpro-card>
+
+<ng-template #skeletonLoader>
+    <div class='card bg-white-25 border-0'>
+        <div class='card-body'>
+            <div class='d-flex justify-content-between align-items-center'>
+                <div class='me-3'>
+                    <SW-skeleton-loader cWidth='60' cHeight='25'></SW-skeleton-loader>
+                    <SW-skeleton-loader cWidth='100' cHeight='15'></SW-skeleton-loader>
+                </div>
+                <SW-skeleton-loader cWidth='48' cHeight='48'></SW-skeleton-loader>
+            </div>
+        </div>
+    </div>
+</ng-template>

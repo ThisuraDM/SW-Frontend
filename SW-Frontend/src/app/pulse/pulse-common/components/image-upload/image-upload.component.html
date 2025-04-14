@@ -1,0 +1,11 @@
+<input class='form-control file-upload-input' (click)="!fileName?fileInput.click():null" [value]="fileName" id='attachment' disabled placeholder="Upload file" />
+                            
+<svg class='icon text-black displace-icon' (click)="!fileName?fileInput.click():null" *ngIf="!fileName" aria-hidden='true' width='24' height='24' >
+  <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#plus'></use>
+</svg>
+
+<svg class='icon text-black displace-icon' (click)="fileName = null;" *ngIf="fileName"  aria-hidden='true' width='24' height='24'>
+  <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#trash'></use>
+</svg>
+
+<input style="display: none" type="file" multiple (change)="onFileChanged($event)" (click)="$event.target.value=null" #fileInput/>

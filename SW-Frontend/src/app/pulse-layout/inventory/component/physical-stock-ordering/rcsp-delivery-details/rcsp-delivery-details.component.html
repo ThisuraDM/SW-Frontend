@@ -1,0 +1,185 @@
+<div class='container-xl px-4 mt-3' [hidden]="displayedScreen !== 'main'">
+    <div class="row gx-4">
+        <div class="col-12">
+            <sbpro-card>
+                <div class='card-header w-100'>
+                    <a (click)="onBackClick()">
+                        <svg class='icon text-black back-arrow' aria-hidden='true' width='24' height='24'>
+                            <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#arrow-previous'></use>
+                        </svg> </a>
+                    <span class="ml-5">Request Summary</span>
+                </div>
+
+                <div class="card-body">
+                    <div class="ms-5 row d-flex justify-content-between gx-4">
+                        <div class="col-md-8">
+                            <div class="row gx-4">
+                                <div class="my-2">
+                                    <span class="result-header">Delivery Address</span>
+                                </div>
+
+                                <div class="row gx-4">
+                                    <div class="col-md-6" *ngFor="let address of addressList; let i = index">
+                                        <div class="address-section" (click)="selectAddress(i, addUpdateAddressPopup)"
+                                            [ngClass]="{'address-section--clicked': address.isSelected}">
+                                            <div class="d-flex flex-row justify-content-between m-2">
+                                                <p class="text-primary text-bold-600">
+                                                    {{address.isMainAddress ? 'Main Address' : (address.isNewAddress ? 'Add New Address' : 'Shipping Address')}}
+                                                </p>
+
+                                                <input
+                                                    *ngIf="(i !== addressList.length - 1) && !address.isSelected"
+                                                    id='customRadio1' type='radio'
+                                                       name='customRadio'/>
+                                                <svg class='icon text-primary' aria-hidden='true' width='16' height='16'
+                                                     *ngIf='address.isSelected'>
+                                                    <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'></use>
+                                                </svg>
+                                            </div>
+                                            <div class="m-2" *ngIf="!address.isNewAddress">
+                                                <p class="small">
+                                                    <span title="{{address.line1}}" >{{address.line1}}</span><br>
+                                                    <span class="elipseAddress">{{address.line2}}</span><br>
+                                                    <span class="elipseAddress">{{address.postalCode ? (address.postalCode + ', ') : ''}}{{address.city}}</span><br>
+                                                    <span class="elipseAddress">{{address.state ? (address.state + ', ') : ''}}</span><br>
+                                                    <span class="elipseAddress">{{address.country}}</span><br>
+                                                </p>
+                                            </div>
+
+                                            <div class="d-flex justify-content-end" *ngIf="address.isSelected && !address.isMainAddress && !address.isNewAddress">
+                                                <button class="btn btn-outline-primary smaller-button mb-2" type="button"
+                                                    (click)="onEditAddress(i, address, addUpdateAddressPopup)">
+                                                    Edit Address
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <sbpro-card [classes]="['mt-3']">
+                                <div class="card-header">
+                                    Request Details
+                                </div>
+                                <div class="card-body p-0" *ngIf="!isPromo">
+                                    <div *ngFor="let item of selectedItemList; let i = index"
+                                         class="stock-list-item">
+                                        <span class="mx-2 text-primary text-bold-600 mt-1">{{item.request_quantity}}x</span>
+                                        <span class="mx-2 details-label">{{item.category}}-{{item.item_name}}</span>
+                                    </div>
+                                    <div class="my-3">
+                                        <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                            <div class="ms-2">Grand Total:</div>
+                                            <div class="text-black text-bold-600 me-3">RM {{(previousScreenDetails?.request_grand_total || 0)  | currency : '' : ''}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0" *ngIf="isPromo">
+                                    <div *ngFor="let item of previousScreenDetailsPromo!.promotionBuyItems; let i = index"
+                                         class="stock-list-item">
+                                        <span class="mx-2 text-primary text-bold-600 mt-1">{{item.quantityOrAmount}}x</span>
+                                        <span class="mx-2 details-label">{{item.productType}}-{{item.itemCode}}</span>
+                                    </div>
+                                    <div *ngFor="let item of previousScreenDetailsPromo!.promotionGetItems; let i = index"
+                                    class="stock-list-item">
+                                   <span class="mx-2 text-primary text-bold-600 mt-1">{{item.quantityOrAmount}}x</span>
+                                   <span class="mx-2 details-label">{{item.productType}}-{{item.itemCode}}</span>
+                               </div>
+                                    <div class="my-3">
+                                        <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                            <div class="ms-2">Grand Total:</div>
+                                            <div class="text-black text-bold-600 me-3">RM {{(previousScreenDetailsPromo?.grandTotal || 0)  | currency : '' : ''}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </sbpro-card>
+                        </div>
+                    </div>
+
+                    <div class="row ms-5 mt-2 mb-1">
+                        <span class="result-header">Confirm Delivery Contact</span>
+                    </div>
+
+                    <div class='row ms-5 col-md-8'>
+                        <div class='row'>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label'>Contact Name</label>
+                                <input class='form-control form-control-custom custom-input' id='name'
+                                       type='text' placeholder='Contact Name' disabled
+                                       [ngModel]='userInformation.name'>
+                            </div>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='phone_number'>Contact Number</label>
+                                <input class='form-control form-control-custom custom-input' id='phone_number'
+                                       type='text'
+                                       placeholder='Contact Number' disabled
+                                       [ngModel]='userInformation.phone_number'>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label'>Contact Email</label>
+                                <input class='form-control form-control-custom custom-input' type='text' id='email'
+                                       placeholder='Contact Email' disabled
+                                       [ngModel]='userInformation.email'>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-12">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-outline-primary me-2 submit-button mb-2" type="button"
+                                (click)="onBackClick()">
+                                Edit Stocks
+                            </button>
+
+                            <button class="btn btn-primary submit-button mb-2" type="button"
+                                (click)="onConfirmClick(modalOwnerDataNotfound)">
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+    </div>
+</div>
+
+<ng-template #addUpdateAddressPopup>
+    <SW-dealer-stock-request-add-update-address-popup
+        [outletId]="outletId"
+        [stateList]="stateList"
+        [defaultAddressDetails]="selectedAddress?.addressDetails ?? null"
+        (saveClick)="selectedAddress ? onUpdateExistingAddress($event) : onAddNewAddress($event)"
+        (cancelClick)="selectedAddress ? onUpdateAddressCancelClick(): onAddNewAddressCancelClick()">
+    </SW-dealer-stock-request-add-update-address-popup>
+</ng-template>
+
+<ng-container>
+    <SW-rcsp-detail-summary
+        *ngIf="displayedScreen === 'summary'"
+        [confirmResponse]="confirmResponse"
+        [selectedItems]="selectedItemList"
+        [selectedPromo]="previousScreenDetailsPromo"
+        [prevDetails]="previousScreenDetails"
+        [isPromo]="isPromo"
+        [requestId]="confirmResponse?.request_id"
+        (backClick)="displayedScreen = 'main'">
+    </SW-rcsp-detail-summary>
+</ng-container>
+
+<ng-template #modalOwnerDataNotfound let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Alert!</span></h5>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>Delivery contact details are empty. <br> Do you want to proceed ?</div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close()'>No</button>
+        <button class='btn btn-primary' type='button' (click)='confirmNumberDetails()'>Yes</button>
+    </div>
+</ng-template>

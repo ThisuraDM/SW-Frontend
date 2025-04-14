@@ -1,0 +1,60 @@
+<sb-layout-auth>
+    <div class='container-xl px-4'>
+        <div class='row gx-4 justify-content-center'>
+            <div class='col-lg-5'>
+                <div class='card shadow-lg border-0 rounded-lg mt-5'>
+                    <div class='card-header justify-content-center'>
+                        <div class='title_container px-0'>
+                            <div class='title_text'>Login</div>
+                            <img src='assets/icons/SW_logo.svg' alt='SW Logo'>
+                        </div>
+                    </div>
+                    <div class='card-body'>
+                        <form [formGroup]='loginForm' (ngSubmit)='loginWithCustomLogin()'>
+                            <div class='mb-3'>
+                                <input (ngModelChange)='clearCommonValidators()' class='form-control'
+                                       id='inputusernameAddress' data-cy='usernameInput' type='username'
+                                       placeholder='Username' aria-describedby='usernameHelp'
+                                       formControlName='username' />
+                                <div
+                                    *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched"
+                                    class='invalid-feedback' style='display: block;'>Username is required.
+                                </div>
+                                <input (ngModelChange)='clearCommonValidators()' class='form-control'
+                                       id='inputpasswordAddress' data-cy='passwordInput' type='password'
+                                       placeholder='Password' aria-describedby='passwordHelp'
+                                       formControlName='password' />
+                                <div
+                                    *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched"
+                                    class='invalid-feedback' style='display: block;'>Password is required.
+                                </div>
+                                <div *ngIf='commonLoginValidation !== undefined' class='invalid-feedback'
+                                     style='display: block;'>{{commonLoginValidation}}
+                                </div>
+                                <div style='margin-top: 1rem;'>
+                                    <ngx-recaptcha2 #captchaElem
+                                                    [siteKey]='siteKey'
+                                                    [ngModel]='recaptcha'
+                                                    formControlName='recaptchaEle'>
+                                    </ngx-recaptcha2>
+                                </div>
+                            </div>
+
+                            <div class='d-flex align-items-center justify-content-between mt-4'>
+                                <div *ngIf='this.authType === "bc"' (click)='loginWithAd()' class='btn ms-button'>
+                                    <img class='ms-logo' src='../../../assets/img/ms-logo.jpg' alt='SW Logo'>Sign in with AD
+                                </div>
+                                <div *ngIf='this.authType == "dealer"' (click)="loginWithB2C()" class="btn" [ngClass]="{'ms-button-disabled': disableRedirect , 'ms-button' : !disableRedirect }">
+                                    <img class='ms-logo' src='../../../assets/img/ms-logo.jpg' alt='SW Logo'>Sign in with B2C
+                                </div>
+                                <button [disabled]='loginForm.invalid' class='btn btn-primary btn-lg' data-cy='loginButton'
+                                        type='submit'>Login
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</sb-layout-auth>

@@ -1,0 +1,161 @@
+<div class="container-xl px-4 mt-n10'">
+  <div class='card mb-4'>
+    <div class='card-header'>CNU Submission List</div>
+    <div class='card-body'>
+      <div class='text-75 small mb-3'> Regularly check the status of CNU submission to maintain optimum record.</div>
+      <div class="dataTable-top">
+        <div class="dataTable-dropdown col-md-6 mt-3"><label>
+            <select class="dataTable-selector" name='pageSize' [(ngModel)]='pageSize'
+              (ngModelChange)="loadPage(1)">
+              <option value="5">5</option>
+              <option value="10" selected="">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+            </select> entries per page</label></div>
+        <div class="dataTable-search col-md-2 col-sm-12 mt-1">
+          <div class='dropdown-label date-label' >Date</div>
+          <input class="form-control form-select-111 fw-bold text-primary" name="dp" ngbDatepicker
+          #d="ngbDatepicker" [maxDate]='currentDate' (click)="d.open()" [(ngModel)]="date"  dateFormat="dd-MMM-yyyy"
+          (dateSelect)="d.close();loadPage(1)" [autoClose]="'outside'" [placement]="'auto'" readonly>
+      </div>
+      </div>
+      <div class="table-responsive">
+
+        <div class="dataTable-container">
+          <table id="datatablesSimple" class="dataTable-table">
+            <thead>
+              <tr>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'date'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'date')">Date</a>
+                </th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'staff_id'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'staff_id')">Staff ID</a></th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'amount'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'amount')">Amount</a>
+                </th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'payment_source'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'payment_source')">Source of
+                    Payment</a></th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'customer_name'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'customer_name')">Customer
+                    Name</a></th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'mobile_no'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'mobile_no')">Mobile No.</a>
+                </th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'order_no'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'order_no')">Official Receipt No.</a>
+                </th>
+                <th data-sortable=""><a class="dataTable-sorter" style="text-align:center!important;padding-right: 1rem !important">Actions</a></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor='let outlet of tableDataList let i = index'>
+                <td>{{outlet.cnu_date}}</td>
+                <td>{{outlet.staff_id}}</td>
+                <td>RM {{outlet.amount | number : '1.2-2'}}</td>
+                <td>{{outlet.payment_source}}</td>
+                <td>{{outlet.customer_name}}</td>
+                <td>{{outlet.mobile_no}}</td>
+                <td>{{outlet.order_no}}</td>
+                <td class="table-action-column">
+                  <sbpro-dropdown placement='bottom-end' [classes]='["no-caret"]'>
+                    <div class='dropdown-trigger'>
+                      <i-feather class='text-primary' name='more-vertical'></i-feather>
+                    </div>
+                    <div class='dropdown-items'>
+                      <a class='dropdown-item'
+                        (click)="openUpdateModal(outlet.id, cnuUpdateModal, {backdrop: 'static', centered: true, size: 'lg'})">Edit</a>
+                      <a class='dropdown-item'
+                        (click)="openDeleteModal(outlet.id, cnuDeleteModal, {backdrop: 'static', centered: true})">Delete</a>
+                    </div>
+                  </sbpro-dropdown>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <SW-no-data *ngIf='!tableDataList.length' [height]="224" [message]="'No pending CNU'"></SW-no-data>
+        </div>
+        
+      
+      <div class="row dataTable-bottom" [hidden]='!tableDataList.length'>
+          <div class="col-md-6 dataTable-info">
+            Showing {{(cnuResponce?.number* pageSize) + 1}} to {{cnuResponce?.totalElements<(cnuResponce?.number+1) * pageSize ?cnuResponce?.totalElements:(cnuResponce?.number+1) * pageSize}} of
+            {{cnuResponce?.totalElements||0}} entries
+          </div>
+          <div class='col-md-6 d-flex justify-content-end'>
+            <ngb-pagination (pageChange)='loadPage($event)' [collectionSize]='cnuResponce?.totalElements||0'
+              [maxSize]='3' [(page)]='pageNo' [pageSize]='pageSize'>
+            </ngb-pagination>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalReport let-modal>
+  <div class='card-header'>CNU Submission List Exported!</div>
+  <div class='modal-body'>
+
+    <div class='mb-3 text-ac'>
+      <div class='row'>
+        <div class='mb-3 col-md-6' *ngFor='let file of fileNames let i = index'>
+          <div class='card mb-4 w-50'>
+
+            <div class='card-body'>
+              {{file|json}}
+              <div class='ms-2'>
+                <svg class='icon text-blue' aria-hidden='true' width='48' height='48'>
+                  <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#document'></use>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='small text-ac fz-20'>
+
+    </div>
+    <div class='small text-ac'>
+
+    </div>
+  </div>
+
+  <div class='modal-footer'>
+    <button class='btn btn-primary' type='button' (click)="closeReport()">
+      Close
+    </button>
+  </div>
+</ng-template>
+
+
+<ng-template #cnuUpdateModal let-updateModal>
+  <SW-cnu-update [cnuId]='selectedCNUId' (afterUpdate)='onAfterUpdateCNU()' (cancelClick)='updateModal.close()'>
+  </SW-cnu-update>
+</ng-template>
+
+<ng-template #cnuDeleteModal let-deleteModal>
+  <div class="modal-header">
+    <h5 class="modal-title"><span class="text-danger">Alert!</span> Delete</h5>
+  </div>
+  <div class="modal-body">
+    Are you sure you want to delete the CNU?
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline-primary" type="button" (click)='deleteModal.close("cancel")'>Cancel</button>
+    <button class="btn btn-danger" type="button" (click)='onDeleteCNU()'>Yes, Delete</button>
+  </div>
+</ng-template>

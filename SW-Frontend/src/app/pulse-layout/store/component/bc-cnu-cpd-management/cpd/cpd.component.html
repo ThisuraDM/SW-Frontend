@@ -1,0 +1,214 @@
+<div class="container-xl px-4 mt-n10'">
+  <div class='card mb-4'>
+    <div class='card-header'>CPD List</div>
+    <div class='card-body'>
+      <div class='text-75 small mb-3'> Regularly check the status of CNU submission to maintain optimum record.</div>
+      <div class="dataTable-top row">
+        <div class="dataTable-dropdown col-md-6 mt-3"><label>
+            <select class="dataTable-selector" name='pageSize' [(ngModel)]='pageSize' (ngModelChange)="loadPage(1)">
+              <option value="5">5</option>
+              <option value="10" selected="">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+            </select> entries per page</label></div>
+       
+        <div class="dataTable-search col-md-2 col-sm-12 mt-1">
+          <div class='dropdown-label date-label' >Date</div>
+          <input class="form-control form-select-111 fw-bold text-primary " name="dp" ngbDatepicker
+          #d="ngbDatepicker" [maxDate]='currentDate' (click)="d.open()" [(ngModel)]="date"  dateFormat="dd-MMM-yyyy"
+          (dateSelect)="d.close();loadPage(1)" [autoClose]="'outside'" [placement]="'auto'" readonly>
+      </div>
+        <div class="dataTable-search col-md-2 col-sm-6 mt-1">
+          <select class="dataTable-selector form-control dataTable-input cpd-table-fields w-100 table-search-inputs"
+            name='selectField' [(ngModel)]="selectField" placeholder="Filter by" (change)="onFieldSelect();InpsearchField.value=''">
+            <option value="null" disabled selected hidden>Filter by</option>
+            <option value="Staff ID">Staff ID</option>
+            <option value="Mobile No">Mobile No</option>
+            <option value="Order No">Order No</option>
+          </select>
+        </div>
+        <div class="dataTable-search col-md-2 col-sm-6 mt-1">
+          <input class="dataTable-input cpd-table-fields table-search-inputs"  #InpsearchField placeholder="Search..." type="text" name='searchField'
+            [(ngModel)]="searchField" maxlength="30" (ngModelChange)="searchCPD()">
+        </div>
+      </div>
+      <div class="table-responsive">
+
+        <div class="dataTable-container">
+          <table id="datatablesSimple" class="dataTable-table">
+            <thead>
+              <tr>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'date'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'date')">Date</a>
+                </th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'staff_id'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'staff_id')">Staff ID</a></th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'amount'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'amount')">Amount</a>
+                </th>
+                <th data-sortable=""> <a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'payment_source'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'payment_source')">Source of
+                    Payment</a></th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'customer_name'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'customer_name')">Customer
+                    Name</a></th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'mobile_no'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'mobile_no')">Mobile No.</a>
+                </th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'order_no'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'order_no')">Order
+                    No.</a></th>
+                <th data-sortable=""><a class="dataTable-sorter tablesorter-header"
+                    [ngClass]="SortHeaderName == 'cnu_status'?sortOrder === -1 ? 'tablesorter-headerAsc' : 'tablesorter-headerDesc':''"
+                    (click)="sortTable(-1*sortOrder,'cnu_status')">
+                    Status</a></th>
+                <th data-sortable=""><a class="dataTable-sorter" style="text-align:center!important;padding-right: 1rem !important">Actions</a></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor='let outlet of tableDataList let i = index'>
+                <td>{{outlet.cnu_date}}</td>
+                <td>{{outlet.staff_id}}</td>
+                <td>RM {{outlet.amount | number : '1.2-2'}}</td>
+                <td>{{outlet.payment_source}}</td>
+                <td>{{outlet.customer_name}}</td>
+                <td>{{outlet.mobile_no}}</td>
+                <td>{{outlet.order_no}}</td>
+                <td ><span *ngIf="outlet.cnu_status=='Completed'" class='badge bg-success'>Completed</span> <span
+                    *ngIf="outlet.cnu_status=='Pending'" class='badge bg-warning'>Pending</span> </td>
+                <td class="table-action-column">
+                  <sbpro-dropdown placement='bottom-end' [classes]='["no-caret"]'
+                    [ngClass]="{ 'disable-complete':outlet.cnu_status==='Completed' }">
+                    <div class='dropdown-trigger'>
+                      <i-feather class='text-primary' name='more-vertical'></i-feather>
+                    </div>
+                    <div class='dropdown-items'>
+                      <a class='dropdown-item' (click)="openCompleteCNU(outlet.id)">Complete Order</a>
+                    </div>
+                  </sbpro-dropdown>
+                </td>
+              </tr>
+
+
+            </tbody>
+          </table>
+          <SW-no-data *ngIf='!tableDataList.length' [height]="224"
+            [message]="'No CNU or CPD found for the search done.'"></SW-no-data>
+
+        </div>
+        <div class="row dataTable-bottom" [hidden]='!tableDataList.length'>
+          <div class="col-md-6 dataTable-info">
+            Showing {{(cnuResponce?.number*pageSize) + 1}} to {{cnuResponce?.totalElements<(cnuResponce?.number+1) * pageSize ?cnuResponce?.totalElements:(cnuResponce?.number+1) * pageSize}} of
+            {{cnuResponce?.totalElements||0}} entries
+          </div>
+          <div class='col-md-4 d-flex justify-content-end'>
+            <ngb-pagination (pageChange)='loadPage($event)' [collectionSize]='cnuResponce?.totalElements||0'
+              [maxSize]='3' [(page)]='pageNo' [pageSize]='pageSize'>
+            </ngb-pagination>
+
+          </div>
+          <div class="col-md-2 d-flex justify-content-end d-none d-md-block">
+            <button class='btn btn-primary' type='button' (click)="openReport()">
+              Generate Report
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 d-flex justify-content-end d-block d-md-none" *ngIf='tableDataList.length'>
+        <button class='btn btn-primary' type='button' (click)="openReport()">
+          Generate Report
+        </button>
+      </div>
+
+
+
+
+    </div>
+  </div>
+</div>
+
+<ng-template #modalReport let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">CPD List Exported!</h5>
+  </div>
+  <div class='modal-body'>
+
+    <div class='mb-3 text-ac'>
+      <div class='row'>
+        <div class='mb-3 col-12'>
+          <p>
+            The CPD report file and Bank In Slip is Successfully exported. Please view and download from the link below.
+          </p>
+          <div class='card mb-4 download-file' (click)="onFileSelect()">
+            <div class='card-body file-card-body'>
+              <div class='ms-2 '>
+                <svg class='icon text-blue' aria-hidden='true' width='48' height='48'>
+                  <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#document'></use>
+                </svg>
+                <span>{{reportDate}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='small text-ac fz-20'>
+
+    </div>
+    <div class='small text-ac'>
+
+    </div>
+  </div>
+
+  <div class='modal-footer'>
+    <button class='btn btn-primary' type='button' (click)="closeReport()">
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #cnuComplete let-complteModal>
+  <div class="modal-header">
+    <h5 class="modal-title"><span class="text-warning">Alert!</span> Complete Order</h5>
+  </div>
+  <form>
+    <div class="modal-body">
+      Please confirm SW Transaction ID to complete order.<br>
+      <div class='mb-1 mt-3'>SW Transaction ID</div>
+      <div class="dataTable-search">
+        <input class="dataTable-input cpd-table-fields mr-3 pr-3"
+          [ngClass]="{'is-invalid': isSubmitted && !searchField.valid}" placeholder="Enter SW Transaction ID"
+          type="text" id="searchField" name='searchField' #searchField="ngModel" [(ngModel)]="transactionId"
+          maxlength="30" required>
+        <div class='invalid-feedback' *ngIf='!searchField.valid && isSubmitted'>
+          Value is required
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-primary" type="button" (click)='hideModel()'>Cancel</button>
+      <button class="btn btn-primary ml-3" type="submit" (click)='onCompleteCNU()'>Confirm</button>
+    </div>
+  </form>
+</ng-template>
+<ng-template #cnuCompleteSuccessModal let-completesuccessModal>
+  <div class="modal-header">
+    <h5 class="modal-title"><span class="text-success">Successful!</span> Complete Order</h5>
+  </div>
+  <div class="modal-body">
+    Order is successfully completed.<br>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" (click)='completesuccessModal.close("cancel")'>Continue</button>
+  </div>
+</ng-template>

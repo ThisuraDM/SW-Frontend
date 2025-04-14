@@ -1,0 +1,45 @@
+.close-button {
+    height: 35px;
+    @media (min-width: 400px) {
+        width: 50%;
+    }
+    @media (min-width: 1150px) {
+        width: 40%;
+    }
+    @media (max-width: 400px) {
+        width: 100%;
+    }
+}
+
+.details-label {
+    color: #697479;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.disable-link {
+    color: #b5c3c4;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.text-overflow-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-left: 1rem;
+}
+
+.text-black {
+    color: black;
+}
+
+.text-bold-600 {
+    font-weight: 600;
+}
+
+.text-align-right {
+    text-align: right;
+}

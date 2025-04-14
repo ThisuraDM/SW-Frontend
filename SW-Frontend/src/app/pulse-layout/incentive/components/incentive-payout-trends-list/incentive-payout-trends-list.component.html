@@ -1,0 +1,110 @@
+<div class='card mb-4'>
+    <div class='card-header w-100'>
+        <a (click)='onBackClick()'>
+            <svg class='icon text-black back-arrow ' aria-hidden='true' width='24' height='24'>
+                <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#arrow-previous'></use>
+            </svg>
+        </a>
+        <span class='ml-5'>View Details - {{incentiveData?.category}}</span>
+    </div>
+</div>
+<div class='container-xl px-4 mt-4'>
+    <div class='card mb-4'>
+        <div class='card-header'>Payout Trends</div>
+        <div class='card-body'>
+            <div class='col-xl-12 mb-4'>
+                <div class='alert alert-primary dashboard-alert' role='alert'>
+                    <div class='row align-items-center justify-content-between'>
+                        <div class='col-auto'>
+                            <ol class='breadcrumb mt-4 mb-0 py-2 rounded'>
+                                <li>
+                                    <span class='txt-c'>{{incentiveData?.month_label}}</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-12 table-responsive'>
+                <table class='table border rounded m-0'>
+                    <thead class='thead-dark'>
+                    <tr class='bg-primary text-white'>
+                        <th class='p-3' scope='col'>Scheme Name</th>
+                        <th class='p-3' scope='col'>Gross</th>
+                        <th class='p-3' scope='col'>Eligible</th>
+                        <th class='p-3' scope='col'>Ineligible</th>
+                        <th class='p-3' scope='col'>Total Incentive</th>
+                        <th class='p-3' scope='col'>Plan Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor='let details of payoutSummaryDetails!.result | slice: start: end; let i=index'>
+                        <td class='small'>{{details.commissionName}}</td>
+                        <td class='small'>{{details.grossCount}}</td>
+                        <td class='small'>{{details.eligibleCount}}</td>
+                        <td class='small'>{{details.ineligibleCount}}</td>
+                        <td class='small'>{{details.commissionAmount}}</td>
+                        <td class='small'>
+                            <button class='btn btn-sm btn-outline-primary' type='button' (click)='onViewSummaryClick(details.commissionName)'>View
+                                Details
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='isError || !payoutSummaryDetails!.result' [height]="224" [message]=errorMessage [content]="''">
+                </SW-no-data>
+
+                <div class='my-3'>
+                </div>
+                <div class="row dataTable-bottom" *ngIf="payoutSummaryDetails!.result?.length">
+                    <div class="col-md-6 dataTable-info">Showing {{start==0?1:start}} to {{endData}} of {{payoutSummaryDetails!.result?.length}} entries
+                    </div>
+                    <div class='col-md-6 d-flex justify-content-end'>
+                        <ngb-pagination id="p1" [collectionSize]='payoutSummaryDetails!.result?.length' [maxSize]='3' [pageSize]='10'
+                                        [(page)]="pageNumber" (pageChange)='loadPage($event)'>
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #summaryModel let-summaryModel>
+    <div class='modal-header'>
+        <h5 class='modal-title'> Summary by Plan Name</h5>
+    </div>
+    <div class='modal-body'>
+        <p class='my-3'>
+            Here's the summary for {{selectedCommissionName}} for {{incentiveData?.month_label}}.<br>
+        </p>
+        <div class='col-md-12 table-responsive'>
+            <table class='table border rounded m-0'>
+                <thead class='thead-dark'>
+                <tr class='bg-primary text-white'>
+                    <th class='p-3' scope='col'>Package Plan</th>
+                    <th class='p-3' scope='col'>Eligible (Quantity)</th>
+                    <th class='p-3' scope='col'>Amount per line</th>
+                    <th class='p-3' scope='col'>Total Incentive</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor='let details of payoutSummaryDetailsPlans.summary_by_plan_name'>
+                    <td class='small'>{{details.package_plan}}</td>
+                    <td class='small'>{{details.eligible}}</td>
+                    <td class='small'>{{details.amount_per_line}}</td>
+                    <td class='small'>{{details.total_incentive}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <SW-no-data *ngIf='isError || !payoutSummaryDetailsPlans.summary_by_plan_name.length' [height]="224" [message]=errorMessage [content]="''">
+            </SW-no-data>
+        </div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='summaryModel.close("cancel")'>Cancel</button>
+        <button class='btn btn-primary' type='button' (click)='download()' [disabled]='isError || !payoutSummaryDetailsPlans.summary_by_plan_name.length'>Download</button>
+    </div>
+</ng-template>

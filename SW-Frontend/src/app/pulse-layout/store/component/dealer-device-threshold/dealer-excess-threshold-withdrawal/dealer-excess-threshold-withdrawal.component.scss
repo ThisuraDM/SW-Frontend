@@ -1,0 +1,138 @@
+@import '../../../../../../styles/core/variables';
+
+.custom-radio-flex {
+    @media (min-width: 472px) {
+        flex-direction: row !important;
+    }
+    @media (max-width: 472px) {
+        flex-direction: column !important;
+    }
+}
+
+.custom-radio-1 {
+    position: relative;
+    margin-right: 25px;
+    margin-bottom: 10px;
+
+    input[type="radio"] {
+        appearance: none;
+        position: absolute;
+        top: 30px;
+        left: 75px;
+    }
+}
+
+.custom-radio-2 {
+    position: relative;
+
+    input[type="radio"] {
+        appearance: none;
+        position: absolute;
+        top: 30px;
+        left: 50px;
+    }
+}
+
+input[type="radio"] + label {
+    color: #999999;
+    font-size: small;
+}
+
+input[type="radio"]:checked {
+    width: 40px;
+    height: 4px;
+    background-color: #4569AB;
+    border-radius: 2px;
+    /* checked state properties */
+}
+
+input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: #666666;
+}
+
+// dropdowns
+.form-select-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.custom-select-option {
+    color: #424d52;
+}
+
+.custom-select {
+    color: $black;
+    font-weight: 600;
+    margin-left: -2.5px;
+}
+
+//inputs
+.form-control-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.mr-2{
+   margin-right: 10px;
+}
+
+.device-threshold-containers {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+}
+.view-device-threshold-value-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.separator {
+    height: 1px;
+    width: 100%;
+    background: #e2e2e2;
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.title-text {
+    font-size: 0.8rem;
+}
+
+.value-text {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.device-threshold-summary-value-container{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+}
+
+.device-threshold-containers-transaction {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.button-container-excess-threshold {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.secondary-label {
+    font-size: 0.7rem;
+    color: red
+}
+
+.all-button{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 3rem;
+    margin-top: -1.8rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}

@@ -1,0 +1,142 @@
+<sbpro-card>
+    <div class='card-header'>Device</div>
+    <div class='card-body fz'>
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='text text-black fw-500 text-lg'>Device Activations</div>
+                <div class='text-75 small my-2'> Select the data filter</div>
+                <div class='row gx-4 align-items-center'>
+                    <div class='col-md-6'>
+                        <div class='row gx-4 align-items-center'>
+                            <div class='col-md-4 col-sm-6 col-6 mr-0'>
+                                <a class='btn p-3 devType'
+                                   [ngClass]="selectedProduct === 'Total' ? 'btn-primary' : 'btn-outline-primary'"
+                                   (click)='filterDataByProduct("Total")'>Total</a>
+                            </div>
+                            <div class='col-md-4 col-sm-6 col-6 mr-0'>
+                                <a class='btn p-3 devType'
+                                   [ngClass]="selectedProduct === 'Device Bundle' ? 'btn-primary' : 'btn-outline-primary'"
+                                   (click)='filterDataByProduct("Device Bundle")'>Device Bundle</a>
+                            </div>
+                            <div class='col-md-4 col-sm-6 col-6 mr-0'>
+                                <a class='btn p-3 devType'
+                                   [ngClass]="selectedProduct === 'EasyPhone' ? 'btn-primary' : 'btn-outline-primary'"
+                                   (click)='filterDataByProduct("EasyPhone")'>Easyphone</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class='alert alert-primary dashboard-alert' role='alert'>
+                    <div class='row align-items-center justify-content-between'>
+                        <div class='col-auto'>
+                            <ol class='breadcrumb mt-4 mb-0 rounded fs'>
+                                <li class='breadcrumb-item'>
+                                    <span class='text-dark fw-500'>Device Activations</span>
+                                    <span class='text-gray-600'> / {{selectedProduct}}</span>
+                                </li>
+                            </ol>
+                        </div>
+                        <span class='small me-2 my-2 flex-end text-black btntxt d-block d-sm-none'>Sort by</span>
+                        <div class='col-auto d-flex flex-row justify-content-end'>
+                            <span class='small me-2 my-2 flex-end text-black btntxt d-none d-sm-block'>Sort by</span>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedDeviceActivationPeriod === '1_year' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceActivationDataByPeriod("1_year")'>
+                                <span class='d-none d-sm-block'>1 Year</span>
+                                <span class='d-block d-sm-none'>1Y</span>
+                            </a>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedDeviceActivationPeriod === '6_months' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceActivationDataByPeriod("6_months")'>
+                                <span class='d-none d-sm-block'>6 Months</span>
+                                <span class='d-block d-sm-none'>6M</span>
+                            </a>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedDeviceActivationPeriod === '1_month' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceActivationDataByPeriod("1_month")'>
+                                <span class='d-none d-sm-block'>1 Month</span>
+                                <span class='d-block d-sm-none'>1M</span>
+                            </a>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedDeviceActivationPeriod === '1_week' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceActivationDataByPeriod("1_week")'>
+                                <span class='d-none d-sm-block'>1 Week</span>
+                                <span class='d-block d-sm-none'>1W</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class='chart-bar' [style.height]='"300px"' [style.width]='width'>
+                    <canvas #myBarChart></canvas>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class='row justify-content-between mt-2'>
+            <div class='col-md-5'>
+                <SW-device-brand [data]='deviceSellingBrandDataList'
+                                    [dataPeriod]='selectedDeviceActivationPeriodString'></SW-device-brand>
+            </div>
+            <div class='col-md-6'>
+                <div class='text text-black text-lg fw-500 mb-2'>Device Sell In</div>
+                <div class='alert alert-primary dashboard-alert' role='alert'>
+                    <div class='row align-items-center justify-content-between'>
+                        <div class='col-auto'>
+                            <ol class='breadcrumb mt-4 mb-0 rounded fs'>
+                                <li class='breadcrumb-item'>
+                                    <span class='text-dark fw-500'>Device Sell In </span>
+                                    <span class='text-gray-600'>/ Total</span>
+                                </li>
+                            </ol>
+                        </div>
+                        <span class='small me-2 my-2 flex-end text-black btntxt d-block d-sm-none'>Sort by</span>
+                        <div class='col-auto d-flex flex-row justify-content-end'>
+                            <span class='small me-2 my-2 flex-end text-black btntxt d-none d-sm-block'>Sort by</span>
+                            <a class='btn p-3 alert-btn flex-end'
+                               [ngClass]="selectedDeviceSellInPeriod === '1_year' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceSellInDataByPeriod("1_year")'>
+                                <span class='d-none d-sm-block'>1 Year</span>
+                                <span class='d-block d-sm-none'>1Y</span>
+                            </a>
+                            <a class='btn p-3 alert-btn flex-end'
+                               [ngClass]="selectedDeviceSellInPeriod === '6_months' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceSellInDataByPeriod("6_months")'>
+                                <span class='d-none d-sm-block'>6 Months</span>
+                                <span class='d-block d-sm-none'>1M</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class='row my-3'>
+                    <div class='col-xl-6 col-lg-6 col-md-6 mb-3'
+                         *ngFor='let deviceSellingData of deviceSellingDataList'>
+                        <div
+                            class='card border-top-0 border-bottom-0 border-end-0 border-start-lg border-primary h-auto'>
+                            <div class='card-body'>
+                                <div class='d-flex align-items-center '>
+                                    <div class='flex-grow-1 '>
+                                        <div class='small fw-600 text-primary'>{{deviceSellingData.month}}</div>
+                                        <div class='h3 mb-0 fw-bolder'>{{deviceSellingData.sellingCount}}</div>
+                                        <div class='text-xs fw-bold'>sold</div>
+                                    </div>
+                                    <div class='ms-2'>
+                                        <img src='assets/icons/device-phone.svg' alt='' width='48' height='48' title='SW Life'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</sbpro-card>
+
+<ng-template #noDeviceActivation>
+    <div class='row gx-4'>
+        <div class='col-md-12'>
+            <SW-no-data height='250'></SW-no-data>
+        </div>
+    </div>
+</ng-template>

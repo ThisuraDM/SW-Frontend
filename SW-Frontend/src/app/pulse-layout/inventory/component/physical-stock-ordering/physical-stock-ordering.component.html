@@ -1,0 +1,871 @@
+<div class='container-xl px-4 mt-4'>
+    <div class='col-12 card mb-4'>
+        <div class='card-header w-100'>
+            <span class=''>Physical Stock Ordering</span>
+        </div>
+        <div class='card-body'>
+            <div class='row mb-2'>
+                <div class='col-md-8'>
+<!--                    <div class='text-75 small my-2'>1. Select your outlet</div>-->
+                    <div class='my-3'>
+                        <div class='text-sm'>1. Select your outlet</div>
+                    </div>
+                    <div class='row gx-4 align-items-center'>
+                        <div class='row'>
+                            <div class='col-md-6'>
+                                <label class='small mb-1 dropdown-label'>Outlet</label>
+                                <select class='form-select form-select-custom custom-select'
+                                        (change)='changeOutlet()' [(ngModel)]='selectedStore' id='brandOwn'>
+                                    <option class='custom-select-option' ngbDropdownItem
+                                            *ngFor='let item of userOutlets' [value]='item.outlet_id'>
+                                        {{item.outlet_id}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+<!--                    <div class='text-75 small my-2'>2. Search Stock</div>-->
+                    <div class='my-3'>
+                        <div class='text-sm'>2. Search Stock</div>
+                    </div>
+                    <div class='d-flex custom-radio-flex mb-4'>
+                        <div class='custom-radio-1 mr-5'>
+                            <input class='custom-radio-input' id='customSolidRadio1' (click)='toggleType("RC&SP")'
+                                   [checked]='isReload' type='radio' value='reload'>
+                            <label class='custom-radio-label' for='customSolidRadio1'>Reload Card & Starter Pack</label>
+                        </div>
+                        <div class='custom-radio-2'>
+                            <input class='custom-radio-input' id='customSolidRadio2' (click)='toggleType("DEVICE")' [disabled]="isDnADisabled"
+                                   [checked]='!isReload' type='radio' value='device'>
+                            <label class='custom-radio-label' for='customSolidRadio2'>Device & Accessories</label>
+                        </div>
+                    </div>
+                    <div *ngIf='!isReload'>
+                        <div class='row mb-2'>
+                            <div class='col-md-6'>
+                                <label class='small mb-1 dropdown-label'>Product Category</label>
+                                <select class='form-select form-select-custom custom-select'
+                                        (change)='loadBrandsByCategory()' [(ngModel)]='selectedCategory' id='brandOwn2'>
+                                    <option class='custom-select-option' ngbDropdownItem
+                                            *ngFor='let item of productCategoryList' [value]='item.value'>
+                                        {{item.display}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='small mb-1 dropdown-label'>Brand</label>
+                                <select class='form-select form-select-custom custom-select' [(ngModel)]='selectedBrand'
+                                        id='brandOwn1'>
+                                    <option class='custom-select-option' ngbDropdownItem
+                                            *ngFor='let item of productBrandList' [value]='item.value'>
+                                        {{item.display}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-6 mb-3'>
+                                <label class='small mb-1 dropdown-label'>Item Name</label>
+                                <input class='form-control form-control-custom custom-input' id='itemNameOwn'
+                                       [(ngModel)]='selectedItemName' type='text' placeholder='Enter Item Name'
+                                       maxlength='100'>
+                            </div>
+                            <div class='col-md-6 mb-3'>
+                                <label class='small mb-1 dropdown-label'>SAP Material Code</label>
+                                <input class='form-control form-control-custom custom-input'
+                                       [(ngModel)]='selectedSapCode'
+                                       id='materialCodeOwn' type='text' placeholder='Enter SAP Material Code'
+                                       maxlength='100'>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-7'>
+                                <div class='text-75 small my-2'>Please note that you cannot combine Reload Card and
+                                    Devices
+                                    in one single order request
+                                </div>
+                            </div>
+                            <div class='col-md-5'>
+                                <div class='d-flex justify-content-end'>
+                                    <button class='btn btn-primary' type='submit' (click)='searchItems()'>Search Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <SW-rcsp-search *ngIf='isReload' (setSearchParameter)='setSearchParameter($event)'
+                                           [isPromo]='isPromo' [selectedOutlet]='selectedStore'>
+                        </SW-rcsp-search>
+                    </div>
+
+                </div>
+                <div class='col-md-4'>
+                    <div *ngIf='isReload' class='card card-header-actions mb-4 mt-11'>
+                        <div class='card-header'>
+                            eWallet Details
+                        </div>
+                        <div class='card-body'>
+                            <div class='flex-row'>
+                                <div class='d-flex align-items-center justify-content-between'>
+                                    <div class='fw-bold text-primary text-75 small'>Balance</div>
+                                </div>
+                                <div class='d-flex align-items-center justify-content-between  mb-2'>
+                                    <div class='fw-bold fs-7 text-black text-75' *ngIf='noEwalletData'>
+                                        <h3>-</h3>
+                                    </div>
+                                    <div class='fw-bold fs-7 text-black text-75' *ngIf='!noEwalletData'>
+                                        <h3>{{balanceStatusResponse.available_balance | currency: 'RM '}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='card-footer'>
+                            <div class=' d-flex align-items-center justify-content-between small px-0 cursor-hand'
+                                 (click)='redirectEwallet()'>
+                                <div class='fw-500  text-md'>Top up eWallet balance</div>
+                                <div class='big-icon'>
+                                    <i-feather class='flex-shrink-0 ms-4 text-primary' name='chevron-right'></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf='!isReload' class='card card-header-actions mb-4'>
+                        <div class='card-header'>
+                            Device Threshold Details
+                        </div>
+                        <div class='card-body'>
+                            <div class='flex-row mb-2'>
+                                <div class='d-flex justify-content-center'>
+                                    <button class='btn mr-2 w-100'
+                                            [ngClass]="isThreshold == true? 'btn-secondary' : 'btn-outline-primary'"
+                                            [disabled]='true' type='submit' (click)='toggleThreshold()'>Threshold
+                                    </button>
+                                    <button class='btn w-100'
+                                            [ngClass]="!isThreshold == true? 'btn-secondary' : 'btn-outline-primary'"
+                                            [disabled]='true' (click)='toggleThreshold()'>eWallet
+                                    </button>
+                                </div>
+                            </div>
+                            <div class='flex-row'>
+                                <div class='d-flex align-items-center justify-content-between'>
+                                    <div class='fw-bold text-primary text-75 small'>Device Credit Limit</div>
+                                </div>
+                                <div class='d-flex align-items-center justify-content-between  mb-2'>
+                                    <div class='fw-bold fs-7 text-black text-75' *ngIf='noThresholdData'>
+                                        <h3>-</h3>
+                                    </div>
+                                    <div class='fw-bold fs-7 text-black text-75' *ngIf='!noThresholdData'>
+                                        <h3>{{deviceThresholdDetails?.device_credit_limit | currency: 'RM '}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='flex-row'>
+                                <div class='d-flex align-items-center justify-content-between'>
+                                    <div class='fw-bold text-primary text-75 small'>Available Credit Limit</div>
+                                </div>
+                                <div class='d-flex align-items-center justify-content-between  mb-2'>
+                                    <div class='fw-bold fs-7 text-black text-75' *ngIf='noThresholdData'>
+                                        <h3>-</h3>
+                                    </div>
+                                    <div class='fw-bold fs-7 text-black' *ngIf='!noThresholdData'>
+                                        <h3>{{deviceThresholdDetails?.available_credit_limit | currency: 'RM '}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='flex-row'>
+                                <div class='d-flex align-items-center justify-content-between'>
+                                    <div class='fw-bold text-primary text-75 small'>% of Utilization</div>
+                                </div>
+                                <div class='progress mb-2'>
+                                    <div class='progress-bar bg-gradient-primary-to-secondary text-75 small'
+                                         *ngIf='noThresholdData' role='progressbar' [style.width.%]='(0)*100'
+                                         aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>
+                                    </div>
+                                    <div class='progress-bar bg-gradient-primary-to-secondary text-75 small'
+                                         *ngIf='!noThresholdData' role='progressbar'
+                                         [style.width.%]='(deviceThresholdDetails?.utilization/deviceThresholdDetails?.device_credit_limit)*100'
+                                         aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>
+                                    </div>
+                                </div>
+                                <div class='d-flex align-items-center justify-content-between'>
+                                    <div class='fw-bold fs-7 text-black text-75' *ngIf='noThresholdData'>
+                                        <h3>-</h3>
+                                    </div>
+                                    <div class='fw-bold fs-7' *ngIf='!noThresholdData'>
+                                        {{deviceThresholdDetails?.utilization / deviceThresholdDetails?.device_credit_limit
+                                    * 100 | number:'1.0-0'}}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='card-footer'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='result-header text-black fw-bold w-100 mb-2'>Stock Result</div>
+
+            <div class='mt-3' *ngIf='isReload'>
+                <SW-toggle-button [value1]="'Promo'" [value2]="'Normal Stocks'" [changeValue]='changeValue'
+                                     (outputValue)='getToggleName($event)'></SW-toggle-button>
+            </div>
+
+            <div *ngIf='isReload && isPromo'>
+                <SW-info-legend-card  *ngIf='promoList.length'></SW-info-legend-card>
+
+                <div class='col-md-12 table-responsive'  *ngIf='promoList.length'>
+                    <table class='table border rounded w-100'>
+                        <thead class='thead-dark'>
+                        <tr>
+                            <th class='small' scope='col'>Product Type</th>
+                            <th class='small' scope='col'>Item Code</th>
+                            <th class='small' scope='col'>Type</th>
+                            <th class='small' scope='col'>Quantity</th>
+                            <th class='small' scope='col'>Request</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ng-container *ngFor='let promoItem of promoList'>
+                            <tr>
+                                <td class='small no-border-bottom col-2'>
+                                    <ul>
+                                        <li *ngFor='let item of promoItem.promotionBuyItems'
+                                            class='text-black-50 fw-500 mb-1'>{{item.productType}}</li>
+                                    </ul>
+                                </td>
+                                <td class='small no-border-bottom col-2'>
+                                    <ul>
+                                        <li *ngFor='let item of promoItem.promotionBuyItems'
+                                            class='text-black-50 fw-500 mb-1'>{{item.itemCode}} </li>
+                                    </ul>
+                                </td>
+                                <td class='small no-border-bottom col-1'>
+                                    <ul>
+                                        <li *ngFor='let item of promoItem.promotionBuyItems'
+                                            class='text-black-50 fw-500 mb-1'>{{item.qtyOrAmtType}}</li>
+                                    </ul>
+                                </td>
+                                <td class='small no-border-bottom col-1'>
+                                    <ul>
+                                        <li *ngFor='let item of promoItem.promotionBuyItems'
+                                            class='text-black-50 fw-500 mb-1'>{{item.quantityOrAmount}} </li>
+                                    </ul>
+                                </td>
+                                <td class='small no-border-bottom col-1'>
+                                    <button class='btn btn-sm btn-outline-primary w-100 ' type='button'
+                                            (click)='addPromo(promoItem)'>Add
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='no-border-top pt-0' colspan='5'>
+                                    <fieldset class='border fieldset-custom ps-2 pe-2 '>
+                                        <legend class='float-none w-auto ps-2 pe-2 legend-custom'>Get FREE Stocks</legend>
+                                        <table class='table'>
+                                            <tbody>
+                                            <tr *ngFor='let item of promoItem.promotionGetItems'>
+                                                <td class='small text-black-50 no-border fw-500 p-0 col-2'>{{item.productType}}</td>
+                                                <td class='small text-black-50 no-border fw-500 p-0 col-2'>{{item.itemCode}}</td>
+                                                <td class='small text-black-50 no-border fw-500 py-0 col-1'>{{item.qtyOrAmtType}}</td>
+                                                <td class='small text-black-50 no-border fw-500 py-0 col-1'>{{item.quantityOrAmount}}</td>
+                                                <td class='small text-black-50 no-border fw-500 p-0 col-1'>&nbsp;</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class='card mt-3' *ngIf='!promoList.length'>
+                    <div class='d-flex flex-column'>
+                        <div class='d-flex justify-content-around mb-3'>
+                            <img src='assets/icons/svg/expressive/expressive-info.svg' alt='' width='128' height='128' title='SW Life'>
+                        </div>
+                        <div class='d-flex justify-content-around mb-3'>
+                            <p class='text-center'>Uh oh! You don't have any eligible promo items at the moment. please select (other) <br>
+                                Outlet or check out Normal Stocks to start order request.</p>
+                        </div>
+                        <div class='d-flex justify-content-around mb-4'>
+                            <button class='btn btn-primary' type='button' (click)='gotoNormalStock()'>Go to Normal Stocks</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf='isReload && !isPromo'>
+                <div class='col-md-12 table-responsive'>
+                    <table class='table border rounded my-3 w-100'>
+                        <thead class='thead-dark'>
+                        <tr>
+                            <th class='small' scope='col'>Category</th>
+                            <th class='small' scope='col'>Item Name</th>
+                            <th class='small' scope='col'>SAP Material Code</th>
+                            <th class='small' scope='col'>Price Per Unit</th>
+                            <th class='small' scope='col'>Last Visit Purchased (LVP)</th>
+                            <th class='small' scope='col'>Optimum Proposed Order (OPO)</th>
+                            <th class='small' scope='col'>Remaining Stock</th>
+                            <th class='small' scope='col'>Purchase Quantity</th>
+                            <th class='small' scope='col'></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class='mb-2' *ngFor='let item of rcspStockItems'>
+                            <td class='small text-black-50 fw-500 custom-table-td'>{{item?.category}}</td>
+                            <td class='small text-black-50 fw-500 custom-table-td'>{{item.item_name}}</td>
+                            <td class='small text-black-50 fw-500 custom-table-td'>{{item.sap_material_code}}</td>
+                            <td class='small text-black-50 fw-500 custom-table-td'>{{item.price | currency : ' '}}</td>
+                            <td class='small text-black-50 fw-500 custom-table-td'>{{item.last_visitation_purchase}}</td>
+                            <td class='small text-black-50 fw-500 custom-table-td'>{{item.optimal_proposed_order}}</td>
+                            <td class='small text-black-50 fw-500 custom-table-td'>{{item.outlet_stocks}}</td>
+                            <td class='small text-black-50 fw-500 custom-table-td'>
+                                <input class='form-control my-3' type='number' min='0' maxlength='100'
+                                       [(ngModel)]='item.tempQty'
+                                       (input)='onChangeRequestQuantityNormal($event.target.value, item.item_id)'>
+                            </td>
+
+                            <td>
+                                <button (click)='addStockNormalResult(item.item_id,item)'
+                                        class='btn btn-outline-primary w-100 table-button-height' type='button'>Add
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <SW-no-data *ngIf='!rcspStockItems?.length' [height]='224' [message]='errorMessage' [content]=''>
+                    </SW-no-data>
+                </div>
+                <div class='row  pt-2' *ngIf='rcspStockItems?.length'>
+                    <div class='col-sm-12 col-md-6'>
+                        <label class='small mb-2'>Showing {{((pageNumber * pageSize) - pageSize) + 1}}
+                            to {{(pageNumber * pageSize) + (pageElements - pageSize)}}
+                            of {{totalElements}}
+                            entries</label>
+                    </div>
+                    <div class='col-sm-12 col-md-6 d-flex justify-content-end'>
+                        <div class='row d-flex justify-content-end'>
+                            <div class='col-sm-12 col-md-auto '>
+                                <ngb-pagination (pageChange)='loadCLNormalPage($event)' [collectionSize]='totalElements'
+                                                [maxSize]='3' [(page)]='pageNumber' [pageSize]='pageSize'>
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class='col-md-12 table-responsive' *ngIf='!isReload'>
+                <table class='table border rounded my-3 w-100'>
+                    <thead class='thead-dark'>
+                    <tr>
+                        <th class='small' scope='col'>Category</th>
+                        <th class='small' scope='col'>SAP Material Code</th>
+                        <th class='small' scope='col'>Brand</th>
+                        <th class='small' scope='col'>Item Name</th>
+                        <th class='small' scope='col'>Price Per Unit(RM)</th>
+                        <th class='small' scope='col'>Min QTY</th>
+                        <th class='small' scope='col'>Max QTY</th>
+                        <th class='small' scope='col'>Outlet Stock</th>
+                        <th class='small' scope='col'>Request</th>
+                        <th class='small' scope='col'></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class='mb-2' *ngFor='let item of dnAStockDetails'>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item?.category}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.sap_material_code}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.brand}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.item_name}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.price_per_unit }}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.min_quantity}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.max_quantity}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.plant_stock}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>
+                            <input class='form-control my-3' type='number' min='0' maxlength='100'
+                                   [(ngModel)]='item.tempQty'
+                                   (input)='onChangeRequestQuantity($event.target.value, item.sap_material_code)'>
+                        </td>
+
+                        <td>
+                            <button (click)='addStockResult(item.sap_material_code,item)'
+                                    class='btn btn-outline-primary w-100 table-button-height' type='button'>Add
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='!dnAStockDetails?.length' [height]='224' [message]='errorMessage' [content]="''">
+                </SW-no-data>
+            </div>
+            <div class='row  pt-2' *ngIf='dnAStockDetails?.length'>
+                <div class='row  pt-2' *ngIf='dnAStockDetails?.length'>
+                    <div class='col-sm-12 col-md-6'>
+                        <label class='small mb-2'>Showing {{((pageNumber * pageSize) - pageSize) + 1}}
+                            to {{(pageNumber * pageSize) + (pageElements - pageSize)}}
+                            of {{totalElements}}
+                            entries</label>
+                    </div>
+                    <div class='col-sm-12 col-md-6 d-flex justify-content-end'>
+                        <div class='row d-flex justify-content-end'>
+                            <div class='col-sm-12 col-md-auto '>
+                                <ngb-pagination (pageChange)='loadCLPage($event)' [collectionSize]='totalElements'
+                                                [maxSize]='3' [(page)]='pageNumber' [pageSize]='pageSize'>
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf='!isReload' class='container-xl px-4 mt-4'>
+    <div class='col-12 card mb-4'>
+        <div class='card-header w-100'>
+            <span class=''>Request Summary</span>
+        </div>
+        <div class='card-body'>
+            <div class='result-header text-black fw-bold w-100 mb-2'>Added Stock</div>
+            <div class='col-md-12 table-responsive'>
+                <table class='table border rounded my-3 w-100'>
+                    <thead class='thead-dark'>
+                    <tr>
+                        <th class='small' scope='col'>Category</th>
+                        <th class='small' scope='col'>SAP Material Code</th>
+                        <th class='small' scope='col'>Brand</th>
+                        <th class='small' scope='col'>Item Name</th>
+                        <th class='small' scope='col'>Quantity</th>
+                        <th class='small' scope='col'>Request</th>
+                        <th class='small' scope='col'></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class='mb-2' *ngFor='let item of dnAStockDetailsAdded'>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.category}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.sap_material_code}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.brand}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.item_name}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.request_quantity}}</td>
+                        <td class='small custom-table-td'>
+                            <button (click)='removeAddedDnAStockDetails(item.sap_material_code)'
+                                    class='btn btn-outline-primary w-100 table-button-height' type='button'>Remove
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class='row mb-2 justify-content-between'>
+                <div class='col-md-4'>
+                </div>
+                <div class='col-md-6'>
+                    <div class='row justify-content-end'>
+                        <div class='calculation-container'>
+                            <div class='text-container'>
+                                <div class='title-container'>
+                                    Total (Not Including Tax):
+                                    <br>
+                                    Service Tax(0%):
+                                </div>
+                                <div class='amount-container fw-bold'>
+                                    RM {{totalValue | number: '1.2-2'}}
+                                    <br>
+                                    RM {{totalTax | number: '1.2-2' }}
+                                </div>
+                            </div>
+                            <div class='separator'></div>
+                            <div class='text-container'>
+                                <div class='title-container'>
+                                    Grand Total:
+                                </div>
+                                <div class='amount-container fw-bold'>
+                                    RM {{grandTotalValue | number: '1.2-2'}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-8'>
+                            <div class='form-input-wrapper'>
+                                <label class='small mb-1 dropdown-label'>Payment Method</label>
+                                <select class='form-select form-select-custom custom-select'
+                                        [(ngModel)]='selectedPaymentMethod' id='paymentMethod'>
+                                    <option class='custom-select-option' ngbDropdownItem
+                                            *ngFor='let item of paymentMethodList' [value]='item.id'>
+                                        {{item.payment_method}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class='d-flex justify-content-end mt-4'>
+                                <button [disabled]='dnAStockDetailsAdded.length ===0' class='btn btn-primary'
+                                        (click)='onConfirmClick(false)'>Continue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf='isReload' class='container-xl px-4 mt-4'>
+
+    <div class='col-12 card mb-4'>
+        <div class='card-header w-100'>
+            <span class=''>Request Summary</span>
+        </div>
+        <div class='card-body'>
+            <div class='result-header text-black fw-bold w-100 mb-2'>Added Stock</div>
+            <div class='col-md-12 table-responsive' *ngIf='!isPromo'>
+                <table class='table border rounded my-3 w-100'>
+                    <thead class='thead-dark'>
+                    <tr>
+                        <th class='small' scope='col'>Category</th>
+                        <th class='small' scope='col'>SAP Material Code</th>
+                        <th class='small' scope='col'>Item Name</th>
+                        <th class='small' scope='col'>Price Per Unit</th>
+                        <th class='small' scope='col'>Quantity</th>
+                        <th class='small' scope='col'>Total Amount</th>
+                        <th class='small' scope='col'>Request</th>
+                        <th class='small' scope='col'></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class='mb-2' *ngFor='let item of addedNormalStocksList'>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.category}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.sap_material_code}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.item_name}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.price | currency : ' '}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{item.request_quantity}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>{{(item.price * item.request_quantity) | currency : ' '}}</td>
+                        <td class='small text-black-50 fw-500 custom-table-td'>
+                            <button (click)='removeAddedDnAStockDetailsRCSP(item.item_id)'
+                                    class='btn btn-outline-primary w-100 table-button-height' type='button'>Remove
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class='col-md-12 table-responsive' *ngIf='isPromo'>
+                <table class='table border rounded my-3 w-100'>
+                    <thead class='thead-dark'>
+                    <tr>
+                        <th class='small' scope='col'>Product Type</th>
+                        <th class='small' scope='col'>Item Code</th>
+                        <th class='small' scope='col'>Type</th>
+                        <th class='small' scope='col'>Quantity</th>
+                        <th class='small' scope='col'>Request</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf='selectedPromo!.promotionId !== 0'>
+                    <ng-container>
+                        <tr>
+                            <td class='small no-border-bottom col-2'>
+                                <ul>
+                                    <li *ngFor='let item of selectedPromo.promotionBuyItems'
+                                        class='text-black-50 fw-500 mb-1'>{{item.productType}}</li>
+                                </ul>
+                            </td>
+                            <td class='small no-border-bottom col-2'>
+                                <ul>
+                                    <li *ngFor='let item of selectedPromo.promotionBuyItems'
+                                        class='text-black-50 fw-500 mb-1'>{{item.itemCode}} </li>
+                                </ul>
+                            </td>
+                            <td class='small no-border-bottom col-1'>
+                                <ul>
+                                    <li *ngFor='let item of selectedPromo.promotionBuyItems'
+                                        class='text-black-50 fw-500 mb-1'>{{item.qtyOrAmtType}}</li>
+                                </ul>
+                            </td>
+                            <td class='small no-border-bottom col-1'>
+                                <ul>
+                                    <li *ngFor='let item of selectedPromo.promotionBuyItems'
+                                        class='text-black-50 fw-500 mb-1'>{{item.quantityOrAmount}} </li>
+                                </ul>
+                            </td>
+                            <td class='small no-border-bottom col-1'>
+                                <button class='btn btn-sm btn-outline-primary w-100 ' type='button'
+                                        (click)='removeSelectedRcSP()'>Remove
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='no-border-top pt-0' colspan='5'>
+                                <fieldset class='border fieldset-custom ps-2 pe-2 '>
+                                    <legend class='float-none w-auto ps-2 pe-2 legend-custom'>Get FREE Stocks</legend>
+                                    <table class='table'>
+                                        <tbody>
+                                        <tr *ngFor='let item of selectedPromo.promotionGetItems'>
+                                            <td class='small text-black-50 fw-500 no-border p-0 col-2'>{{item.productType}}</td>
+                                            <td class='small text-black-50 fw-500 no-border p-0 col-2'>{{item.itemCode}}</td>
+                                            <td class='small text-black-50 fw-500 no-border py-0 col-1'>{{item.qtyOrAmtType}}</td>
+                                            <td class='small text-black-50 fw-500 no-border py-0 col-1'>{{item.quantityOrAmount}}</td>
+                                            <td class='small text-black-50 fw-500 no-border p-0 col-1'>&nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </fieldset>
+                            </td>
+                        </tr>
+                    </ng-container>
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='selectedPromo!.promotionId === 0' [height]='224' [message]='errorMessage'
+                               [content]="''">
+                </SW-no-data>
+                <br>
+            </div>
+            <div class='row mb-2 justify-content-between'>
+                <div class='col-md-4'>
+                </div>
+                <div class='col-md-6'>
+                    <div class='row justify-content-end'>
+                        <div class='calculation-container'>
+                            <div class='text-container'>
+                                <div class='title-container'>
+                                    Total (Not Including Tax):
+                                    <br>
+                                    Service Tax(0%):
+                                </div>
+                                <div class='amount-container fw-bold'>
+                                    RM {{totalForRcSP | number: '1.2-2'}}
+                                    <br>
+                                    RM {{totalTaxForRcSP | number: '1.2-2' }}
+                                </div>
+                            </div>
+                            <div class='separator'></div>
+                            <div class='text-container'>
+                                <div class='title-container'>
+                                    Grand Total:
+                                </div>
+                                <div class='amount-container fw-bold'>
+                                    RM {{grandTotalForRcSP | number: '1.2-2'}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-8'>
+                            <div class='form-input-wrapper'>
+                                <label class='small mb-1 dropdown-label'>Payment Method</label>
+                                <select class='form-select form-select-custom custom-select'
+                                        [(ngModel)]='selectedPaymentMethod' id='paymentMethod1'>
+                                    <!-- <option class='custom-select-option' ngbDropdownItem [ngValue]="'eWallet'">
+                                        eWallet
+                                    </option> -->
+                                    <option *ngIf='grandTotalForRcSP > 500' class='custom-select-option' ngbDropdownItem
+                                            [ngValue]="'COD'">
+                                        Cash on Delivery (COD)
+                                    </option>
+                                    <option class='custom-select-option' ngbDropdownItem [ngValue]="'CBD'">
+                                        Cash before Delivery (CBD)
+                                    </option>
+                                    <option *ngIf='grandTotalForRcSP > 500' class='custom-select-option' ngbDropdownItem
+                                            [ngValue]="'TF'">
+                                        Trade Financing (TF)
+                                    </option>
+                                </select>
+                            </div>
+                            <div class='d-flex justify-content-end mt-4'>
+                                <button *ngIf='!isPromo' [disabled]='addedNormalStocksList.length ===0'
+                                        class='btn btn-primary'
+                                        (click)='onContinueClick()'>Continue
+                                </button>
+                                <button *ngIf='isPromo' [disabled]='selectedPromo.promotionId == 0'
+                                        class='btn btn-primary'
+                                        (click)='onContinueClick()'>Continue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalConfirmCBDOption let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Alert!</span></h5>
+    </div>
+
+    <div class='modal-body'>
+        Store ID: {{selectedStore}}
+        <br>
+        Request From: {{requestedFromOutlet}}
+        <br>
+        <br>
+        Please make payment immediately for order to be processed by SW.
+        <br>
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close("close")'>Cancel
+        </button>
+        <button *ngIf='!isPromo' class='btn btn-primary' type='button' (click)='onConfirmClickNormal()'>Proceed
+        </button>
+        <button *ngIf='isPromo' class='btn btn-primary' type='button' (click)='onConfirmClickPromo()'>Proceed
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #modalConfirmCODOption let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Alert!</span></h5>
+    </div>
+
+    <div class='modal-body'>
+        Store ID: {{selectedStore}}
+        <br>
+        Request From: {{requestedFromOutlet}}
+        <br>
+        <br>
+        Please make payment upon stock delivered to outlet.
+        <br>
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close("close")'>Cancel
+        </button>
+        <button *ngIf='!isPromo' class='btn btn-primary' type='button' (click)='onConfirmClickNormal()'>Proceed
+        </button>
+        <button *ngIf='isPromo' class='btn btn-primary' type='button' (click)='onConfirmClickPromo()'>Proceed
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #modalConfirmTFOption let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Alert!</span></h5>
+    </div>
+
+    <div class='modal-body'>
+        Store ID: {{selectedStore}}
+        <br>
+        Request From: {{requestedFromOutlet}}
+        <br>
+        <br>
+        Your payment will be processed by SW through Trade Financing (TF).
+        <br>
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close("close")'>Cancel
+        </button>
+        <button *ngIf='!isPromo' class='btn btn-primary' type='button' (click)='onConfirmClickNormal()'>Proceed
+        </button>
+        <button *ngIf='isPromo' class='btn btn-primary' type='button' (click)='onConfirmClickPromo()'>Proceed
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #modalInsufficientBalanceEWalletOption let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-danger'>Alert!</span> Insufficient Balance</h5>
+    </div>
+
+    <div class='modal-body'>
+        You have insufficient balance to place order, please kindly reload or change payment method to continue.
+        <br>
+        <h5 class='modal-title'>eWallet</h5>
+        <br>
+        Available Balance :
+        <br>
+        Order grand total :
+        <br>
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='changePaymentMethod()'>Change Payment Method
+        </button>
+        <button class='btn btn-primary' type='button' (click)='topUpEWallet(true)'>Top up eWallet
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #modalConfirmCashOption let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Alert!</span></h5>
+    </div>
+
+    <div class='modal-body'>
+        Store ID: {{selectedStore}}
+        <br>
+        Request From: {{userID}}
+        <br>
+        <br>
+        Please make the payment via M2E within 24 hours after SO accepted by dealer for order to be processed by
+        SW.
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='clearData()'>Cancel
+        </button>
+        <button class='btn btn-primary' type='button' (click)='onConfirmClick(true)'>Proceed
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #modalConfirmClearReqListNormal let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-danger'>Uh oh!</span></h5>
+    </div>
+
+    <div class='modal-body my-4'>
+        Do you want to clear items in the request list?
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='gotoNormalStock()'>Go to Normal Stocks</button>
+        <button class='btn btn-primary' type='button' (click)='closeModal()'>Return</button>
+    </div>
+</ng-template>
+
+<ng-template #modalConfirmClearReqListPromo let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-danger'>Uh oh!</span></h5>
+    </div>
+
+    <div class='modal-body my-4'>
+        Do you want to clear items in the request list?
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='gotoPromo()'>Go to Promo Stocks</button>
+        <button class='btn btn-primary' type='button' (click)='closeModal()'>Return</button>
+    </div>
+</ng-template>
+
+<ng-template #modalConfirmClearReqGoDevice let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-danger'>Uh oh!</span></h5>
+    </div>
+
+    <div class='modal-body my-4'>
+        Do you want to clear items in the request list?
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='gotoDevice()'>Go to Device & Accessories</button>
+        <button class='btn btn-primary' type='button' (click)='closeModalRCSP(true)'>Return</button>
+    </div>
+</ng-template>
+
+<ng-template #modalConfirmClearReqGoRcsp let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-danger'>Uh oh!</span></h5>
+    </div>
+
+    <div class='modal-body my-4'>
+        Do you want to clear items in the request list?
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='gotoRCSP()'>Go to RC&SP</button>
+        <button class='btn btn-primary' type='button' (click)='closeModalRCSP(false)'>Return</button>
+    </div>
+</ng-template>

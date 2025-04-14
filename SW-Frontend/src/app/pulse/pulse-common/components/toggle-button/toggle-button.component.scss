@@ -1,0 +1,51 @@
+.switcher {
+    display: inline-block;
+    background: #f3f1f1;
+    width: 250px;
+    border-radius: 30px;
+    border: solid 0px #ddd;
+    position: relative;
+}
+
+.switcher__input {
+    display: none;
+}
+
+.switcher__label {
+    float: left;
+    width: 50%;
+    font-size: 12px;
+    font-weight: 600;
+    color: #c7c8cb;
+    line-height: 35px;
+    text-align: center;
+    cursor: pointer;
+    position: inherit;
+    z-index: 10;
+    transition: color 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    will-change: transform;
+}
+
+.switcher__toggle {
+    position: absolute;
+    float: left;
+    height: 35px;
+    width: 50%;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 35px;
+    cursor: pointer;
+    background-color: #164396;
+    border-radius: 30px;
+    left: 0px;
+    transition: left 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+    will-change: transform;
+}
+
+.switcher__input:checked + .switcher__label {
+    color: #fff;
+}
+
+.switcher__input--normal:checked ~ .switcher__toggle {
+    left: 125px;
+}

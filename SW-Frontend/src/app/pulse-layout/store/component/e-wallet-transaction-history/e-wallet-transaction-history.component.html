@@ -1,0 +1,222 @@
+<sbpro-card-navigation [classes]='["h-100"]' sbproTocItem="Tabs" [navNames]='["Transaction"]'
+    [isCardHeaderVisible]="true" [cardHeader]="'History'" [templates]="[topUp]">
+    <ng-template #topUp>
+        <div class='row mb-2'>
+            <div class='col-md-4 col-sm-6 mb-2'>
+                <div>
+                    <div class='dropdown-label'>Outlet</div>
+                    <ng-multiselect-dropdown class='container p-0' [placeholder]="'Outlet'" [settings]='outletSettings'
+                        [data]='outletList' [(ngModel)]='selectedOutlets' (onSelect)='onOutletChange()'
+                        (onDeSelect)='onOutletChange()'>
+                    </ng-multiselect-dropdown>
+                </div>
+                <span *ngIf='outletsEmpty' class='small fw-500 text-danger'>Please select a outlet *</span>
+            </div>
+
+            <div class='col-md-4 col-sm-6 mb-2'>
+                <div>
+                    <div class='dropdown-label'>Transaction Type</div>
+                    <ng-multiselect-dropdown class='container p-0' [placeholder]="'TransactionType'"
+                        [settings]='transactionSettings' [data]='transactionTypes'
+                        [(ngModel)]='selectedTransactionTypes' (onSelect)='onTransactionChange()'
+                        (onDeSelect)='onTransactionChange()'>
+                    </ng-multiselect-dropdown>
+                </div>
+                <span *ngIf='transactionTypesEmpty' class='small fw-500 text-danger'>Please select a transaction
+                    type *</span>
+            </div>
+
+            <div class='col-md-4 col-sm-6 mb-2'>
+                <SW-date-range-picker></SW-date-range-picker>
+            </div>
+        </div>
+        <div class='col-md-12 table-responsive'>
+            <table class='table border rounded mb-4' id='content' #content>
+                <thead class='thead-dark'>
+                    <tr class='bg-primary text-white'>
+                        <th class='p-3' scope='col'>Date</th>
+                        <th class='p-3' scope='col'>Transaction Type</th>
+                        <th class='p-3' scope='col'>Transaction ID</th>
+                        <th class='p-3' scope='col'>Amount (RM)</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf='filteredTransactionItems.length > 0  || requiredFieldEmpty'>
+                    <tr *ngFor='let transactionData of filteredTransactionItems'>
+                        <td class='p-3'>{{transactionData.completedTime | datePipe: 'date'}}</td>
+                        <td class='p-3'>{{transactionData.details | txn}}</td>
+                        <td class='p-3'>{{transactionData.receiptNumber}}</td>
+                        <td class='p-3'>
+                            <span *ngIf="!transactionData.markedHighlighted" class='text-success'> {{transactionData.amount | currency : ' '}}</span>
+                            <span *ngIf="transactionData.markedHighlighted" class='text-danger'> -{{transactionData.amount | currency : ' '}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='filteredTransactionItems.length <= 0 || requiredFieldEmpty' style='height: 224px'
+                class='col-md-12 d-flex justify-content-center align-content-center flex-wrap bg-gray-100'>
+                <SW-no-data [height]='250'></SW-no-data>
+            </div>
+        </div>
+
+        <div class='row' *ngIf='filteredTransactionItems.length > 0'>
+            <div class='col-sm-12 col-md-4'>
+                <label class='small mb-2'>Showing {{dataFrom}} to {{dataTo}} of {{typeCount}} entries</label>
+            </div>
+            <div class='col-sm-12 col-md-8 d-flex justify-content-md-end justify-content-sm-start'>
+                <div class='row d-flex justify-content-end'>
+                    <div class='col-sm-12 col-md-auto '>
+                        <ngb-pagination [maxSize]='4' [ellipses]='true' [collectionSize]='typeCount' [(page)]='page'
+                            [pageSize]='dataSize' (pageChange)='pageChange($event)'></ngb-pagination>
+                    </div>
+                    <div class='col-sm-12 col-md-auto '>
+                        <button class='btn btn-primary mb-auto'
+                            (click)='open(modalDefaultStatic,  {backdrop: "static"})'>Download Statement
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #cashOut>
+        <div class='row mb-2'>
+            <div class='col-md-4 col-sm-6 mb-2'>
+                <div>
+                    <div class='dropdown-label'>Status</div>
+                    <ng-multiselect-dropdown class='container p-0' [placeholder]="'Status'" [settings]='statusSettings'
+                        [data]='statusList' [(ngModel)]='selectedStatusList' (onSelect)='onStatusChange()'
+                        (onDeSelect)='onStatusChange()'>
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+
+            <div class='col-md-4 col-sm-6 mb-2'>
+                <SW-date-range-picker></SW-date-range-picker>
+            </div>
+        </div>
+        <div class='col-md-12 table-responsive'>
+            <table class='table border rounded mb-4' id='content' #content>
+                <thead class='thead-dark'>
+                    <tr class='bg-primary text-white'>
+                        <th class='p-3' scope='col'>Date & Time</th>
+                        <th class='p-3' scope='col'>Cash Out Amount (RM)</th>
+                        <th class='p-3' scope='col'>Bank Name</th>
+                        <th class='p-3' scope='col'>Bank Account Number</th>
+                        <th class='p-3' scope='col'>Status</th>
+                        <th class='p-3' scope='col'>Remark</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf='eWalletCashoutList.length > 0'>
+                    <tr *ngFor='let transactionData of eWalletCashoutList'>
+                        <td class='p-3'>{{transactionData.transaction_date}}</td>
+                        <td class='p-3'>{{transactionData.amount | currency: 'RM ' }}</td>
+                        <td class='p-3'>{{transactionData.bank_name}}</td>
+                        <td class='p-3'>{{transactionData.bank_acc_no}}</td>
+                        <td class='p-3'>
+                            <div *ngIf="transactionData.status == 'SUCCESS'" class="badge bg-success text-white">{{transactionData.status}}</div>
+                            <div *ngIf="transactionData.status == 'FAILED'" class="badge bg-danger text-white">{{transactionData.status}}</div>
+                        </td>
+                        <td class='p-3'>
+                            <button class='btn btn-primary w-120 table-button-height'
+                            (click)="onViewSummary(transactionData)"  type='button'>View Summary
+                        </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='eWalletCashoutList.length <= 0' style='height: 224px'
+                class='col-md-12 d-flex justify-content-center align-content-center flex-wrap bg-gray-100'>
+                <SW-no-data [height]='250'></SW-no-data>
+            </div>
+        </div>
+
+        <div class='row pt-4'>
+            <div class='col-sm-12 col-md-4'>
+                <label class='small mb-2'>Showing {{((pageNumber * pageSize) - pageSize) + 1}}
+                    to {{(pageNumber * pageSize) + (pageElements - pageSize)}}
+                    of {{totalElements}}
+                    entries</label>
+            </div>
+            <div class='col-sm-12 col-md-8 d-flex justify-content-md-end justify-content-sm-start'>
+                <div class='row d-flex justify-content-end'>
+                    <div class='col-sm-12 col-md-auto '>
+                        <ngb-pagination [maxSize]='4' [ellipses]='true' [collectionSize]='totalElements' [(page)]='pageNumber'
+                            [pageSize]='pageSize' (pageChange)='pageChangeCashout($event)'></ngb-pagination>
+                    </div>
+                    <div class='col-sm-12 col-md-auto '>
+                        <button class='btn btn-primary mb-auto'
+                            (click)='onDownloadLink()'>Download Statement
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</sbpro-card-navigation>
+
+
+
+<ng-template #modalDefaultStatic let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><strong>Confirm Statement Export</strong></h5>
+    </div>
+
+    <div class='modal-body'>
+        <label class='small mb-3'>Please confirm to proceed with the data as per below:</label>
+        <div class='row'>
+            <div class='col-lg-4'>
+                Outlet ID
+            </div>
+            <div class='col'>
+                <strong class='ms-lg-5'>{{selectedOutlet}}</strong>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-lg-4'>
+                MSISDN
+            </div>
+            <div class='col'>
+                <strong class='ms-lg-5'>N/A</strong>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-lg-4'>
+                Transaction Type
+            </div>
+            <div class='col'>
+                <strong class='ms-lg-5'>{{selectedTransactionType}}</strong>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-lg-4'>
+                Date
+            </div>
+            <div class='col'>
+                <strong class='ms-lg-5'>{{selectedDateRangeString}}</strong>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <label class='small mt-3 mb-3'>Send email to</label>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-lg-5'>
+                <div class='form-check'>
+                    <input class='form-check-input' id='customRadio1' (change)='selectEmailRequired()' type='checkbox'
+                        name='customRadio' />
+                    <label class='form-check-label' for='customRadio1'>Dealer Owner Email</label>
+                </div>
+            </div>
+            <div class='col'>
+                <div class='ts-type'><strong class=''>{{emailTo}}</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close("Close Click")'>Cancel</button>
+        <button class='btn btn-primary' type='button' (click)='confirm()'>Confirm
+        </button>
+    </div>
+</ng-template>

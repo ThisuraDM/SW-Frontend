@@ -1,0 +1,54 @@
+.w-100 {
+    width: 100% !important;
+}
+
+.input-group-prepend {
+    margin-right: -1px;
+    display: flex;
+}
+
+.input-group-addon {
+    background-color: transparent;
+    margin-top: 0.8rem;
+    overflow: hidden;
+    margin-right: -1px;
+}
+
+.input-group .input-group-addon + .form-control {
+    border-left: none;
+}
+
+.step-4-wizard-section {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0 1rem 0;
+}
+
+.step-4-wizard-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    flex-shrink: 0;
+    margin-right: 1rem;
+    border-radius: 0.35rem;
+    background-color: #009bdf;
+    color: white;
+}
+
+.step-4-wizard-text {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: #009bdf;
+}
+
+.text-overflow-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-left: 1rem;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}

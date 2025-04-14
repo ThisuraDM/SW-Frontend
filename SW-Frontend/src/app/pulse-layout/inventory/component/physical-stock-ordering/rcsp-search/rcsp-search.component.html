@@ -1,0 +1,43 @@
+<div class='row mb-2'>
+    <div class='col-md-6'>
+        <label class='small mb-1 dropdown-label'>Product Category</label>
+        <select class='form-select form-select-custom custom-select' [disabled]='isPromo'
+             [(ngModel)]="selectedCategory" id='brandOwn'>
+            <option class='custom-select-option' ngbDropdownItem
+                *ngFor='let item of products' [value]="item">
+                {{item}}
+            </option>
+        </select>
+    </div>
+    <div class='col-md-6'>
+        <label class='small mb-1 dropdown-label'>Brand</label>
+        <select class='form-select form-select-custom custom-select' [disabled]='true'
+            id='brandOwn'>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class='col-md-6 mb-3'>
+        <label class='small mb-1 dropdown-label'>Item Name</label>
+        <input class='form-control form-control-custom custom-input' id='itemNameOwn' [disabled]='isPromo'
+            [(ngModel)]="selectedItemName" type='text' placeholder='Enter Item Name'
+            maxlength='100'>
+    </div>
+    <div class='col-md-6 mb-3'>
+        <label class='small mb-1 dropdown-label'>SAP Material Code</label>
+        <input class='form-control form-control-custom custom-input' [(ngModel)]="selectedSapCode" [disabled]='isPromo'
+            id='materialCodeOwn' type='text' placeholder='Enter SAP Material Code' maxlength='100'>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-7">
+        <div class='text-75 small my-2'>Please note that you cannot combine Reload Card and Devices
+            in one single order request</div>
+    </div>
+    <div class="col-md-5">
+        <div class='d-flex justify-content-end'>
+            <button class='btn btn-primary' [disabled]='isPromo' type='submit' (click)='searchItems()'>Search Now
+            </button>
+        </div>
+    </div>
+</div>

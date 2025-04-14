@@ -1,0 +1,59 @@
+<div class='container-xl px-4 mt-4'>
+    <div class='card mb-4'>
+        <div class='card-header'>Stock Transfer From Device Management Team</div>
+        <div class='card-body'>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                        <div>Transfer ID:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                            {{stockTransferDetails.request_id}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                        <div>Store Name:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                            {{stockTransferDetails.destination_outlet_name}}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">           
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                        <div>Status:</div>
+                        <div class="text-overflow-ellipsis text-primary text-bold-600">
+                            {{stockTransferDetails.status}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class='col-md-12 table-responsive mb-2 scroll-body scrollbar'>
+                <table class='table border  m-0'>
+                    <thead class='thead-dark '>
+                        <tr class='bg-primary text-white'>
+                            <th class='p-3' scope='col'>Device Name</th>
+                            <th class='p-3' scope='col'>IMEI</th>
+                            <th class='p-3' scope='col'>Date Acknowledged</th>
+                            <th class='p-3' scope='col'>Acknowledged By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let item of tableData'>
+                            <td class='p-3'>{{item.item_name}}</td>
+                            <td class='p-3'>{{item.serial}}</td>
+                            <td class='p-3'>{{stockTransferDetails.last_status_updated_date}}</td>
+                            <td class='p-3'>{{stockTransferDetails.last_status_updated_by}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='tableData?.length==0' [height]='224' [content]="''"
+                    [message]="'Unable to load data'">
+                </SW-no-data>
+            </div>
+         
+            <div class='d-flex justify-content-end my-3'>
+                <button class='btn btn-outline-primary me-2 smaller-button' type='button' (click)="onDownloadClick()">Download
+                </button>
+                <button class='btn btn-primary me-2 smaller-button' type='button' (click)="onConfirmClick()">Done
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

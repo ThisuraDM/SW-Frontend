@@ -1,0 +1,59 @@
+<div class="bg-white" id="layoutError">
+    <div id="layoutError_content">
+        <main>
+            <div class="container-xl px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="text-center mt-4">
+                            <img class="img-fluid p-4" src="assets/img/illustrations/403-error-forbidden.svg" alt="" />
+                            <p class="lead">You do not have permission to view this page.</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="layoutError_footer">
+        <footer class="footer-admin mt-auto footer-light">
+            <div class="container-fluid px-4">
+                <div class="row gx-4">
+                    <div class="col-md-6 small">Copyright &copy; Your Website 2021</div>
+                    <div class="col-md-6 text-md-end small">
+                        <a href="javascript:void(0);">Privacy Policy</a>
+                        &middot;
+                        <a href="javascript:void(0);">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<ng-template #modalIdle let-modal>
+    <div class='modal-body'>
+        <div class='mb-3 text-ac'>
+            <svg class='icon' aria-hidden='true' width='100' height='100'>
+                <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#no-phone-device'></use>
+            </svg>
+        </div>
+        <div class='small text-ac fz-20'>
+          
+        </div>
+        <div class='small text-ac fz-20'>
+         
+        </div>
+        <div class='small text-ac'>
+            Account is not active, Please login with active user.
+        </div>
+    </div>
+
+    <div class='modal-footer justify-content-center'>
+        <button
+            class='btn btn-primary mr-auto'
+            type='button'
+            (click)="logout()"
+        >
+            Login
+        </button>
+    </div>
+</ng-template>

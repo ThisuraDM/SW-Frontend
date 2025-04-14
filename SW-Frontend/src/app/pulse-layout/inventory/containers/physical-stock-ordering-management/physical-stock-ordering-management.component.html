@@ -1,0 +1,26 @@
+<SW-physical-stock-ordering
+    [hidden]="displayedScreen !== 'main'"
+    (confirmClick)="onContinueClick($event)"
+    (confirmClickRcsp)="onContinueClickRcsp($event)"
+    (confirmClickRcspPromo)="onContinueClickRcspPromo($event)"
+    (isPromoStocks)="getIsPromo($event)">
+</SW-physical-stock-ordering>
+
+<SW-dealer-confirm-stock-order-delivery-details
+    *ngIf="displayedScreen === 'confirm'"
+    [previousScreenDetails]="mainScreenRequest"
+    [outletId]="mainScreenRequest?.outlet_id"
+    [alreadyAddedContactDetails]="previouslyAddedContactDetails"
+    (backClick)="onBackClick($event)">
+</SW-dealer-confirm-stock-order-delivery-details>
+
+<SW-rcsp-delivery-details
+    *ngIf="displayedScreen === 'confirmRcsp'"
+    [previousScreenDetails]="mainScreenRequestRcsp"
+    [outletId]="mainScreenRequestRcsp?.outlet_id"
+    [previousScreenDetailsPromo]="mainScreenRequestRcspPromo"
+    [outletIdPromo]="mainScreenRequestRcspPromo?.outletId"
+    [isPromo]="isPromo"
+    [alreadyAddedContactDetails]="previouslyAddedContactDetails"
+    (backClick)="onBackClick($event)">
+</SW-rcsp-delivery-details>

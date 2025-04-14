@@ -1,0 +1,45 @@
+@import '../../../../../styles/core/variables';
+
+@media (max-width: 354px) {
+    .btntxt {
+        margin-right: 120px !important;
+    }
+    .fs {
+        font-size: 12px !important;
+    }
+}
+
+.form-select {
+    padding: 1.4rem 3.375rem 0.875rem 1.125rem !important
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+}
+
+.border-node {
+    border: none;
+}
+
+.ts-type {
+    //display: flex;
+    //justify-content: flex-end;
+    float: left;
+    width: 240px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.table-button-height {
+    height: 26px;
+}
+
+.badge{
+    width: 90px;
+}
+
+.w-120{
+    width: 150px;
+}

@@ -1,0 +1,251 @@
+@import '../../../../../styles/core/variables';
+$blue: #009bdf;
+
+.btn-sub-col {
+    width: 100% !important;
+    margin-top: 25px;
+}
+
+.mbtm-10 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.up-arrow {
+    width: 0;
+    height: 0;
+    border: solid 4px transparent;
+    background: transparent;
+    border-bottom: solid 5px black;
+    border-top-width: 0;
+    cursor: pointer;
+
+}
+
+.down-arrow {
+    width: 0;
+    height: 0;
+    border: solid 4px transparent;
+    background: transparent;
+    border-top: solid 5px black;
+    border-bottom-width: 0;
+    margin-top:1px;
+    cursor: pointer;
+
+}
+
+.tablesorter-header {
+    position: relative;          /* This is needed for the absolute positioning. */
+}
+
+.tablesorter-header::before,
+.tablesorter-header::after {
+    position: absolute;
+    right: 0.75em;
+    font-family: 'FontAwesome';  /* Use FontAwesome's font so that you can set the content */
+    opacity: 0.3;                /* Set opacity to gray out icons by default */
+}
+
+.tablesorter-header::before {
+    width: 0;
+    height: 0;
+    border: solid 4px transparent;
+    background: transparent;
+    border-top: solid 5px black;
+    border-bottom-width: 0;
+    margin-top:1px;
+    cursor: pointer;
+}
+
+.tablesorter-header::after {
+    width: 0;
+    height: 0;
+    border: solid 4px transparent;
+    background: transparent;
+    border-bottom: solid 5px black;
+    border-top-width: 0;
+    cursor: pointer;
+}
+
+.tablesorter-header.tablesorter-headerAsc::before,
+.tablesorter-header.tablesorter-headerDesc::after {
+    opacity: 1;                  /* When sorting, set full opacity on the direction */
+}
+
+.dataTable-sorter {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    padding-right: 2rem;
+    padding-left: 0rem;
+}
+
+.dataTable-table th a {
+    text-decoration: none;
+    color: inherit;
+}
+.dataTable-table th{
+    padding-right: 0rem !important;
+}
+.date-label{
+    font-size: 0.8rem
+}
+.cnu-date-picker-input{
+    // margin-top: 0.3rem;
+    // margin-left: -0.2rem;
+    // font-size: 1rem;
+    // padding-bottom: 0.45rem;
+    margin-left: -0.2rem;
+    font-size: 1rem;
+    padding-bottom: 0.7rem;
+    margin-top: 0;
+}
+.no-data-banner{
+    height: 224px
+}
+.table-action-column{
+    text-align: center;
+    padding: 0rem;
+}
+.table, .dataTable-table {
+    overflow: auto !important;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+.btn-add {
+    margin-top: 25px;
+    float: right;
+}
+
+.displace-icon{
+    position: absolute;
+    @media(min-width: 1200px) {
+        right: 70%;
+    }
+    right: 29%;
+    transform: translateY(-155%);
+    cursor: pointer;
+}
+.displace-icon-trash{
+    position: absolute;
+    @media(min-width: 1200px) {
+        right: 61%;
+    }
+    right: 5%;
+    transform: translateY(-155%);
+    cursor: pointer;
+}
+.file-upload-input {
+    background-color: gray-500 !important;
+}
+
+.time-input {
+    background-color: inherit;
+}
+
+.custom-month-dropdown {
+    min-width: 33rem;
+    padding: 0;
+    top: 44px !important;
+}
+
+.month-item {
+    position: relative;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    border-radius: 0.35rem;
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+    margin-left: -3px;
+    font-size: 16px;
+    margin-top: 17px;
+}
+.date-label{
+    font-size: 0.75rem;
+    font-weight: 600;
+
+}
+.date-dropdown{
+    @media(min-width: 768px) {
+    margin-left: -0.2rem;
+    }
+    font-size: 1rem;
+    padding-bottom: 0.7rem;
+    margin-top: 0.20rem;
+    font-weight: 600;
+
+}
+  
+  .pagination a {
+    text-decoration: none;
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: $blue;
+    background-color: white;
+    border: 1px solid $gray-500;
+  }
+  .pagination-next {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+  .pagination-prev {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+  .pagination a.active {
+    color: white;
+    border: 1px solid ;
+  }
+  .pagination a.active {
+    color: white;
+    border: 1px solid ;
+  }
+  .link-disabled{
+      pointer-events: none;
+  }
+  .link-active{
+      cursor: pointer;
+  }
+  .pagination a:hover:not(.active) {background-color: $gray-500;}
+  .select-label {
+    position: absolute;
+    left: 2.5rem;
+    margin-top: 4px;
+    color: $gray-600;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.form-select-111 {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.form-select2{
+    padding: 12px !important
+}
+
+.dtxt-c {
+    color: #424d52;
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+    margin-top: 10px;
+}
+.product-label{
+    margin-top: 10px;
+}
+.invalid-msg{
+    display: block;
+}
+.dataTable-selector {
+    padding-right: 2.5rem !important;
+}

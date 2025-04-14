@@ -1,0 +1,62 @@
+.check-box-btn {
+    float: right !important;
+    margin: 5px 5px;
+}
+
+.link {
+    font-size: 18px; cursor: pointer;
+}
+
+.stepper-horizontal {
+    display: flex;
+}
+
+li.active a .circle {
+    background-color: #4285f4 !important;
+}
+
+ul.stepper li a .circle {
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-right: 0.6rem;
+    line-height: 1.7rem;
+    color: #fff;
+    text-align: center;
+    background: rgba(0,0,0,0.38);
+    border-radius: 50%;
+}
+
+.list-style-none {
+    list-style: none!important;
+}
+
+.center {
+    display: flex;
+    justify-content: space-around;
+}
+
+.invalid-input {
+    width: 100%;
+    color: #dc3545;
+}
+.big-icon {
+    ::ng-deep i-feather svg {
+        height: 22px !important;
+        width: 22px !important;
+        vertical-align: top !important;
+    }
+}
+
+.form-check-input{
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.check-box-btn {
+    margin: 0 5px;
+}
+
+.border-darker {
+    border-color: #999999 !important;
+}

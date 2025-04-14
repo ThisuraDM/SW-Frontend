@@ -1,0 +1,33 @@
+
+@import '../../../../../styles/core/variables';
+
+.select-label {
+    position: absolute;
+    left: 2.5rem;
+    margin-top: 4px;
+    color: $gray-600;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.form-select {
+    padding: 1.4rem 3.375rem 0.875rem 1.125rem !important
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+}
+
+.border-node {
+    border: none;
+}
+
+.table-action-column{
+    text-align: center;
+    padding: 0rem !important;
+}
+
+.table th, .dataTable-table th, .table td, .dataTable-table td {
+    padding: 0.75rem;
+}

@@ -1,0 +1,60 @@
+@import '../../../../../styles/core/variables';
+
+.alert {
+    padding: 0.25rem 1rem !important;
+    background-color: #c6d6eb;
+    margin-bottom: 0rem !important;
+    border-color: #c6d6eb !important;
+}
+
+.alert-btn {
+    height: 30px;
+    font-size: 13px;
+    margin: 3px;
+}
+
+.devType {
+    height: 40px;
+    width: 100%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.mt-4 {
+    margin-top: 0rem !important;
+}
+
+@media (max-width: 354px) {
+    .btntxt {
+        margin-right: 120px !important;
+    }
+    .fs {
+        font-size: 12px !important;
+    }
+}
+
+.select-label {
+    position: absolute;
+    left: 2.5rem;
+    margin-top: 4px;
+    color: $gray-600;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.form-select {
+    padding: 1.4rem 3.375rem 0.875rem 1.125rem !important
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+}
+
+.so-elipse{
+    width: 110px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+

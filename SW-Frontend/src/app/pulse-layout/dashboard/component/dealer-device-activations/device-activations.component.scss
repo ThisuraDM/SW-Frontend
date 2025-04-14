@@ -1,0 +1,48 @@
+@import '../../../../../styles/core/variables';
+
+.alert {
+    padding: 0.25rem 1rem !important;
+    background-color: #c6d6eb;
+    margin-bottom: 0rem !important;
+}
+
+.alert-btn {
+    height: 30px;
+    font-size: 13px;
+    margin: 3px;
+}
+
+.devType {
+    height: 40px;
+    width: 100%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.mt-4 {
+    margin-top: 0rem !important;
+}
+
+
+@media (max-width: 362px) {
+    .bc {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 354px) {
+    .btntxt {
+        margin-right: 120px !important;
+    }
+    .fs {
+        font-size: 12px !important;
+    }
+}
+
+.card-body{
+    padding: .55rem 1.35rem !important;
+}
+
+.mr-0{
+    padding-right: 0px !important;
+}

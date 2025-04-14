@@ -1,0 +1,85 @@
+<div class="row gx-4">
+    <div class="col-12">
+        <sbpro-card>
+            <div class='card-header w-100'>
+                <span class="ml-5">Cash Out Summary</span>
+            </div>
+
+            <div class="card-body">
+                <div class="mt-2 mb-3">
+                    <span class="result-header">Summary</span>
+                </div>
+                <div class="row d-flex ">
+                    <div class="col-md-6">
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>Date & Time:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">{{selectedItem.transaction_date}}
+                            </div>
+                        </div>
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>Cash Out Status:</div>
+                            <div class="text-overflow-ellipsis text-black">
+                                <span class="h5 card-title mb-0 text-primary">{{selectedItem.status}}</span>
+                            </div>
+                        </div>
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>Transaction ID:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">{{selectedItem.request_no}}
+                            </div>
+                        </div>
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>Payment Reference Number:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">{{selectedItem.ref_no}}
+                            </div>
+                        </div>
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>Login/User ID:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">{{loginUser}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>Cash Out Amount:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">
+                                {{selectedItem.amount | currency: 'RM '}}</div>
+                        </div>
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>Bank Name:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">
+                                {{selectedItem.bank_name}}</div>
+                        </div>
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>Account Number:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">{{selectedItem.bank_acc_no}}
+                            </div>
+                        </div>
+                        <div class='d-flex flex-row gx-4 my-2 mb-3 details-label justify-content-between no-wrap'>
+                            <div>eWallet Balance:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">{{availableBalance | currency: 'RM '}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="row my-2 ms-2 w-100">
+                    <div class="col-md-6">
+                    </div>
+
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <button class="btn btn-outline-primary me-2 smaller-button mb-2" type="button"
+                            (click)="printReciept()">
+                            Print Reciept
+                        </button>
+
+                        <button class="btn btn-primary smaller-button mb-2" type="button" (click)="onReturnClick()">
+                            Return
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </sbpro-card>
+    </div>
+</div>

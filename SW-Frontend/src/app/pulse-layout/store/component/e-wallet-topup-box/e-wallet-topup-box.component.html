@@ -1,0 +1,242 @@
+<sbpro-card-navigation [classes]='["h-100 card-bodyw"]' sbproTocItem="Tabs" [navNames]='["Top Up"]' [isCardHeaderVisible]="true"
+    [cardHeader]="'Manage eWallet '" [templates]="[topUp]">
+    <ng-template #topUp>
+        <div class='row'>
+            <div class='col-md-6 col-sm-12 mt-2'>
+                <label class='small mb-1'>Enter Topup Amount</label>
+                <input class='form-control txt-a' id='amount' currencyMask [disabled]='!isDealerOwner'
+                    [(ngModel)]='topUpFormData.amount'
+                    [options]="{ prefix: 'RM ', thousands: ',', precision: 2, decimal:'.', allowNegative: false }" />
+            </div>
+            <div class='col-md-6 col-sm-12 mt-2'>
+                <label class='small mb-1'>Top Up To</label>
+                <select class='form-select' name='pageSize' [(ngModel)]='topUpFormData.outlet_id'
+                    [disabled]='!isDealerOwner'>
+                    <option *ngFor="let outlet of outletList" [value]='outlet.outlet_id'>
+                        {{outlet.outlet_id}}</option>
+                </select>
+            </div>
+            <div class='col-md-6 col-sm-12 mt-2'>
+                <label class='small mb-1'>Payment Via</label>
+                <select class='form-select' name='pageSize' [(ngModel)]='topUpFormData.payment_method'
+                        [disabled]='!isDealerOwner'>
+                    <option [ngValue]='7'>FPX</option>
+                    <option [ngValue]='1'>Credit Card / Debit Card</option>
+                </select>
+            </div>
+        </div>
+            <button [disabled]='!isDealerOwner' (click)='getEWalletBalanceStatus()' class='btn btn-primary'
+                style='float: right' type='button'>
+                Top Up Now
+            </button>
+        <div>
+            <form ngNoForm hidden method='POST' #paymentFormGroup [action]="ewalletUrl">
+                <input type='hidden' id='storeId' name='storeId' [value]='transferRequestResponse.storeId' />
+                <input type='hidden' id='orderId' name='orderId' [value]='transferRequestResponse.orderId' />
+                <input type='hidden' id='totalAmount' name='totalAmount'
+                    [value]='transferRequestResponse.totalAmount' />
+                <input type='hidden' id='signature2' name='signature2' [value]='transferRequestResponse.signature2' />
+                <input type='hidden' id='signature' name='signature' [value]='transferRequestResponse.signature' />
+                <input type='hidden' id='transDate' name='transDate' [value]='transferRequestResponse.transDate' />
+                <input type='hidden' id='responseUrl' name='responseUrl'
+                    [value]='transferRequestResponse.responseUrl' />
+                <input type='hidden' id='reconFilename' name='reconFilename'
+                    [value]='transferRequestResponse.reconFileName' />
+                <input type='hidden' id='outletId' name='outletId' [value]='topUpFormData.outlet_id' />
+                <input type='hidden' id='prePayment' name='prePayment' [value]='transferRequestResponse.prePayment' />
+                <input type='hidden' id='paymentMethod' name='paymentMethod'
+                    [value]='transferRequestResponse.paymentMethod' />
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #cashOut>
+        <div class='row mb-3'>
+            <div class='col-md-6'>
+                <label class='small mb-1'>Enter Cash Out Amount</label>
+                <input class='form-control txt-a' [class.is-invalid]="showAmountErrorMessage" id='amountCashout' name="amountCashout" placeholder="Amount" autocomplete="off" currencyMask [readonly]='disableCashout' type="text"
+                    [(ngModel)]='cashOutAmount' (ngModelChange)="onChangeAmount()"
+                    [options]="{ prefix: 'RM ', thousands: ',', precision: 2, decimal:'.', allowNegative: false }" />
+                    <div class='mb-1' *ngIf="showAmountErrorMessage"><span class="tcr">Please enter a valid amount</span></div>
+            </div>
+            <div class='col-md-6'>
+                <label class='small mb-1'>Enter eWallet Security Pin</label>
+                <input class='form-control txt-a' [class.is-invalid]="showPinErrorMessage" (input)='onChangePin()' id='pin' placeholder="eWallet Security Pin" [(ngModel)]='pinNumber'
+                 [disabled]='disableCashout' maxlength="6" autocomplete="false" type="password" readonly onfocus="this.removeAttribute('readonly');"
+             />
+             <div class='mb-1' *ngIf="showPinErrorMessage"><span class="tcr">Please enter the correct eWallet security pin</span></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-9">
+                <div class='text-75 small' *ngIf="!disableCashout">Please ensure there is sufficient balance in your eWallet to proceed to Cash Out.
+                </div>
+                <div class='text-75 small tc-m' *ngIf="disableCashout">Your eWallet security Pin has been locked. Please contact 1919 for further assistance.
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button [disabled]='pinNumber == "" || cashOutAmount <= 0 || !isDealerOwner && disableCashout'  style='float: right; width:120px;' (click)='validateEligible()' class='btn btn-primary'
+                 type='button'>
+                Confirm
+            </button>
+            </div>
+        </div>
+    </ng-template>
+</sbpro-card-navigation>
+
+<ng-template #modalConfirmTopUp let-modal>
+    <div class='modal-header'>
+        <h3 class='modal-title fw-bolder'>Confirm Top Up Amount!</h3>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>Are you sure you want to submit the top up amount?</div>
+        <div class='row'>
+            <div class='col-xl-6 col-lg-6 col-md-6'>
+                <div class='card border-top-0 border-bottom-0 border-end-0 border-start-lg border-primary h-auto'>
+                    <div class='card-body'>
+                        <div class='d-flex align-items-center '>
+                            <div class='flex-grow-1 '>
+                                <div class='small fw-bold text-primary'>{{selectedOutletName}}</div>
+                                <div class='h3 mb-0 fw-bolder'>{{topUpFormData.amount | currency: 'RM '}}</div>
+                                <div class='text-xs fw-bold' *ngIf='topUpFormData.payment_method==1'>via Credit Card /
+                                    Debit Card</div>
+                                <div class='text-xs fw-bold' *ngIf='topUpFormData.payment_method==7'>via FPX</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-outline-secondary' type='button' (click)='modal.close("Save Click")'>Cancel</button>
+        <button class='btn btn-primary' type='button' (click)=confirmPayment()>Confirm</button>
+    </div>
+</ng-template>
+
+<ng-template #modalSuccessful let-modal>
+    <div class='modal-header'>
+        <h3 class='modal-title fw-bolder'>Top Up Successful!</h3>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>Transaction ID : <span style="color:#009bdf;">{{paymentResponse.orderId}}</span></div>
+        <div class='row'>
+            <div class='col-xl-6 col-lg-6 col-md-6'>
+                <div class='card border-top-0 border-bottom-0 border-end-0 border-start-lg border-primary h-auto'>
+                    <div class='card-body'>
+                        <div class='d-flex align-items-center '>
+                            <div class='flex-grow-1 '>
+                                <div class='small fw-bold text-primary'>{{getOutlet(paymentResponse.outletId)}}</div>
+                                <div class='h3 mb-0 fw-bolder'>RM {{paymentResponse.amount}}</div>
+                                <div class='text-xs fw-bold' *ngIf='paymentResponse.paymentMethod=="1"'>via Credit Card
+                                    / Debit Card</div>
+                                <div class='text-xs fw-bold' *ngIf='paymentResponse.paymentMethod=="7"'>via FPX</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xl-6 col-lg-6 col-md-6'>
+                <div class='card border-top-0 border-bottom-0 border-end-0 border-start-lg border-primary h-auto'>
+                    <div class='card-body'>
+                        <div class='d-flex align-items-center '>
+                            <div class='flex-grow-1 '>
+                                <div class='small fw-bold text-primary'>Balance</div>
+                                <div class='h3 mb-0 fw-bolder'>RM {{balanceStatus.available_balance}}</div>
+                                <div class='text-xs fw-bold'>&nbsp;</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-primary' type='button' (click)='modal.close()'>Return to eWallet</button>
+    </div>
+</ng-template>
+
+<ng-template #modalUnsuccessful let-modal>
+    <div class='modal-header'>
+        <h3 class='modal-title fw-bolder'>Top Up Failed!</h3>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>Transaction ID : <span style="color:#009bdf;">{{paymentResponse.orderId}}</span></div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-primary' type='button' (click)='modal.close()'>Return to eWallet</button>
+    </div>
+</ng-template>
+
+<ng-template #modalInactiveOutlet let-modal>
+    <div class='modal-header'>
+        <h3 class='modal-title fw-bolder'>Failed To Top Up!</h3>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>Selected outlet is invalid.</div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-primary' type='button' (click)='modal.close()'>Return to eWallet</button>
+    </div>
+</ng-template>
+
+<ng-template #modalCashOutErrorMessages let-modal>
+    <div class='modal-header'>
+        <h3 class='modal-title fw-bolder'>Uh-Oh!</h3>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>{{cashoutErrorMessage}}</div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-primary' type='button' (click)='modal.close()'>Return</button>
+    </div>
+</ng-template>
+
+<ng-template #modalOTP let-modal>
+    <div class='modal-header'>
+        <h3 class='modal-title h5 fw-bolder'>Confirm Cash Out Amount</h3>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>Are you sure you want to submit the cash out amount?</div>
+        <div class='row mb-3'>
+            <div class='col-xl-6 col-lg-6 col-md-6'>
+                <div class='card border-top-0 border-bottom-0 border-end-0 border-start-lg border-primary h-auto'>
+                    <div class='card-body'>
+                        <div class='d-flex align-items-center '>
+                            <div class='flex-grow-1 '>
+                                <div class='small fw-bold text-primary'>Amount</div>
+                                <div class='h3 mb-0 fw-bolder'>{{cashOutAmount | currency: 'RM '}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='h5 mb-3 fw-bolder'>Enter Code</div>
+        <div class='mb-1'>A text message with a code will be sent to</div>
+        <div class='mb-3'>{{dealerRetrieve.cell_phone}}</div>
+        <div class="flexWrap mb-4">
+            <input class='form-control txt-a w-40 mr-2' [class.rb]="showOTPErrorMessage" id='pin1' maxlength="1" [(ngModel)]="otp1"  (input)='onChangeOTP(1)'  autocomplete="false" type="password" />
+            <input class='form-control txt-a w-40 mr-2' [class.rb]="showOTPErrorMessage" id='pin2' maxlength="1" [(ngModel)]="otp2" (input)='onChangeOTP(2)'  autocomplete="false" type="password" />
+            <input class='form-control txt-a w-40 mr-2' [class.rb]="showOTPErrorMessage" id='pin3' maxlength="1" [(ngModel)]="otp3" (input)='onChangeOTP(3)'   autocomplete="false" type="password" />
+            <input class='form-control txt-a w-40 mr-2' [class.rb]="showOTPErrorMessage" id='pin4' maxlength="1" [(ngModel)]="otp4" (input)='onChangeOTP(4)'   autocomplete="false" type="password" />
+            <input class='form-control txt-a w-40 mr-2' [class.rb]="showOTPErrorMessage" id='pin5' maxlength="1" [(ngModel)]="otp5" (input)='onChangeOTP(5)'   autocomplete="false" type="password" />
+            <input class='form-control txt-a w-40 mr-2' [class.rb]="showOTPErrorMessage" id='pin6' maxlength="1" [(ngModel)]="otp6" (input)='onChangeOTP(6)'  autocomplete="false" type="password" />
+        </div>
+        <div class='mb-3' *ngIf="showOTPErrorMessage"><span class="tcr">Please enter the correct code to proceed</span></div>
+        <div class="mb-3">
+            <button class='btn btn-primary' type='button' [disabled]="disableResend" (click)='resendCode()'>Resend</button>
+        </div>
+        <div class='mb-2'><span><b>{{otpMessage}}</b></span>Code will expire in <span class="tco">{{minutes|number: '2.0-0'}} mins {{seconds|number: '2.0-0'}} secs </span></div>
+        <div>
+
+        </div>
+
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close()'>Cancel</button>
+        <button class='btn btn-primary' type='button' (click)='confirmOTP()'>Confirm</button>
+    </div>
+</ng-template>

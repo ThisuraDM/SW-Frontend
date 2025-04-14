@@ -1,0 +1,152 @@
+@import '../../../../../../styles/core/variables';
+
+::ng-deep li {
+    @media (max-width: 370px) {
+        font-size: 15px !important;
+    }
+    @media (max-width: 360px) {
+        font-size: 14px !important;
+    }
+    @media (max-width: 340px) {
+        font-size: 12px !important;
+    }
+}
+
+.custom-radio-flex {
+    @media (min-width: 472px) {
+        flex-direction: row !important;
+    }
+    @media (max-width: 472px) {
+        flex-direction: column !important;
+    }
+}
+
+.custom-radio-1 {
+    position: relative;
+    margin-right: 25px;
+    margin-bottom: 10px;
+
+    input[type="radio"] {
+        appearance: none;
+        position: absolute;
+        top: 30px;
+        left: 75px;
+    }
+}
+
+.custom-radio-2 {
+    position: relative;
+
+    input[type="radio"] {
+        appearance: none;
+        position: absolute;
+        top: 30px;
+        left: 60px;
+    }
+}
+
+input[type="radio"] + label {
+    color: #999999;
+}
+
+input[type="radio"]:checked {
+    width: 40px;
+    height: 4px;
+    background-color: #4569AB;
+    border-radius: 2px;
+    /* checked state properties */
+}
+
+input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: #666666;
+}
+
+.search-button-width {
+    height: 40px;
+    @media (min-width: 500px) {
+        width: 20%;
+    }
+
+    @media (max-width: 500px) {
+        width: 40%;
+    }
+}
+
+.result-header {
+    color: black;
+    font-weight: bold;
+}
+
+table {
+    overflow: auto !important;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+// dropdowns
+.form-select-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.custom-select-option {
+    color: #424d52;
+}
+
+.custom-select {
+    color: $black;
+    font-weight: 600;
+    margin-left: -2.5px;
+}
+
+//inputs
+.form-control-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.custom-input {
+    color: $black;
+    font-weight: 600;
+    margin-left: -2.5px;
+}
+
+.text-black {
+    color: $black;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.table-button-height {
+    height: 26px;
+}
+
+.text-label {
+    font-size: 16px;
+    font-weight: 450;
+    color: #333333;
+}
+
+.confirm-button {
+    width: 185px;
+    height: 40px;
+}
+
+table tr:last-child th:first-child {
+    border-top-left-radius: 10px;
+}
+
+table tr:last-child th:last-child {
+    border-top-right-radius: 10px;
+}
+
+table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}

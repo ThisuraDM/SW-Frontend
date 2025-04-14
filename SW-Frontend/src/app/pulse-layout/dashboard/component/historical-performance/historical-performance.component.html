@@ -1,0 +1,67 @@
+<sbpro-card>
+    <div class='card-header'>Historical Performance</div>
+    <div class='card-body fz'>
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='text-75 small mb-2'> Select the data filter</div>
+
+                <div class='row filterDropdownRow'>
+                    <div  *ngIf="productList.length > 0" class='col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'>
+                        <SW-multilevel-dropdown [dataList]='productList' (selectProductAndPlan)='changeProduct($event)'></SW-multilevel-dropdown>
+                    </div>
+                </div>
+                <br>
+                <div class='alert alert-primary dashboard-alert' role='alert'>
+                    <div class='row align-items-center justify-content-between'>
+                        <div class='col-auto'>
+                            <ol class='breadcrumb mt-4 mb-0 rounded fs'>
+                                <span class='text-dark fw-500 so-elipse' title="{{selectedOutletName}}">{{selectedOutletName}} </span>
+                                <span class='text-gray-600'> &nbsp; / {{selectedProduct}}</span>
+                            </ol>
+                        </div>
+                        <div class='col-auto'>
+                            <span class='small m-1 flex-end text-black btntxt'>Sort by</span>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedHistoricalPerformancePeriod === '1_year' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceActivationDataByPeriod("1_year")'>
+                                <span class='d-none d-sm-block'>1 Year</span>
+                                <span class='d-block d-sm-none'>1 Y</span>
+                            </a>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedHistoricalPerformancePeriod === '6_months' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceActivationDataByPeriod("6_months")'>
+                                <span class='d-none d-sm-block'>6 Month</span>
+                                <span class='d-block d-sm-none'>6 M</span>
+                            </a>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedHistoricalPerformancePeriod === '1_month' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceActivationDataByPeriod("1_month")'>
+                                <span class='d-none d-sm-block'>1 Month</span>
+                                <span class='d-block d-sm-none'>1 M</span>
+                            </a>
+                            <a class='btn p-3 alert-btn'
+                               [ngClass]="selectedHistoricalPerformancePeriod === '1_week' ? 'btn-primary' : 'btn-light'"
+                               (click)='filterDeviceActivationDataByPeriod("1_week")'>
+                                <span class='d-none d-sm-block'>1 Week</span>
+                                <span class='d-block d-sm-none'>1 W</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class='chart-bar' [style.height]='"300px"' [style.width]='width'>
+                    <canvas #myBarChart></canvas>
+                </div>
+            </div>
+
+        </div>
+        <br>
+    </div>
+</sbpro-card>
+
+<ng-template #noHistoricalPerformance>
+    <div class='row gx-4'>
+        <div class='col-md-12'>
+            <SW-no-data height='250'></SW-no-data>
+        </div>
+    </div>
+</ng-template>

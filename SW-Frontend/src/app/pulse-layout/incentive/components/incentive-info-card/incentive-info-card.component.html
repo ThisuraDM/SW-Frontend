@@ -1,0 +1,39 @@
+<div class="card">
+    <div class="card-header border-bottom-0 text-primary text-lg">{{cardData.category}}</div>
+    <div class="card-body">
+        <div class='h-100 d-flex flex-row justify-content-around mb-3 px-0'>
+            <div class='w-100 d-flex'>
+                <SW-incentive-info-pie-chart [value]='70'></SW-incentive-info-pie-chart>
+            </div>
+            <div class='w-100 d-flex flex-column justify-content-start product-container'>
+                <div style='margin-bottom: 0.2rem'>
+                    <span style='font-size: 1rem' class='text-primary fw-600 bsDetails' title="Postpaid">{{cardData.category}}</span>
+                </div>
+                <span style='font-size: 1.5rem' class='text-black-75 line-height-normal fw-bolder'>{{'RM'}}</span>
+                <span style='font-size: 1.5rem' class='text-black-75 line-height-normal fw-bolder'>{{cardData.commission_amount | number: '1.0-0'}}</span>
+            </div>
+        </div>
+        <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
+                <div class="me-3"><fa-icon class="me-1 text-blue" [icon]='["fas", "circle"]'></fa-icon>Eligible</div>
+                <div class="fw-500 text-dark">{{cardData.eligible_count}}</div>
+            </div>
+            <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
+                <div class="me-3"><fa-icon class="me-1 text-yellow" [icon]='["fas", "circle"]'></fa-icon>Ineligible</div>
+                <div class="fw-500 text-dark">{{cardData.ineligible_count}}</div>
+            </div>
+            <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
+                <div class="me-3"><fa-icon class="me-1 text-green" [icon]='["fas", "circle"]'></fa-icon>Gross</div>
+                <div class="fw-500 text-dark">{{cardData.gross_count}}</div>
+            </div>
+        </div>
+    </div>
+    <div class='card-footer border-top-0'>
+        <div class='d-flex align-items-center justify-content-between small px-0 download-summary-detail'>
+            <div class='fw-400 text-lg text-primary' (click)='viewDetails()'>View details</div>
+            <div class='big-icon'>
+                <i-feather class="flex-shrink-0 ms-4 text-primary" name="chevron-right"></i-feather>
+            </div>
+        </div>
+    </div>
+</div>

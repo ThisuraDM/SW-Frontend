@@ -1,0 +1,281 @@
+<div class="container-xl px-4 mt-4" [hidden]="displayedScreen !== 'search'">
+    <div class="row gx-4 mb-2">
+        <div class='col-md-5'>
+            <sbpro-card [classes]="['']">
+                <div
+                    class='card card-body bg-gradient-primary-to-secondary d-flex flex-column justify-content-center py-3'>
+                    <div class='row gx-4 align-items-center'>
+                        <div class='row'>
+                            <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12'>
+                                <div class='text-white text-md fw-bolder mb-2'>View Stock Details</div>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='d-flex flex-column mb-2'>
+                                <div class='text-white-75 small'> Store ID</div>
+                                <div class='text-white small fw-bold'>
+                                    <span title="Store ID">{{storeID || '-'}}</span>
+                                </div>
+                            </div>
+                            <div class='d-flex flex-column mb-2'>
+                                <div class='text-white-75 small'> Store Name</div>
+                                <div class='text-white small fw-bold'>
+                                    <span title="Store Name">{{storeName || '-'}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </sbpro-card>
+
+            <sbpro-card [classes]="['']">
+                <div class="card-header">
+                    Outlet Stock Details
+                </div>
+                <div class="card-body">
+
+                    <div class="mb-0 mb-4 text-small"> Download reports and summary</div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3 download-summary-detail big-icon"
+                        (click)="onDownloadSummaryDetail('Detail')">
+                        <div class="text-small fw-bold card-title mb-0 text-primary">Outlet Stock Balance Details</div>
+                        <i-feather class="flex-shrink-0 ms-4 text-primary" name="chevron-right"></i-feather>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mb-4 download-summary-detail big-icon"
+                        (click)="onDownloadSummaryDetail('Summary')">
+                        <div class="text-small fw-bold card-title mb-0 text-primary">Outlet Stock Balance Summary</div>
+                        <i-feather class="flex-shrink-0 ms-4 text-primary" name="chevron-right"></i-feather>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+
+        <div class='col-md-7'>
+
+            <sbpro-card-navigation sbproTocItem="Tabs" [navNames]='["Own Store", "Other Store"]'
+                [isCardHeaderVisible]="true" [cardHeader]="'View and Search Stock'"
+                [templates]="[ownStoreTab, otherStoreTab]" (onNavItemClick)="onTabChange($any($event))">
+                <ng-template #ownStoreTab>
+                    <form [formGroup]="ownStoreSearchForm" (ngSubmit)='onSearchOwnStore()' class='needs-validation'>
+
+                        <div class='row'>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='productCategoryOwn'>Product Category</label>
+                                <select (change)="onSelectProductCategory($any($event.target).value, 'own-store')"
+                                    class='form-select form-select-custom custom-select' id='productCategoryOwn' formControlName='productCategory'>
+                                    <option class='custom-select-option' [value]="null" selected>---</option>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of productCategoryList'
+                                        [value]="item.value">
+                                        {{item.display}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='brandOwn'>Brand</label>
+                                <select class='form-select form-select-custom custom-select' id='brandOwn' formControlName='brand'>
+                                    <option class='custom-select-option' [value]="null" selected>---</option>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of productBrandListOwnStore'
+                                        [value]="item.value">
+                                        {{item.display}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='itemNameOwn'>Item Name</label>
+                                <input
+                                    [ngClass]="{'is-invalid': ownStoreSearchForm.controls.itemName.touched && ownStoreSearchForm.controls.itemName.invalid}"
+                                    class='form-control form-control-custom custom-input' id='itemNameOwn' formControlName='itemName' type='text'
+                                    placeholder='Enter Item Name' maxlength='100'>
+                                <div class='invalid-feedback'
+                                    *ngIf='ownStoreSearchForm.controls.itemName.invalid && ownStoreSearchForm.controls.itemName.errors?.maxlength'>
+                                    Max length exceeded
+                                </div>
+                            </div>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='materialCodeOwn'>SAP Material Code</label>
+                                <input
+                                    [ngClass]="{'is-invalid': ownStoreSearchForm.controls.materialCode.touched && ownStoreSearchForm.controls.materialCode.invalid}"
+                                    class='form-control form-control-custom custom-input' formControlName='materialCode' id='materialCodeOwn' type='text'
+                                    placeholder='Enter SAP Material Code' maxlength='100'>
+                                <div class='invalid-feedback'
+                                    *ngIf='ownStoreSearchForm.controls.materialCode.invalid && ownStoreSearchForm.controls.materialCode.errors?.maxlength'>
+                                    Max length exceeded
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class='d-flex justify-content-end'>
+                            <button class='btn btn-primary search-button-width' type='submit'>Search
+                            </button>
+                        </div>
+                    </form>
+                </ng-template>
+
+                <ng-template #otherStoreTab>
+                    <form [formGroup]="otherStoreSearchForm" (ngSubmit)='onSearchOtherStore()' class='needs-validation'>
+                        <div class='row'>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='regionOther'>Region</label>
+                                <select
+                                    [ngClass]="{'is-invalid': otherStoreSearchForm?.controls?.region?.touched && otherStoreSearchForm?.controls?.region?.invalid}"
+                                    (change)="onSelectRegion($any($event.target).value)"
+                                    class='form-select form-select-custom custom-select' id='regionOther' formControlName='region'>
+                                    <option class='custom-select-option' [value]="null" hidden selected>Select</option>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of regionsList' [value]="item.region_name">
+                                        {{item.region_name}}
+                                    </option>
+                                </select>
+                                <div class='invalid-feedback'
+                                     *ngIf='otherStoreSearchForm.controls.region.invalid && otherStoreSearchForm.controls.region.errors?.required'>
+                                    Value is required
+                                </div>
+                            </div>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='storeIdOther'>Store ID</label>
+                                <select
+                                    (change)="onSelectStoreID($any($event.target).value)"
+                                    [ngClass]="{'is-invalid': otherStoreSearchForm?.controls?.storeId?.touched && otherStoreSearchForm?.controls?.storeId?.invalid}"
+                                    class='form-select form-select-custom custom-select text-truncate' id='storeIdOther' formControlName='storeId'>
+                                    <option class='custom-select-option' [value]="null" hidden selected>Select</option>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of otherStoreOutletList' [value]="item.store_id">
+                                        {{item.store_id}} - {{item.store_name}}
+                                    </option>
+                                </select>
+                                <div class='invalid-feedback'
+                                     *ngIf='otherStoreSearchForm.controls.storeId.invalid && otherStoreSearchForm.controls.storeId.errors?.required'>
+                                    Value is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='productCategoryOther'>Product Category</label>
+                                <select (change)="onSelectProductCategory($any($event.target).value, 'other-store')"
+                                        class='form-select form-select-custom custom-select' id='productCategoryOther' formControlName='productCategory'>
+                                    <option class='custom-select-option' [value]="null" selected>---</option>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of productCategoryList'
+                                            [value]="item.value">
+                                        {{item.display}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='brandOther'>Brand</label>
+                                <select class='form-select form-select-custom custom-select' id='brandOther' formControlName='brand'>
+                                    <option class='custom-select-option' [value]="null" selected>---</option>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of productBrandListOtherStore'
+                                            [value]="item.value">
+                                        {{item.display}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='itemNameOther'>Item Name</label>
+                                <input
+                                    [ngClass]="{'is-invalid': otherStoreSearchForm.controls.itemName.touched && otherStoreSearchForm.controls.itemName.invalid}"
+                                    class='form-control form-control-custom custom-input' id='itemNameOther' formControlName='itemName' type='text'
+                                    placeholder='Enter Item Name' maxlength='100'>
+                                <div class='invalid-feedback'
+                                    *ngIf='otherStoreSearchForm.controls.itemName.invalid && otherStoreSearchForm.controls.itemName.errors?.maxlength'>
+                                    Max length exceeded
+                                </div>
+                            </div>
+                            <div class='mb-3 col-md-6'>
+                                <label class='small mb-1 dropdown-label' for='materialCodeOther'>SAP Material Code</label>
+                                <input
+                                    [ngClass]="{'is-invalid': otherStoreSearchForm.controls.materialCode.touched && otherStoreSearchForm.controls.materialCode.invalid}"
+                                    class='form-control form-control-custom custom-input' formControlName='materialCode' id='materialCodeOther'
+                                    type='text' placeholder='Enter SAP Material Code' maxlength='100'>
+                                <div class='invalid-feedback'
+                                     *ngIf='otherStoreSearchForm.controls.materialCode.invalid && otherStoreSearchForm.controls.materialCode.errors?.maxlength'>
+                                    Max length exceeded
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class='d-flex justify-content-end'>
+                            <button class='btn btn-primary search-button-width' type='submit'>Search
+                            </button>
+                        </div>
+                    </form>
+                </ng-template>
+            </sbpro-card-navigation>
+        </div>
+    </div>
+</div>
+
+<div class='container-xl px-4' [hidden]="displayedScreen !== 'search'">
+    <div class='col-12 card mb-4'>
+        <div class='card-header w-100'>Stock Results</div>
+        <div class='card-body'>
+            <div class='d-flex justify-content-start alert alert-primary pad-alert' role='alert' *ngIf="showAlert">
+                <div class='small alertCol'><span class='text-danger'>Warning!</span> This SAP material code is of a non serial item</div>
+            </div>
+            <div class='col-md-12 table-responsive'>
+                 <table class="table border rounded my-3 w-100">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class='small' scope='col'>Category</th>
+                            <th class='small' scope='col'>SAP Material Code</th>
+                            <th class='small' scope='col'>Brand</th>
+                            <th class='small' scope='col'>Item Name</th>
+                            <th class='small' scope='col'>Quantity</th>
+                            <th class='small' scope='col'>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf='stockResults?.length'>
+                        <tr
+                            *ngFor='let outlet of stockResults | slice : (pageNumber - 1) * 10 : (pageNumber - 1) * 10 + 10 let i = index'>
+                            <td class='small'>{{outlet.category||'-'}}</td>
+                            <td class='small'>{{outlet.sAPMaterialCode ||'-'}}</td>
+                            <td class='small'>{{outlet.brand ||'-'}}</td>
+                            <td class='small'>{{outlet.itemDescription ||'-'}}</td>
+                            <td class='small'>{{outlet.totalAvailableQty ||'-'}}</td>
+                            <td>
+                                <button
+                                    [disabled]="!outlet.totalAvailableQty || outlet.totalAvailableQty === '0'"
+                                    (click)="onSelectButtonClick(outlet)" class='btn btn-outline-primary w-100 table-button-height'
+                                    type='button'>Select
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <SW-no-data *ngIf='!stockResults?.length' [height]="224" [message]="errorMessage" [content]="''">
+                </SW-no-data>
+            </div>
+            <div *ngIf='stockResults?.length' class='d-flex justify-content-end my-3'>
+                <button class='btn btn-primary export-button-width' type='button' (click)="onExportOwnStoreClick()">Export
+                </button>
+            </div>
+            <div class="row dataTable-bottom" *ngIf="stockResults?.length">
+                <div class="col-md-6 dataTable-info">Showing 1 to {{10}} of {{stockResults?.length}} entries
+                </div>
+                <div class='col-md-6 d-flex justify-content-end'>
+                    <ngb-pagination [collectionSize]='stockResults?.length' [maxSize]='3' [pageSize]='10'
+                        [(page)]="pageNumber" (pageChange)="loadPage()">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<ng-container *ngIf="displayedScreen === 'stock-level-detail'">
+    <SW-bc-view-stock-level-details
+        [storeId]="bcSearchRequest?.store_id"
+        [sapCode]="selectedStock?.sAPMaterialCode"
+        [productName]="selectedStock?.itemDescription"
+        (onBackClick)="displayedScreen = 'search'">
+    </SW-bc-view-stock-level-details>
+</ng-container>

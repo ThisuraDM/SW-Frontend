@@ -1,0 +1,6 @@
+@import 'styles/core/variables.scss';
+
+.custom-background {
+    background: rgb(0,155,223) !important;
+    background: linear-gradient(90deg, rgb(0,155,223,1) 0%, rgba(22,67,150,1) 100%) !important;
+}

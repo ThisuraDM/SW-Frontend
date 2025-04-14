@@ -1,0 +1,81 @@
+@import '../../../../../../styles/core/variables';
+
+.big-icon {
+    ::ng-deep i-feather svg {
+        height: 24px !important;
+        width: 24px !important;
+        vertical-align: top !important;
+    }
+}
+
+.table .thead-dark th {
+    color: #fff;
+    background-color: #164396;
+    border-color: #e6e6e6;
+}
+
+.download-summary-detail{
+    cursor: pointer;
+}
+
+.header-margin {
+    margin-top: -2rem;
+    margin-bottom: 0.5rem;
+}
+
+.store-information-margin {
+    margin-bottom: -1rem;
+}
+
+.search-button-width {
+    height: 40px;
+    @media (min-width: 500px) {
+        width: 30%;
+    }
+
+    @media (max-width: 500px) {
+        width: 50%;
+    }
+}
+
+.export-button-width {
+    height: 40px;
+    @media (min-width: 500px) {
+        width: 17.5%;
+    }
+    @media (max-width: 500px) {
+        width: 40%;
+    }
+}
+
+// dropdowns
+.form-select-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.custom-select-option {
+    color: #424d52;
+}
+
+.custom-select {
+    color: $black;
+    font-weight: 600;
+    margin-left: -2.5px;
+}
+
+//inputs
+.form-control-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.custom-input {
+    color: $black;
+    font-weight: 600;
+    margin-left: -2.5px;
+}
+
+.table-button-height {
+    height: 26px;
+}

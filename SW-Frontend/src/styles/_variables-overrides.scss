@@ -1,0 +1,12 @@
+// 
+// Variable overrides
+// 
+
+// This file is intentionally blank
+// Use this file to override any core SCSS variables
+.bg-gradient-primary-to-secondary {
+    background-color: #009bdf !important;
+    background-image: linear-gradient(
+89deg
+, #009bdf 0%, rgb(22 67 150) 100%) !important;
+}

@@ -1,0 +1,35 @@
+<sbpro-dashboard-head title='{{title}}'
+                      [showDate]='true'
+                      [light]='true'
+                      [simplified]='true'>
+</sbpro-dashboard-head>
+
+<div class='container-xl px-4 mt-xl-3'>
+    <div class='col-xxl-12 col-xl-12 mb-4'>
+        <SW-store-information-box></SW-store-information-box>
+    </div>
+    <div class='row'>
+        <div class='col-xxl-4 col-xl-4 mb-4 sm-12'>
+            <SW-threshold-information [thresholdValue]="Utilized_threshold||0" [thresholdName]="'Utilized Threshold'"></SW-threshold-information>
+        </div>
+        <div class='col-xxl-4 col-xl-4 mb-4 sm-12'>
+            <SW-threshold-information [thresholdValue]="Threshold_limit||0" [thresholdName]="'Threshold Limit'"></SW-threshold-information>
+        </div>
+        <div class='col-xxl-4 col-xl-4 mb-4 sm-12'>
+            <SW-threshold-information [thresholdValue]="Remaining_threshold||0" [thresholdName]="'Remaining Threshold'"></SW-threshold-information>
+        </div>
+    </div>
+</div>
+<div class='container-xl px-4 mt-xl-3'>
+    <div class='row'>
+        <div class='col-xxl-12 col-xl-12 mb-12 sm-12'>
+            <SW-threshold-request></SW-threshold-request>
+        </div>
+    </div>
+    <br>
+    <div class='row'>
+        <div class='col-xxl-12 col-xl-12 mb-12 sm-12'>
+            <SW-threshold-collection-list></SW-threshold-collection-list>
+        </div>
+    </div>
+</div>

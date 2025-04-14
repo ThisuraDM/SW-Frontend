@@ -1,0 +1,60 @@
+<div class='card h-100'>
+    <div class='card-header border-bottom-0 text-md'>My Incentive Reports</div>
+    <div class='card-body'>
+        <div *ngFor="let item of productCategories" class=' d-flex align-items-center justify-content-between small px-0 download-summary-detail' (click)='incentiveReport(item)'>
+            <div class='fw-500 text-dark text-md ts-1'>{{item}}</div>
+            <div class='big-icon'>
+                <i-feather class='flex-shrink-0 ms-4 big-icon text-primary' name='chevron-right'></i-feather>
+            </div>
+        </div>
+
+        <div class=' d-flex align-items-center justify-content-between small px-0 download-summary-detail' (click)='payoutHistory()'>
+            <div class='fw-500 text-dark text-md ts-1'>Payout History</div>
+            <div class='big-icon'>
+                <i-feather class='flex-shrink-0 ms-4 text-primary' name='chevron-right'></i-feather>
+            </div>
+        </div>
+    </div>
+    <div class='card-footer bg-white'>
+        <div class='d-flex align-items-center justify-content-between small px-0 download-summary-detail'>
+            <div class='fw-500 text-dark text-md'>CP58 Tax Form</div>
+            <button class='btn big-icon p-0' (click)='onViewDownloadCP58TaxForm()'>
+                <i-feather class='flex-shrink-0 ms-4 text-primary' name='download' ></i-feather>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #DownloadCP58TaxForm let-summaryModel>
+    <div class='modal-header'>
+        <h5 class='modal-title fw-600'>Download CP58 Tax Form</h5>
+    </div>
+    <div class='modal-body'>
+        <p class=''>
+            Please select the Tax Form year you would like to download below.<br>
+        </p>
+
+        <div class=' filterDropdownRow my-3'>
+            <div class='col-md-6'>
+                <label class='small mb-1 dropdown-label'>Tax Form</label>
+                <select class='form-select form-select-custom custom-select' id='brandOwn' [(ngModel)]='selectedTaxForm'>
+                    <option class='custom-select-option' ngbDropdownItem
+                            *ngFor='let item of pastSevenYearsList' [value]='item'>
+                        Year {{item}}
+                    </option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='summaryModel.close("cancel")'>Cancel</button>
+        <button class='btn btn-primary' type='button' (click)='download()'>Download
+            <div class='small-icon'>
+                <i-feather class='flex-shrink-0 ms-2 text-white' name='download'></i-feather>
+            </div>
+             </button>
+    </div>
+</ng-template>
+

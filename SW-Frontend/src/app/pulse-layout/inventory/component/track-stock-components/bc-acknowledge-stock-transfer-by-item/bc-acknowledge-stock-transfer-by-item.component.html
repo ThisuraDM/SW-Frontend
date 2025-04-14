@@ -1,0 +1,127 @@
+<div class='container-xl px-4 mt-4'>
+    <div class='card mb-4'>
+        <div class='card-header'>Acknowledge Detail</div>
+        <div class='card-body'>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                        <div>Item Name:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                            {{itemRow?.item_name}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 mt-2 details-label justify-content-between no-wrap'>
+                        <div>Approved Quantity:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                            {{itemRow?.approved_quantity}}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                        <div>Sap Material Code:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                            {{itemRow?.sap_material_code}}</div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class='row'>
+                <div class='col-md-12'>
+                    <div class='small mb-3'>Any serial number input here will be imported into the table, and will be
+                        check if it is matched with the request, or unmatched items.
+                    </div>
+                </div>
+            </div>
+            <form [formGroup]='acknowledgeForm' (ngSubmit)='onAddAcknowledge()' class='needs-validation'>
+
+                <div class='row'>
+                    <div class='mb-3 col-md-6'>
+                        <label class='small mb-1 dropdown-label'>{{acknowledgeForm.controls.typeOf.value}}</label>
+                        <input class='form-control form-control-custom custom-input' id='typeDetail'
+                            [(ngModel)]='inputSerialOrCode' formControlName='typeDetail' type='text'
+                            [placeholder]="'Enter '+acknowledgeForm.controls.typeOf.value" maxlength='100'>
+                    </div>
+                    <div class='mb-3 col-md-2'>
+                        <button class='mt-2 btn btn-primary col-12' type='submit'
+                            (click)='searchSerialsForAcknowledge()'>Add
+                        </button>
+                    </div>
+                    <div class='mb-3 col-md-2'>
+                        <button class='mt-2 btn btn-outline-primary col-12' type='button'>Scan via Reader</button>
+                    </div>
+                    <!-- <div class='mb-3 col-md-2'>
+                        <button class='mt-2 btn btn-outline-primary col-12' type='button'>Scan All</button>
+                    </div> -->
+                </div>
+            </form>
+            <div class='col-md-12 table-responsive'>
+                <table class='table border m-0'>
+                    <thead class='thead-dark '>
+                        <tr class='bg-primary text-white'>
+                            <th class='p-3' scope='col'>Serial Number</th>
+                            <th *ngIf="!isDispatched" class='p-3 text-invis' scope='col'>Select</th>
+                            <th *ngIf="!isDispatched" class='p-3 text-primary cursor-pointer'
+                                (click)="selectRemoveAll()" scope='col'>{{allText}}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class='col-md-12 table-responsive mb-2 scroll-body scrollbar'>
+                <table class='table border  m-0'>
+                    <tbody>
+                        <tr *ngFor='let item of searchFilterList' [ngClass]="{'tr-bg-clr': item.newlyAdded}">
+                            <td class='p-3'>{{item.serial}}</td>
+                            <td *ngIf="!isDispatched" class='p-3'>
+                                <svg *ngIf="item.selected" class='icon text-success' (click)="checkboxClick(item)"
+                                    aria-hidden='true' width='24' height='24'>
+                                    <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'>
+                                    </use>
+                                </svg>
+                                <svg *ngIf="!item.selected" class='icon text-gray-300' (click)="checkboxClick(item)"
+                                    aria-hidden='true' width='24' height='24'>
+                                    <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'>
+                                    </use>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <sbpro-card>
+                    <div class="card-body">
+                        <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                            <div>Total Number of Serial Number:</div>
+                            <div class="text-overflow-ellipsis text-black text-bold-600">
+                                {{selectedCount}} of {{itemRow.serial_numbers.length}} Selected</div>
+                        </div>
+                    </div>
+                </sbpro-card>
+            </div>
+            <!-- <div class='result-header text-black fw-bold w-100 mb-2'>Unmatched Items</div>
+            <div class="row">
+                <div *ngFor="let item of unmatchedList" class="col-md-4">
+                    <div class='card mb-4 remove-shadow'>
+                        <div class="card-body ptb-1 bc-grey brad-035">
+                            <div class="details-label mb-1">Serial Number</div>
+                            <div ng class="text-overflow-ellipsis text-black text-bold-600">
+                                <h6>
+                                    {{item}}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- <div class="d-flex flex-row mb-3 bc-grey">
+                <span class="text-black result-header-600" style="margin: 10px;">Remarks:</span>
+                <input class='form-control input-h-2' type='text' style="margin: 10px;" [(ngModel)]='remark'
+                    placeholder='Remarks (mandatory)'>
+            </div> -->
+            <div class='d-flex justify-content-end my-3'>
+                <button class='btn btn-primary smaller-button' type='button' (click)="onConfirmClick()">Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

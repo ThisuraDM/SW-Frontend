@@ -1,0 +1,219 @@
+<div class='container-xl px-4 mt-3'>
+    <div class="row gx-4">
+        <div class="col-md-12">
+            <sbpro-card>
+                <div class="card-header">
+                    Transfer Stock Serial Number
+                </div>
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                <div>Item Name:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">
+                                    {{itemRow?.item_name}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 mt-2 details-label justify-content-between no-wrap'>
+                                <div>Approved Quantity:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">
+                                    {{itemRow?.approved_quantity}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                <div>Sap Material Code:</div>
+                                <div class="text-overflow-ellipsis text-black text-bold-600">
+                                    {{itemRow?.sap_material_code}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div *ngIf="!isDispatched" class='alert alert-primary alert-clr-primary' role='alert'>
+                        <div class='align-items-center justify-content-between'>
+                            <div class='col-auto'>
+                                <ol class='breadcrumb rounded'>
+                                    <li>
+
+                                        <span>
+                                            <svg class='icon text-primary' style="margin-right: 10px;" aria-hidden='true' width='20' height='20'>
+                                                <use
+                                                    xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#error-filled'>
+                                                </use>
+                                            </svg>We have already preselected the recommended amount of stock for you.
+                                            You may choose to modify the selection by unchecking the below.
+                                        </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="!isDispatched">
+                        <div class='mb-3 col-md-10'>
+                            <div class="input-group input-group-joined input-group-solid">
+                                <div class="input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-search">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg></div>
+                                    <div *ngIf="advancedSearch" class="input-group-text p-1">                              
+                                        <span class="badge search-badge badge-primary">Serial Number Range <span class='btn-close' type='button' (click)="toggleAS()"></span></span>
+                                      </div>
+                                <input class="form-control" type="search" maxlength="100" [(ngModel)]="searchedSerial" [disabled]="advancedSearch"
+                                [placeholder]="!advancedSearch ? 'Search Serial Number' : ''">
+                               
+                            </div>
+
+                        </div>
+                        <div class=' col-md-2'>
+                            <button class='btn btn-primary mb-1 col-12' type='submit' (click)="searchSerialClick()">Search </button>
+                            <div class="d-flex align-items-center justify-content-center big-icon mb-3">
+                                <div *ngIf="!advancedSearch" class="small text-primary"
+                                    style='font-size: 12px; cursor: pointer;' (click)="toggleAS()">Advanced Search</div>
+                                <!-- <div *ngIf="advancedSearch" class="small text-primary"
+                                    style='font-size: 12px; cursor: pointer;' (click)="toggleAS()">Close Advanced Search
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="advancedSearch" class='row'>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class='mb-3 col-md-4'>
+                                    <label class='small mb-1 dropdown-label' for='itemNameOwn'>Range From</label>
+                                    <input class='form-control form-control-custom custom-input' [(ngModel)]="searchedFromSerial" type='text'
+                                        placeholder='Enter From Serial' maxlength='100'>
+                                </div>
+                                <div class='mb-3 col-md-4'>
+                                    <label class='small mb-1 dropdown-label' for='materialCodeOwn'>Range To</label>
+                                    <input class='form-control form-control-custom custom-input' [(ngModel)]="searchedToSerial" type='text'
+                                        placeholder='Enter To Serial' maxlength='100'>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class='col-md-12 table-responsive'>
+                        <table class='table border m-0'>
+                            <thead class='thead-dark '>
+                                <tr class='bg-primary text-white'>
+                                    <th class='p-3' scope='col'>Serial Number</th>
+                                    <th *ngIf="!isDispatched" class='p-3 text-invis' scope='col'>Select</th>
+                                    <th *ngIf="!isDispatched" class='p-3 text-primary cursor-pointer' (click)="selectRemoveAll()" scope='col'>{{allText}}</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class='col-md-12 table-responsive mb-2 scroll-body scrollbar'>
+                        <table class='table border  m-0'>
+                            <tbody>
+                                <tr *ngFor='let item of searchFilterList' [ngClass]="{'tr-bg-clr': item.newlyAdded}">
+                                    <td class='p-3'>{{item.serial}}</td>
+                                    <td *ngIf="!isDispatched" class='p-3'>
+                                        <svg *ngIf="item.selected" class='icon text-primary' (click)="checkboxClick(item)" aria-hidden='true'
+                                            width='24' height='24'>
+                                            <use
+                                                xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'>
+                                            </use>
+                                        </svg>
+                                        <svg *ngIf="!item.selected" class='icon text-gray-300'  (click)="checkboxClick(item)"  aria-hidden='true'
+                                            width='24' height='24'>
+                                            <use
+                                                xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#tick-yes-filled'>
+                                            </use>
+                                        </svg>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <SW-no-data *ngIf='searchResultList?.length==0 && !isDispatched' [height]='224' [content]="''"
+                            [message]="'Unable to load data'">
+                        </SW-no-data>
+                    </div>
+                    <div *ngIf="!isDispatched">
+                        <sbpro-card>
+                            <div class="card-body ">
+                                <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                    <div>Total Number of Serial Number:</div>
+                                    <div class="text-overflow-ellipsis text-black text-bold-600">
+                                        {{selectedCount}} of {{searchResultList?.length}} Selected</div>
+                                </div>
+                            </div>
+                        </sbpro-card>
+                    </div>
+                    <div *ngIf="isDispatched">
+                        <sbpro-card>
+                            <div class="card-body ">
+                                <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                    <div>Total Number of Serial Number:</div>
+                                    <div class="text-overflow-ellipsis text-black text-bold-600">
+                                        {{searchFilterList?.length}}</div>
+                                </div>
+                            </div>
+                        </sbpro-card>
+                    </div>
+
+                    <div *ngIf="!isDispatched" class='d-flex justify-content-end my-3'>
+                        <button class='btn btn-primary smaller-button' type='button' (click)="onConfirmClick()">Confirm
+                        </button>
+                    </div>
+                    <div *ngIf="isDispatched" class='d-flex justify-content-end my-3'>
+                        <button class='btn btn-primary smaller-button' type='button' (click)="onDownloadClick()" >Download
+                        </button>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+
+        <!-- <div class="col-md-6" *ngIf="searchResultList.length || addedStockList.length">
+            <sbpro-card [classes]="[]">
+                <div class="card-header">
+                    Search Results
+                </div>
+                <div class="card-body stock-list-overflow p-0">
+                    <div *ngFor="let item of searchResultList; let i = index"
+                         class="stock-list-item"
+                         [ngClass]="{'highlight-item': selectedStockToBeAdded === item.serial_number}"
+                         (click)="onSearchedListItemClick($any($event.target).innerText)">
+                        <span class="ms-2">{{item.serial_number}}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="result-header-600">Add stock to transfer</div>
+                        <button class="btn btn-success smaller-button" type="button" [disabled]="selectedStockToBeAdded==''" (click)="onAddStockClick()">Add
+                        </button>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+
+        <div class="col-md-6" *ngIf="searchResultList.length || addedStockList.length">
+            <sbpro-card [classes]="[]">
+                <div class="card-header">
+                    Added Products
+                </div>
+                <div class="card-body stock-list-overflow p-0">
+                    <div *ngFor="let item of addedStockList; let i = index"
+                         class="stock-list-item"
+                         [ngClass]="{'highlight-item': selectedStockToBeRemoved === item.serial_number}"
+                         (click)="onAddedListItemClick($any($event.target).innerText)">
+                        <span class="ms-2">{{item.serial_number}}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="result-header-600">Remove added stock</div>
+                        <button class="btn btn-danger smaller-button" type="button" [disabled]="selectedStockToBeRemoved==''" (click)="onRemoveStockClick()">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+
+    -->
+    </div>
+</div>

@@ -1,0 +1,22 @@
+$blue: #009bdf;
+
+.custom-month-dropdown {
+    min-width: 33rem;
+    padding: 0;
+    top: 44px !important;
+}
+
+.month-item {
+    position: relative;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    border-radius: 0.35rem;
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+    margin-left: -3px;
+    font-size: 16px;
+    margin-top: 17px;
+}

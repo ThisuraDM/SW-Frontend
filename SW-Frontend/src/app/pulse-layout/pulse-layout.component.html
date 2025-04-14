@@ -1,0 +1,52 @@
+<sbpro-layout-dashboard [light]='true'>
+    <sbpro-toast-view class='ngb-toasts' aria-live='polite' aria-atomic='true'></sbpro-toast-view>
+    <SW-survey-view aria-live='polite' aria-atomic='true'></SW-survey-view>
+    <router-outlet></router-outlet>
+</sbpro-layout-dashboard>
+
+<ng-template #modalIdle let-modal>
+    <div class='modal-body'>
+        <div class='mb-3 text-ac'>
+            <svg class='icon' aria-hidden='true' width='100' height='100'>
+                <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#timer'></use>
+            </svg>
+        </div>
+        <div class='small text-ac fz-20'>
+            {{ popupTitle }}
+        </div>
+        <div class='small text-ac fz-20' *ngIf='this.isLabelVisible'>
+            {{ idleState }}
+        </div>
+        <div class='small text-ac'>
+            {{ description }}
+        </div>
+    </div>
+
+    <div class='modal-footer' [ngClass]="isTimeout ? 'justify-content-center' : 'justify-content-between'">
+        <button
+            class='btn btn-outline-primary mr-auto'
+            *ngIf='this.isLogoutButtonVisible'
+            style='border: none !important;'
+            type='button'
+            (click)="logout()"
+        >
+            Logout
+        </button>
+        <button
+            class='btn btn-primary mr-auto'
+            *ngIf='this.isLoginButtonVisible'
+            type='button'
+            (click)="logout()"
+        >
+            Login
+        </button>
+        <button
+            class='btn btn-primary'
+            *ngIf='this.isConfirmButtonVisible'
+            type='button'
+            (click)="onContinueClick();"
+        >
+            Continue
+        </button>
+    </div>
+</ng-template>

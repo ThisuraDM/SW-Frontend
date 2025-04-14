@@ -1,0 +1,26 @@
+<div class='card mb-4' style='height: 96%;'>
+    <div class='card-header'>{{selectedProductName}} Trend</div>
+    <div *ngIf='loaded else skeletonLoader' class='card-body py-0'>
+        <SW-trend-chart
+            [selectedMonth]='selectedMonth'
+            [selectedOutlet]='selectedOutlet'
+            [height]='"425px"'
+            [selectedProduct]='selectedProduct'
+        ></SW-trend-chart>
+        <div class='small text-center p-4'>{{selectedProductName}} Trend for <span
+            class='text-primary'><strong>{{month}} {{year}}</strong></span></div>
+    </div>
+</div>
+
+<ng-template #skeletonLoader>
+    <div class='card-body'>
+        <div class='d-flex justify-content-center'>
+            <SW-skeleton-loader *ngIf='!loaded' cWidth='330' cHeight='405'></SW-skeleton-loader>
+        </div>
+        <div class='d-flex justify-content-center'>
+            <div class='pt-3'>
+                <SW-skeleton-loader *ngIf='!loaded' cWidth='200' cHeight='30'></SW-skeleton-loader>
+            </div>
+        </div>
+    </div>
+</ng-template>

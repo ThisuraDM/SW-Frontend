@@ -1,0 +1,52 @@
+<sbpro-dashboard-head title='{{title}}'
+                      [showDate]='true'
+                      [light]='true'
+                      [simplified]='true'>
+</sbpro-dashboard-head>
+
+<div class='container-xl px-4 mt-4'>
+    <sbpro-card [classes]="['h-100']">
+        <div
+            class='card card-body bg-gradient-primary-to-secondary d-flex flex-column justify-content-center py-5 py-xl-4 '>
+            <div class='row gx-4 align-items-center'>
+                <div class='row'>
+                    <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12'>
+                        <div class='text-white text-lg fw-bolder'>CNU & CPD</div>
+                    </div>
+                </div>
+
+                <div class='row mt-2 mb-1'>
+                    <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12'>
+                        <div class='text-white-75 small'>Select submission type</div>
+                    </div>
+
+                </div>
+
+                <div class='row'>
+                    <div class='col-md-3 col-sm-12 col-12'>
+                        <button id="cnuButton" [ngClass]="{'main-button-after-select': displayedScreen === 'cnu'}"
+                            class="my-1 me-2 btn btn-outline-light cnu-cpd-main-buttons w-100" type="button" (click)="displayedScreen = 'cnu'">Submit CNU</button>
+                    </div>
+                    <div class='col-md-3 col-sm-12 col-12'>
+                        <button [ngClass]="{'main-button-after-select': displayedScreen === 'generate-report'}"
+                            class="my-1 me-2 btn btn-outline-light cnu-cpd-main-buttons w-100" type="button" (click)="displayedScreen = 'generate-report'">CNU list</button>
+                    </div>
+                    <div class='col-md-3 col-sm-12 col-12'>
+                        <button [ngClass]="{'main-button-after-select': displayedScreen === 'cpd'}"
+                            class="my-1 me-2 btn btn-outline-light cnu-cpd-main-buttons w-100" type="button" (click)="displayedScreen = 'cpd'">CNU and CPD list</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </sbpro-card>
+</div>
+
+<ng-container *ngIf="displayedScreen === 'cnu'">
+    <SW-cnu (viewReport)="displayedScreen = 'generate-report'"></SW-cnu>
+</ng-container>
+<ng-container>
+    <SW-generate-report-and-bis [hidden]="displayedScreen === 'cnu' || displayedScreen === 'cpd'"></SW-generate-report-and-bis>
+</ng-container>
+<ng-container>
+    <SW-cpd [hidden]="displayedScreen === 'cnu' || displayedScreen === 'generate-report'"></SW-cpd>
+</ng-container>

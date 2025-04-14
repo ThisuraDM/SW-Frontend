@@ -1,0 +1,177 @@
+<form [formGroup]='ownStoreSearchForm' (ngSubmit)='onSearch()' class='needs-validation'>
+    <div class='my-3'>
+        <div class='text-sm'>1. Select your outlet</div>
+    </div>
+    <div class='row'>
+        <div class='mb-3 col-md-4'>
+            <label class='small mb-1 dropdown-label' for='DateRange'>Outlet</label>
+            <select class='form-select form-select-custom custom-select' id='outlet' formControlName='outlet'>
+                <option class='custom-select-option' *ngFor='let outlet of outletList' ngbDropdownItem
+                        [value]='outlet.outlet_id'>
+                    {{outlet.outlet_id}}
+                </option>
+            </select>
+        </div>
+
+    </div>
+    <div class='my-3'>
+        <div class='text-sm'>2. Search Stock Transfer Request.</div>
+    </div>
+    <div class='row'>
+        <div class='mb-1 col-md-10'>
+            <div class='input-group input-group-joined mb-4'>
+                <div class='input-group-text'>
+                    <i-feather name='search'></i-feather>
+                </div>
+                <input class='form-control' id='requestID' type='text' maxlength='100' formControlName='requestID'
+                       placeholder='Search Purchase ID' aria-label='Search' />
+            </div>
+        </div>
+        <div class='mb-1 col-md-2'>
+            <button class='btn btn-primary col-12' type='submit'>Search</button>
+        </div>
+    </div>
+    <div class='result-header w-100 mb-4'>Results</div>
+    <div class='row'>
+        <div class='mb-1 col-md-4'>
+            <label class='small mb-1 dropdown-label' for='DateRange'>Date Range</label>
+            <select class='form-select form-select-custom custom-select' id='DateRange' formControlName='dateRange'
+                    (change)='$event.target.value==-1?dateRangeDrop.open():onDateRangeSelect($event.target.value);$event.target.value!=-1?dateRangeDrop.close():null'>
+                <option class='custom-select-option' *ngFor='let date of dateRages' ngbDropdownItem [value]='date.id'>
+                    {{date.value}}
+                </option>
+            </select>
+
+            <div class='d-inline-block' ngbDropdown #dateRangeDrop='ngbDropdown' [autoClose]='true'>
+
+                <div ngbDropdownMenu aria-labelledby='dropdownManual'>
+                    <ngb-datepicker #dp (dateSelect)='onDateSelection($event)' [displayMonths]='2' [dayTemplate]='t'
+                                    outsideDays='hidden' [maxDate]='maxDate'>
+                    </ngb-datepicker>
+
+                    <ng-template #t let-date let-focused='focused'>
+                        <span class='custom-day' [class.focused]='focused' [class.range]='isRange(date)'
+                              [class.faded]='isHovered(date) || isInside(date)' (mouseenter)='hoveredDate = date'
+                              (mouseleave)='hoveredDate = null'>
+                            {{ date.day }}
+                        </span>
+                    </ng-template>
+                </div>
+            </div>
+
+        </div>
+
+        <div class='mb-3 col-md-4'>
+            <label class='small mb-1 dropdown-label' for='DateRange'>Request Status</label>
+            <select class='form-select form-select-custom custom-select' id='DateRange1' formControlName='status'
+                    (change)='loadPage(0)'>
+                <option class='custom-select-option' ngValue='ALL' selected>All</option>
+                <option class='custom-select-option' *ngFor='let status of requestStatus' ngbDropdownItem
+                        [value]='status'>
+                    {{status}}
+                </option>
+            </select>
+        </div>
+        <div class='mb-3 col-md-4'>
+            <a class='info-icon' (click)='OnOpenInfo(ServiceRequestLegend)'>
+                <svg class='icon text-black-75 back-arrow mt-3' aria-hidden='true' width='36' height='36'>
+                    <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#info'></use>
+                </svg>
+            </a>
+
+        </div>
+    </div>
+</form>
+<div class='my-1 mb-4'>
+    <div>
+        <div class='col-md-12 table-responsive'>
+            <table class='table border rounded w-100'>
+                <thead class='thead-dark'>
+                <tr>
+                    <th class='small' scope='col'>Purchase Date</th>
+                    <th class='small' scope='col'>Purchase ID</th>
+                    <th class='small' scope='col'>Purchase Order No</th>
+                    <th class='small' scope='col'>Payment Type</th>
+                    <th class='small' scope='col'>Purchase Status</th>
+                    <th class='small' scope='col'>Details</th>
+                </tr>
+                </thead>
+                <tbody *ngIf='stockResults?.length'>
+                <tr *ngFor='let stockItem of stockResults'>
+                    <td class='small'>{{stockItem.orderDate || '-'}}</td>
+                    <td class='small'>{{stockItem.orderId || '-'}}</td>
+                    <td class='small'>{{stockItem.orderNumber || '-'}}</td>
+                    <td class='small'>{{stockItem.paymentType || '-'}}</td>
+                    <td class='small'>{{stockItem.orderStatus || '-'}}</td>
+                    <td>
+                        <button class='btn btn-primary w-100 table-button-height'
+                                (click)='onSelectAction(stockItem)' type='button'>View
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <SW-no-data *ngIf='!stockResults?.length' [height]='224' [content]="''" [message]='errorMessage'>
+            </SW-no-data>
+        </div>
+        <div class='row dataTable-bottom' *ngIf='stockResults?.length'>
+            <div class='col-md-6 dataTable-info'>Showing {{(responseDetails?.number * pageSize) + 1}}
+                to {{responseDetails?.totalElements < (responseDetails?.number + 1) * pageSize
+                    ? responseDetails?.totalElements : (responseDetails?.number + 1) * pageSize}} of
+                {{responseDetails?.totalElements}} entries
+            </div>
+            <div class='col-md-6 d-flex justify-content-end'>
+                <ngb-pagination (pageChange)='loadPageData($event)'
+                                [collectionSize]='responseDetails?.totalElements' [maxSize]='3' [pageSize]='pageSize'
+                                [(page)]='pageNumber'>
+                </ngb-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #ServiceRequestLegend let-serviceRequestLegend>
+    <div class='modal-header'>
+        <h5 class='modal-title text-primary'>Status Type</h5>
+    </div>
+    <div class='modal-body'>
+        <div class='card-body'>
+            <div class='timeline timeline-xs'>
+                <div class='timeline-item'>
+                    <div class='timeline-item-marker'>
+                        <div class=''>&nbsp;</div>
+                        <div class='timeline-item-marker-indicator bg-blue'></div>
+                    </div>
+                    <div class='timeline-item-content'>In Progress</div>
+                </div>
+                <div class='timeline-item'>
+                    <div class='timeline-item-marker'>
+                        <div class=''>&nbsp;</div>
+                        <div class='timeline-item-marker-indicator bg-blue'></div>
+                    </div>
+                    <div class='timeline-item-content'>Shipped Out</div>
+                </div>
+                <div class='timeline-item'>
+                    <div class='timeline-item-marker'>
+                        <div class=''>&nbsp;</div>
+                        <div class='timeline-item-marker-indicator bg-blue'></div>
+                    </div>
+                    <div class='timeline-item-content'>Delivered</div>
+                </div>
+            </div>
+            <div class='timeline timeline-xs mt-3'>
+                <div class='timeline-item'>
+                    <div class='timeline-item-marker'>
+                        <div class=''>&nbsp;</div>
+                        <div class='timeline-item-marker-indicator bg-red'></div>
+                    </div>
+                    <div class='timeline-item-content'>Order Cancelled</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-primary' type='button' (click)='serviceRequestLegend.close()'>
+            Close
+        </button>
+    </div>
+</ng-template>

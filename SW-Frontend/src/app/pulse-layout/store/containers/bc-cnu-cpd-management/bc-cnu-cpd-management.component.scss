@@ -1,0 +1,23 @@
+.main-button-after-select {
+    color: #009BDF;
+    background-color: #f2f8fb;
+    border-color: #f2f8fb;
+    font-weight: 625;
+}
+
+.cnu-cpd-main-buttons {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    &:hover {
+        color: #009BDF;
+        background-color: #f2f8fb;
+        border-color: #f2f8fb;
+        font-weight: 625;
+    }
+}
+
+.w-100 {
+    width: 100% !important;
+}

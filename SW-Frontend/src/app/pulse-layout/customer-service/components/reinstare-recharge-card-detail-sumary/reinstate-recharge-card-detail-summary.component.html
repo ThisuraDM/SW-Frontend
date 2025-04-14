@@ -1,0 +1,83 @@
+<div class='container px-4 mt-3'>
+    <div class='row gx-4'>
+        <div class='col-12'>
+            <sbpro-card>
+                <div class='card-header'>
+                    <a (click)='onClickBack()'>
+                        <svg class='icon text-black back-arrow ' aria-hidden='true' width='24' height='24'>
+                            <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#arrow-previous'></use>
+                        </svg>
+                    </a>
+                    <span class='ms-4'>Transaction Details</span>
+                </div>
+
+                <div class='card-body'>
+                    <div class='row d-flex justify-content-evenly gx-4 px-4'>
+                        <div class='mb-3 ms-5'>
+                            <div class='result-header text-black fw-bold w-100 ms-5'>Summary</div>
+                        </div>
+                    </div>
+                    <div class='row d-flex justify-content-evenly gx-4 px-4'>
+                        <div class='col-md-5'>
+                            <div class='d-flex flex-row gx-4 text-black justify-content-between no-wrap'>
+                                <div>Transaction ID:</div>
+                                <div class='text-overflow-ellipsis fw-bold'>{{viewData.transactionId}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 text-black justify-content-between no-wrap'>
+                                <div>Transaction Status:</div>
+                                <div class='text-overflow-ellipsis text-primary fw-bold'>{{viewData.transactionStatus}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 text-black justify-content-between no-wrap'>
+                                <div>Recharge Card Serial Number:</div>
+                                <div class='text-overflow-ellipsis  fw-bold'>{{viewData.serialNo}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 mt-2 mb-1 text-black justify-content-between no-wrap'>
+                                <div>Recharge Card Status:</div>
+                                <div class='text-overflow-ellipsis fw-bold'>{{viewData.rechargeCardStatus}}</div>
+                            </div>
+                        </div>
+
+                        <div class='col-md-5'>
+                            <div class='d-flex flex-row gx-4 text-black justify-content-between no-wrap'>
+                                <div>Recharge Card Expire Date:</div>
+                                <div
+                                    class='text-overflow-ellipsis  fw-bold'>{{viewData.rechargeCardExpDate}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 my-2 text-black justify-content-between no-wrap'>
+                                <div>Denomination (RM):</div>
+                                <div
+                                    class='text-overflow-ellipsis  fw-bold'>{{viewData.denomination}}</div>
+                            </div>
+                            <div class='d-flex flex-row gx-4 mt-2 mb-1 text-black justify-content-between no-wrap'>
+                                <div>Lock /Unlock Reason:</div>
+                                <div
+                                    class='text-overflow-ellipsis fw-bold'>{{viewData.operationReason}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='px-5'>
+
+                        <hr>
+
+                    </div>
+                    <div class='row w-100 px-3 mt-4'>
+
+                        <div class='d-flex justify-content-end'>
+                            <button class='btn btn-outline-primary btn-md me-2 mb-2  col-2' type='button' (click)='printDetails()'>
+                                Print
+                            </button>
+
+                            <button class='btn btn-primary btn-md mb-2 col-2' *ngIf='!backToListButton' type='button' (click)='onClickBack()'>
+                                Done
+                            </button>
+
+                            <button class='btn btn-primary btn-md mb-2 col-2' *ngIf='backToListButton'  type='button' (click)='onClickBackToList()'>
+                                Back to list
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+    </div>
+</div>

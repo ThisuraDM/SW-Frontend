@@ -1,0 +1,93 @@
+@import '../../../../../styles/core/variables';
+
+thead > tr > th {
+    cursor: pointer;
+}
+
+.tdTxtAlign {
+    text-align: center;
+}
+
+.spinner-border-sm {
+    height: $font-size-sm;
+    width: $font-size-sm;
+}
+
+.table-search {
+    max-width: 20rem;
+}
+
+::ng-deep ngb-pagination ul {
+    margin-bottom: 0 !important;
+}
+
+.fz {
+    font-size: 0.9rem !important;
+}
+
+@media (max-width: 425px) {
+    .outletTable {
+        display: block;
+        max-width: 100%;
+        overflow: scroll;
+    }
+}
+
+@media (max-width: 576px) {
+    .outletPagination {
+        margin-bottom: 10px;
+    }
+}
+
+.sortDD {
+    width: 135px;
+}
+
+.alert {
+    margin-top: 10px !important;
+    padding: 0.25rem;
+}
+
+.alert-primary {
+    margin-top: 10px !important;
+    padding: 0.25rem;
+    background-color: #c6d6eb !important;
+}
+
+.mt-txt {
+    margin-top: 9px;
+    margin-left: 9px;
+}
+
+.product-mt {
+    margin-top: 5px;
+}
+
+.select-label {
+    position: absolute;
+    left: 2.5rem;
+    margin-top: 4px;
+    color: $gray-600;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.form-select-111 {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.form-select2{
+    padding: 12px !important
+}
+
+.dtxt-c {
+    color: #424d52;
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+    margin-top: 10px;
+}
+

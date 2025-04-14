@@ -1,0 +1,39 @@
+@import '../../../../../styles/core/variables';
+
+.txt-c {
+    color: grey;
+}
+
+.dtxt-c {
+    color: #424d52;
+}
+
+.mt-4 {
+    margin-top: 0rem !important;
+}
+
+.alert {
+    padding: 0.25rem 1rem !important;
+    background-color: #c6d6eb;
+    margin-bottom: 0rem !important;
+}
+
+.alert-btn {
+    height: 30px;
+    font-size: 13px;
+    margin: 3px;
+}
+
+.form-select-custom {
+  line-height: 1.4 !important;
+  padding-top: 30px;
+}
+
+.custom-select-option {
+    color: #424d52;
+}
+
+.custom-select {
+    color: $blue;
+    font-weight: 600;
+}

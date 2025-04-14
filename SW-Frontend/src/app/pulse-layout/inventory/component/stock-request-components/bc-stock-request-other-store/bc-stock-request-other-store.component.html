@@ -1,0 +1,251 @@
+<div class="container-xl px-4 mt-4">
+    <div class="row gx-4 mb-2">
+        <div class='col-12'>
+            <sbpro-card-navigation sbproTocItem="Tabs" [navNames]='["Create Request", "Return Request"]'
+                                   [isCardHeaderVisible]="true" [cardHeader]="'Search and Request Stock'"
+                                   [templates]="[createRequestTab, returnRequestTab]">
+                <ng-template #createRequestTab>
+                    <form [formGroup]="ownStoreSearchForm" (ngSubmit)='onSearchOwnStore()' class='needs-validation'>
+
+                        <div class='result-header w-100 my-2'>Search Stock</div>
+
+                        <div class="d-flex custom-radio-flex my-4">
+                            <div class="custom-radio-1 mr-5">
+                                <input class="custom-radio-input" formControlName="radio" id="customSolidRadio1" type="radio" value="reload">
+                                <label class="custom-radio-label" for="customSolidRadio1">Reload Card & Starter Pack</label>
+                            </div>
+                            <div class="custom-radio-2">
+                                <input class="custom-radio-input" formControlName="radio" id="customSolidRadio2" type="radio" value="device">
+                                <label class="custom-radio-label" for="customSolidRadio2">Device & Accessories</label>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='mb-3 col-md-4'>
+                                <label class='small mb-1 dropdown-label' for='from'>From</label>
+                                <input
+                                    class='form-control form-control-custom custom-input' id='from' type='text'
+                                    formControlName='from' readonly>
+                            </div>
+                            <div class='mb-3 col-md-4'>
+                                <label class='small mb-1 dropdown-label' for='storeID'>Store ID</label>
+                                <select [ngClass]="{'is-invalid': ownStoreSearchForm.controls.storeID.touched && ownStoreSearchForm.controls.storeID.invalid}"
+                                        [disabled]="!!addedStockList?.length"
+                                        class='form-select form-select-custom custom-select text-truncate' id='storeID' formControlName='storeID'>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of outletList'
+                                            [value]="item.outlet_id">
+                                        {{item.outlet_id}} - {{item.outlet_name}}
+                                    </option> 
+                                </select>
+                                <div class='invalid-feedback'
+                                     *ngIf='ownStoreSearchForm.controls.storeID.invalid && ownStoreSearchForm.controls.storeID.errors?.required'>
+                                    Value is required
+                                </div>
+                            </div>
+                            <div class='mb-3 col-md-4'>
+                                <label class='small mb-1 dropdown-label' for='productCategoryOwn'>Product Category</label>
+                                <select (change)="onSelectProductCategory($any($event.target).value)"
+                                        class='form-select form-select-custom custom-select' id='productCategoryOwn' formControlName='productCategory'>
+                                    <option class='custom-select-option' [value]="null" selected>---</option>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of productCategoryList'
+                                            [value]="item.value">
+                                        {{item.display}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='mb-3 col-md-4'>
+                                <label class='small mb-1 dropdown-label' for='brandOwn'>Brand</label>
+                                <select class='form-select form-select-custom custom-select' id='brandOwn' formControlName='brand'>
+                                    <option class='custom-select-option' [value]="null" selected>---</option>
+                                    <option class='custom-select-option' ngbDropdownItem *ngFor='let item of productBrandList'
+                                            [value]="item.value">
+                                        {{item.display}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class='mb-3 col-md-4'>
+                                <label class='small mb-1 dropdown-label' for='itemNameOwn'>Item Name</label>
+                                <input
+                                    [ngClass]="{'is-invalid': ownStoreSearchForm.controls.itemName.touched && ownStoreSearchForm.controls.itemName.invalid}"
+                                    class='form-control form-control-custom custom-input' id='itemNameOwn' formControlName='itemName' type='text'
+                                    placeholder='Enter Item Name' maxlength='100'>
+                                <div class='invalid-feedback'
+                                     *ngIf='ownStoreSearchForm.controls.itemName.invalid && ownStoreSearchForm.controls.itemName.errors?.maxlength'>
+                                    Max length exceeded
+                                </div>
+                            </div>
+                            <div class='mb-3 col-md-4'>
+                                <label class='small mb-1 dropdown-label' for='materialCodeOwn'>SAP Material Code</label>
+                                <input
+                                    [ngClass]="{'is-invalid': ownStoreSearchForm.controls.materialCode.touched && ownStoreSearchForm.controls.materialCode.invalid}"
+                                    class='form-control form-control-custom custom-input' formControlName='materialCode' id='materialCodeOwn' type='text'
+                                    placeholder='Enter SAP Material Code' maxlength='100'>
+                                <div class='invalid-feedback'
+                                     *ngIf='ownStoreSearchForm.controls.materialCode.invalid && ownStoreSearchForm.controls.materialCode.errors?.maxlength'>
+                                    Max length exceeded
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class='d-flex justify-content-end'>
+                            <button class='btn btn-primary search-button-width' type='submit'>Search
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="my-4">
+                        <div class='result-header w-100 mb-1'>Stock Results</div>
+                        <div class='card-subtitle w-100'>Please fill in the quantity request, and press ‘Add’. The items will be added to the stock transfer request list.</div>
+                        <div class='mt-3'>
+                            <div class='col-md-12 table-responsive'>
+                                <table class="table border rounded my-3 w-100">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th class='small' scope='col'>Category</th>
+                                        <th class='small' scope='col'>SAP Material Code</th>
+                                        <th class='small' scope='col'>Brand</th>
+                                        <th class='small' scope='col'>Item Name</th>
+                                        <th class='small' scope='col'>Reserved Quantity</th>
+                                        <th class='small' scope='col'>Available Quantity</th>
+                                        <th class='small' scope='col'>Request</th>
+                                        <th class='small' scope='col'></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody *ngIf='stockResults?.length'>
+                                    <tr
+                                        *ngFor='let outlet of stockResults | slice : (pageNumber - 1) * 10 : (pageNumber - 1) * 10 + 10 let i = index'>
+                                        <td class='small'>{{outlet.category}}</td>
+                                        <td class='small'>{{outlet.sAPMaterialCode }}</td>
+                                        <td class='small'>{{outlet.brand }}</td>
+                                        <td class='small'>{{outlet.itemDescription }}</td>
+                                        <td class='small'>{{outlet.reservedQty }}</td>
+                                        <td class='small'>{{outlet.totalAvailableQty }}</td>
+                                        <input [disabled]="!outlet.totalAvailableQty"
+                                            class="form-control my-3" type='text' maxlength='100'
+                                            [(ngModel)]="outlet.tempInputQuantity">
+                                        <td>
+                                            <button (click)="onAddButtonClick(outlet)" class='btn btn-outline-primary w-100 table-button-height'
+                                                    [disabled]="!outlet.totalAvailableQty || +outlet.totalAvailableQty <= 0"
+                                                    type='button'>Add
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <SW-no-data *ngIf='!stockResults?.length' [height]="224" [content]="''"
+                                               [message]="errorMessage">
+                                </SW-no-data>
+                            </div>
+                            <div class="row dataTable-bottom" *ngIf="stockResults?.length">
+                                <div class="col-md-6 dataTable-info">Showing 1 to {{10}} of {{stockResults?.length}} entries
+                                </div>
+                                <div class='col-md-6 d-flex justify-content-end'>
+                                    <ngb-pagination id="p1" [collectionSize]='stockResults?.length' [maxSize]='3' [pageSize]='10'
+                                                    [(page)]="pageNumber">
+                                    </ngb-pagination>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #returnRequestTab>
+                   <SW-bc-stock-return></SW-bc-stock-return>
+                </ng-template>
+            </sbpro-card-navigation>
+        </div>
+    </div>
+</div>
+
+<div class='container-xl px-4' [hidden]="!addedStockList.length">
+    <sbpro-card [classes]="['col-12', 'mb-4']">
+        <div class='card-header w-100'>Stock Transfer Request</div>
+        <div class='card-body'>
+
+            <sbpro-card>
+                <div class="card-header">
+                    Request From: Other Store
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="d-flex flex-row justify-content-between">
+                                <span class="text-label">Store ID:</span>
+                                <span class="text-black fw-bold">{{bcSearchRequest?.store_id}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-6">
+                            <div class="d-flex flex-row justify-content-between">
+                                <span class="text-label w-50">Store Address:</span>
+                                <span class="text-black fw-bold text-align-right">{{selectedOutletAddress}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="d-flex flex-row justify-content-between">
+                                <span class="text-label">Store Name:</span>
+                                <span class="text-black fw-bold">{{storeNameByStoreID(bcSearchRequest?.store_id)}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                        </div>
+                    </div>
+                </div>
+            </sbpro-card>
+
+            <div class="my-3">
+                <div class='result-header w-100 mb-1'>Request List</div>
+                <div class='card-subtitle w-100'>Please check the quantity request, press ‘Remove’ to remove the item(s).</div>
+            </div>
+
+            <div class='col-md-12 table-responsive'>
+                <table class="table border rounded my-3 w-100">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th class='small' scope='col'>Category</th>
+                        <th class='small' scope='col'>SAP Material Code</th>
+                        <th class='small' scope='col'>Brand</th>
+                        <th class='small' scope='col'>Item Name</th>
+                        <th class='small' scope='col'>Quantity</th>
+                        <th class='small' scope='col'>Request</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf='addedStockList?.length'>
+                    <tr
+                        *ngFor='let outlet of addedStockList | slice : (pageNumber2 - 1) * 10 : (pageNumber2 - 1) * 10 + 10 let i = index'>
+                        <td class='small'>{{outlet.category}}</td>
+                        <td class='small'>{{outlet.sAPMaterialCode }}</td>
+                        <td class='small'>{{outlet.brand }}</td>
+                        <td class='small'>{{outlet.itemDescription }}</td>
+                        <td class='small'>{{outlet.tempInputQuantity }}</td>
+                        <td>
+                            <button (click)="onRemoveButtonClick(outlet)" class='btn btn-outline-primary w-100 table-button-height'
+                                    type='button'>Remove
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf='addedStockList?.length' class='d-flex justify-content-end my-3'>
+                <button class='btn btn-primary confirm-button' type='button' (click)="onConfirmButtonClick()">Confirm
+                </button>
+            </div>
+            <div class="row dataTable-bottom" *ngIf="addedStockList?.length">
+                <div class="col-md-6 dataTable-info">Showing 1 to {{10}} of {{addedStockList?.length}} entries
+                </div>
+                <div class='col-md-6 d-flex justify-content-end'>
+                    <ngb-pagination id="p2" [collectionSize]='addedStockList?.length' [maxSize]='3' [pageSize]='10'
+                                    [(page)]="pageNumber2">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+    </sbpro-card>
+</div>

@@ -1,0 +1,145 @@
+<div class='container-xl px-4 mt-4' *ngIf='!showSummary'>
+    <div class='row gx-4 mb-2'>
+        <div class='col-12'>
+            <sbpro-card-navigation sbproTocItem='Tabs' [navNames]='["Unlock", "View History"]'
+                                   [isCardHeaderVisible]='true' [cardHeader]="'Reinstate Recharge Card'" [selectedIndex]='selectedIndex'
+                                   [templates]='[unlock, viewHistory]' (onNavItemClick)='getNavItemClick($event)'>
+                <ng-container></ng-container>
+            </sbpro-card-navigation>
+        </div>
+    </div>
+
+    <ng-container [ngTemplateOutlet]='cardDetails' *ngIf='navItemClick === "Unlock" && voucherInfo'></ng-container>
+</div>
+<ng-template #cardDetails>
+    <div class='card col-md-6'>
+        <div class='card-header w-100'> Recharge Card Details</div>
+        <div class='card-body'>
+            <div class='row'>
+                <div class='d-flex justify-content-between'>
+                    <div class='small fw-400'> Serial Number</div>
+                    <div class='small fw-bolder justify-content-end text-black-75'>{{this.voucherInfo?.serialNo}}</div>
+                </div>
+                <div class='d-flex justify-content-between mt-2'>
+                    <div class='small fw-400'> Status</div>
+                    <div *ngIf="voucherInfo?.status.toUpperCase() == 'LOCKED'" class='small fw-bolder justify-content-end text-danger'> {{this.voucherInfo?.status.toUpperCase() || '-'}}</div>
+                    <div *ngIf="voucherInfo?.status.toUpperCase() !== 'LOCKED'" class='small fw-bolder justify-content-end text-black-75'> {{this.voucherInfo?.status.toUpperCase() || '-'}}</div>
+                </div>
+                <div class='d-flex justify-content-between mt-2'>
+                    <div class='small fw-400'> Locked Date</div>
+                    <div *ngIf="voucherInfo?.status.toUpperCase() == 'LOCKED'"
+                        class='small fw-bolder justify-content-end text-black-75'> {{this.voucherInfo?.lockedDate || '-'}}</div>
+                        <div *ngIf="voucherInfo?.status.toUpperCase() !== 'LOCKED'"
+                        class='small fw-bolder justify-content-end text-black-75'> N/A</div>
+                </div>
+            </div>
+
+            <div class='small fw-400 mt-3'> To Unlock this recharge card, please select the reason below.</div>
+            <div class='col-md-7 mt-3'>
+                <label class='small mb-2'>Reason</label>
+                <select class='form-select' id='reason' name='reason' [(ngModel)]='unlockRequest.operationReason'>
+                    <option *ngFor='let reason of reasonList' [value]='reason'>{{reason}}</option>
+                </select>
+            </div>
+            <div class='col-md-7 mt-3' *ngIf='unlockRequest.operationReason == "Others"'>
+                <input class='form-control' placeholder='Remarks...' id='remark' name='remark'
+                       [(ngModel)]='remark' max='100'>
+            </div>
+            <!-- <div class='invalid-feedback invalid-msg mb-2'
+                 *ngIf='unlockRequest.operationReason == "Others" && remark == ""'>
+                Remarks is required
+            </div> -->
+
+        </div>
+        <div class='card-footer py-2'>
+            <div class='d-flex justify-content-end'>
+                <button class='btn btn-primary w-25' type='submit' (click)='unLockRechargeCard()'
+                        [disabled]='!unlockRequest.operationReason || unlockRequest.operationReason == "Others" && remark == "" '>
+                    Unlock
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #unlock>
+    <ng-template [ngTemplateOutlet]='searchArea'></ng-template>
+</ng-template>
+
+<ng-template #viewHistory>
+    <ng-template [ngTemplateOutlet]='searchArea'></ng-template>
+
+    <div class='fw-bolder text-black mb-3'>Results</div>
+    <div class='row'>
+        <div class='mb-3 col-md-4'>
+            <label class='small mb-1 dropdown-label' for='DateRange'>Date Range</label>
+            <select class='form-select form-select-custom custom-select' id='DateRange' [(ngModel)]='dateRange' (change)="unLockRechargeCardHistory()">
+                <option class='custom-select-option' *ngFor='let date of dateRages' ngbDropdownItem [value]='date.id'>
+                    {{date.value}}
+                </option>
+            </select>
+        </div>
+
+        <div class='col-md-12'>
+            <table class='table rounded border-end border-start'>
+                <thead class='thead-dark'>
+                <tr>
+                    <th class='small'>Operation Date</th>
+                    <th class='small'>Transaction ID</th>
+                    <th class='small'>Recharge Card Serial Number</th>
+                    <th class='small'>Denomination (RM)</th>
+                    <th class='small'>Recharge Card Expiry Date</th>
+                    <th class='small'>User Id</th>
+                    <th class='small'>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor='let history of unlockRechargeCardHistory?.content'>
+                    <td class='small align-middle'>{{history.createdDate | date: 'dd/MM/yyyy'}}</td>
+                    <td class='small align-middle'>{{history.transactionId}}</td>
+                    <td class='small align-middle col-2'>{{history.serialNo}}</td>
+                    <td class='small align-middle'>{{history.denomination}}</td>
+                    <td class='small align-middle col-2'>{{history.cardExpDate}}</td>
+                    <td class='small align-middle'>{{history.userId}}</td>
+                    <td class='small align-middle col-2'>
+                        <button class='btn btn-sm btn-primary' type='button' (click)='viewSummary(history.transactionId, history.id, true)'>View Summary</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <SW-no-data *ngIf='!unlockRechargeCardHistory?.content?.length' [height]='224' [message]="'No data available.'" content=''>
+            </SW-no-data>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #searchArea>
+    <div class='form-group col-md-12'>
+        <div class='my-3'>
+            <div class='text-sm'>Enter serial number of the Recharge Card</div>
+        </div>
+        <div class='row'>
+            <div class='mb-3 col-md-10'>
+                <div class='input-group input-group-joined mb-2'>
+                    <div class='input-group-text'>
+                        <i-feather name='search'></i-feather>
+                    </div>
+                    <input class='form-control' type='text' maxlength='100' id='serialNo' name='serialNo' required [(ngModel)]='serialNo'
+                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                           placeholder='e.g. 123456789' aria-label='Search'/>
+                </div>
+                <div class='invalid-feedback invalid-msg mb-2' *ngIf='invalidSerialNo'>
+                    {{invalidSerialNoError}}
+                </div>
+            </div>
+            <div class='mb-3 col-md-2'>
+                <button class='btn btn-primary col-12' type='button' (click)='searchBySerial()'>Search</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<SW-reinstate-recharge-card-detail-summary *ngIf='showSummary' (backClick)="backClick()" (backToListClick)='backToListClick()' [backToListButton]='backToListButton'
+                                              [viewData]='unlockResponse'></SW-reinstate-recharge-card-detail-summary>
+

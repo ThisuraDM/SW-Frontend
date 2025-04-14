@@ -1,0 +1,419 @@
+<div class='container-xl px-4 mt-3'>
+    <div class="row gx-4">
+        <div class="col-md-6">
+            <sbpro-card>
+                <div class="card-header">
+                    Request Information
+                </div>
+                <div class="card-body">
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                        <div>Request ID:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                            {{stockTransferDetails?.request_id}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                        <div>Distributor Code:</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">{{''}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                        <div>Approved Date</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                            {{stockTransferDetails?.approved_date | date}}</div>
+                    </div>
+                    <div class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                        <div>Updated Date</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                            {{stockTransferDetails?.last_status_updated_date | date}}</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="result-header-600">Status:</div>
+                        <div class="d-flex flex-row pending-request-button"
+                            (click)="onPendingRequestClick(historicalDataModal, {centered: true, size: 'lg'})">
+                            <div class="h5 card-title mb-0 text-primary">{{status.toUpperCase()}}</div>
+                            <i-feather class="flex-shrink-0 text-primary mt-1" name="chevron-right"></i-feather>
+                        </div>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+
+        <div class="col-md-6">
+            <sbpro-card>
+                <div class="card-header">
+                    Request Stock From/Destination
+                </div>
+                <div class="card-body d-flex flex-row">
+                    <div class="col-1">
+                        <div class="icon-frame">
+                            <img class='circle_o' src="assets/icons/svg/icon/group-7223.svg" width='24' height='24'
+                                alt="circle_o">
+                            <img class='rectangle' src="assets/icons/svg/icon/line-466.svg" width='6' height='48'
+                                alt="rectangle">
+                            <img class='circle_d' src="assets/icons/svg/icon/group-7227.svg" width='24' height='24'
+                                alt="circle_d">
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="details-label ms-1 mb-1">Origin ID</div>
+                        <div class="details-label ms-1 mb-3">Origin Name</div>
+                        <div class="details-label ms-1 mb-1">Destination ID</div>
+                        <div class="details-label ms-1 mb-1">Destination Name</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-overflow-ellipsis text-black text-bold-600 value-margin-top mb-1">
+                            {{stockTransferDetails?.origin_outlet_store_id}}</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600 value-margin-top mb-3">
+                            {{stockTransferDetails?.origin_outlet_name}}</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600 value-margin-top mb-1">
+                            {{stockTransferDetails?.destination_outlet_store_id}}</div>
+                        <div class="text-overflow-ellipsis text-black text-bold-600 value-margin-top mb-1">
+                            {{stockTransferDetails?.destination_outlet_name}}</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="result-header-600">View Stock Movement</div>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+
+        <div class="col-12">
+            <sbpro-card>
+                <div class="card-header">
+                    Request Stock List
+                </div>
+                <div class="card-body">
+                    <!-- <div class='col-md-12 table-responsive'>
+                        <table class="table border rounded mt-0 my-3 w-100">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th class='small' scope='col'>Item Name</th>
+                                    <th class='small' scope='col'>SAP Material Code</th>
+                                    <th class='small' scope='col'>Serial Number</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf='tableDataList?.length'>
+                                <tr *ngFor='let outlet of tableDataList'>
+                                    <td class='small'>{{outlet.item_name }}</td>
+                                    <td class='small'>{{outlet.sap_material_code }}</td>
+                                    <td class='small'>{{outlet.serial_number }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <SW-no-data *ngIf='!tableDataList?.length' [height]="224" [message]="'Unable to load data.'">
+                        </SW-no-data>
+                    </div> -->
+
+                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap mb-3'>
+                        <div>Here is the summary of item(s) for request stock</div>
+                    </div>
+                    <div *ngIf="approverPage == 2" class='alert alert-primary alert-clr-primary' role='alert'>
+                        <div class='align-items-center justify-content-between'>
+                            <div class='col-auto'>
+                                <ol class='breadcrumb rounded'>
+                                    <li>
+                                        <span>
+                                            <svg class='icon text-primary' style="margin-right: 10px;"
+                                                aria-hidden='true' width='20' height='20'>
+                                                <use
+                                                    xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#error-filled'>
+                                                </use>
+                                            </svg> Pro-tip: You can only enter the
+                                            available stock left and to cancel specific item(s) you may simply enter "0"
+                                        </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <sbpro-card class="mb-3" *ngFor="let item of tableDataList; let indexOfelement=index;">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="result-header-600">Item {{indexOfelement + 1}}
+                                    <span *ngIf="approverPage == 1 || approverPage == 2 && item.approved_quantity !== 0"
+                                        class="badge bg-warning-soft text-warning ms-auto">{{approverStatus}}</span>
+                                    <span *ngIf="approverPage == 3 && !item.isVerified && item.approved_quantity !== 0 && isSerial"
+                                        class="badge bg-warning-soft text-warning ms-auto">Pending Serial</span>
+                                        <span *ngIf="approverPage == 3 && !item.isVerified && item.approved_quantity !== 0 && !isSerial"
+                                        class="badge bg-success-soft text-success ms-auto">Approved</span>
+                                    <span
+                                        *ngIf="approverPage == 5 || approverPage == 3 && item.isVerified && item.approved_quantity !== 0"
+                                        class="badge bg-success-soft text-success ms-auto">Approved & Verified</span>
+                                    <span *ngIf="approverPage == 6 && item.approved_quantity !== 0"
+                                        class="badge bg-danger-soft text-danger ms-auto">Rejected</span>
+                                    <span *ngIf="item.approved_quantity == 0 && approverPage !== 2"
+                                        class="badge bg-danger-soft text-danger ms-auto">Cancelled</span>
+                                    <span *ngIf="userType === 'destination-user' && requestorPage == 1"
+                                        class="badge bg-warning-soft text-warning ms-auto">Pending Approval</span>
+                                    <span *ngIf="userType === 'destination-user' && requestorPage == 2"
+                                        class="badge bg-warning-soft text-warning ms-auto">Pending Serial</span>
+                                    <span
+                                        *ngIf="isSerial && userType === 'destination-user' && requestorPage == 3 && !item.isVerified"
+                                        class="badge bg-warning-soft text-warning ms-auto">Pending
+                                        Acknowledgement</span>
+                                    <span
+                                        *ngIf="isSerial && userType === 'destination-user' && requestorPage == 4 || requestorPage == 3 && item.isVerified"
+                                        class="badge bg-success-soft text-success ms-auto">Confirmed</span>
+                                        <span
+                                        *ngIf="!isSerial && checkRecievedQty() && userType === 'destination-user' && requestorPage == 3"
+                                        class="badge bg-warning-soft text-warning ms-auto">Pending
+                                        Acknowledgement</span>
+                                    <span *ngIf="!isSerial && (!checkRecievedQty() && userType === 'destination-user' && (requestorPage == 4 || requestorPage == 3))"
+                                        class="badge bg-success-soft text-success ms-auto">Confirmed</span>
+                                    <span *ngIf="userType === 'destination-user' && requestorPage == 5"
+                                        class="badge bg-success-soft text-success ms-auto">Acknowledged</span>
+                                    <span *ngIf="userType === 'destination-user' && requestorPage == 6"
+                                        class="badge bg-danger-soft text-danger ms-auto">Rejected</span>
+                                </div>
+                                <div *ngIf="approverPage == 3 && !item.isVerified && isSerial && item.approved_quantity !== 0"
+                                    class='d-flex justify-content-end smaller-button'>
+                                    <button class='btn btn-primary search-button-width' type='button'
+                                        (click)="onTransferSerialNumberClick(item)">Verify Serial
+                                    </button>
+                                </div>
+                                <div *ngIf="approverPage == 3 && item.isVerified && item.approved_quantity !== 0"
+                                    class='d-flex justify-content-end smaller-button'>
+                                    <button class='btn btn-primary search-button-width' type='button'
+                                        (click)="onTransferSerialNumberClick(item)">Edit Serial
+                                    </button>
+                                </div>
+                                <div *ngIf="isSerial && (approverPage == 5 || requestorPage == 5) && item.approved_quantity !== 0"
+                                    class='d-flex justify-content-end smaller-button'>
+                                    <button class='btn btn-outline-primary search-button-width' type='button'
+                                        (click)="onTransferSerialNumberClick(item)">View List
+                                    </button>
+                                </div>
+                                <div *ngIf="isSerial && requestorPage == 3 && !item.isVerified" class='d-flex justify-content-end smaller-button'>
+                                    <button class='btn btn-primary search-button-width' type='button'
+                                        (click)="onStartAcknowledgeClick(item)">Scan Serial
+                                    </button>
+                                </div>
+                                <div *ngIf="requestorPage == 3 && item.isVerified" class='d-flex justify-content-end smaller-button'>
+                                    <button class='btn btn-primary search-button-width' type='button'
+                                        (click)="onStartAcknowledgeClick(item)">Edit Scan
+                                    </button>
+                                </div>
+                                <div *ngIf="approverPage == 2" class='d-flex justify-content-end'>
+                                    <span *ngIf="(+item.available_quantity + +item.reserved_quantity) - item.approved_quantity >= 0 "
+                                        class="text-success text-bold-600">{{(+item.available_quantity + +item.reserved_quantity) -
+                                        item.approved_quantity}} left</span>
+                                    <span
+                                        *ngIf="(+item.available_quantity + +item.reserved_quantity) - item.approved_quantity < 0"
+                                        class="text-danger text-bold-600">0 left</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                        <div>Item Name:</div>
+                                        <div class="text-overflow-ellipsis text-black text-bold-600">{{item.item_name}}
+                                        </div>
+                                    </div>
+                                    <div
+                                        class='d-flex flex-row gx-4 my-2 details-label justify-content-between no-wrap'>
+                                        <div>Requested Quantity:</div>
+                                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                                            {{item.requested_quantity}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class='d-flex flex-row gx-4 details-label justify-content-between no-wrap'>
+                                        <div>Sap Material Code</div>
+                                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                                            {{item.sap_material_code}}
+                                        </div>
+                                    </div>
+                                    <div *ngIf="userType === 'origin-user' && (approverPage == 2 || approverPage == 3 || approverPage == 4 || approverPage == 5 )"
+                                        class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                        <div>Approved Quantity</div>
+                                        <div *ngIf="approverPage == 3 || approverPage == 5  && userType === 'origin-user'"
+                                            class="text-overflow-ellipsis text-black text-bold-600">
+                                            {{item.approved_quantity}}
+                                        </div>
+                                        <div *ngIf="approverPage == 2 && userType === 'origin-user'">
+                                            <input type='text' class='form-control col-1 input-h-1'
+                                                [(ngModel)]='item.approved_quantity'>
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf="isSerial && userType === 'destination-user' && requestorPage !== 1"
+                                        class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                        <div>Approved Quantity</div>
+                                        <div class="text-overflow-ellipsis text-black text-bold-600">
+                                            {{item.approved_quantity}}
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf="!isSerial && userType === 'destination-user' && (requestorPage == 3 || requestorPage == 5)"
+                                    class='d-flex flex-row gx-4 mt-2 mb-1 details-label justify-content-between no-wrap'>
+                                    <div>Received Quantity</div>
+                                    <div *ngIf="!isSerial && requestorPage == 3 && userType === 'destination-user'">
+                                        <input type='text' class='form-control col-1 input-h-1'
+                                            [(ngModel)]='item.received_quantity'>
+                                    </div>
+                                    <div *ngIf="!isSerial && userType === 'destination-user' && requestorPage == 5" class="text-overflow-ellipsis text-black text-bold-600">
+                                        {{item.received_quantity}}
+                                    </div>
+
+                                </div>
+                                    <div *ngIf="approverPage == 2"
+                                        class='d-flex flex-row gx-4 details-label justify-content-end no-wrap'>
+                                        <div class="text-overflow-ellipsis text-align-right">
+                                            <span
+                                                *ngIf="(+item.available_quantity + +item.reserved_quantity) - item.approved_quantity < 0"
+                                                class="text-danger text-bold-600">*The amount you entered have exceeded
+                                                the stock(s)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </sbpro-card>
+                    <div class="d-flex flex-row mb-3" style="background-color: #f9f9f9;">
+                        <span class="text-black result-header-600" style="margin: 10px;">Remarks:</span>
+                        <span *ngIf="approverPage == 1 || approverPage == 5 || userType === 'destination-user'" style="margin: 10px;"
+                            class="text-black fw-bold text-align-left remark-margin word-wrap">{{stockTransferDetails?.remarks}}</span>
+                        <span *ngIf="approverPage == 3 || approverPage == 4 || approverPage == 6"
+                            class="text-black fw-bold text-align-left remark-margin word-wrap"
+                            style="margin: 10px;">{{remark}}</span>
+                        <input *ngIf="approverPage == 2" class='form-control input-h-2' type='text'
+                            style="margin: 10px;" [(ngModel)]='remark' placeholder='Remarks (mandatory)'>
+                    </div>
+
+                    <div *ngIf="approverPage == 3 && checkAllVerified()" class='alert alert-warning alert-clr-warning'
+                        role='alert'>
+                        <div class='align-items-center justify-content-between'>
+                            <div class='col-auto'>
+                                <ol class='breadcrumb rounded'>
+                                    <li>
+                                        <span>
+                                            <svg class='icon text-warning' style="margin-right: 10px;"
+                                                aria-hidden='true' width='20' height='20'>
+                                                <use
+                                                    xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#error-filled'>
+                                                </use>
+                                            </svg>Looks like 1 or more item(s) are
+                                            still not verified by you. Please click on Verify Serial to proceed
+                                        </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="approverPage == 3 && !checkAllVerified()" class='alert alert-success alert-clr-success'
+                        role='alert'>
+                        <div class='align-items-center justify-content-between'>
+                            <div class='col-auto'>
+                                <ol class='breadcrumb rounded'>
+                                    <li>
+                                        <span>
+                                            <svg class='icon text-success' style="margin-right: 10px;"
+                                                aria-hidden='true' width='20' height='20'>
+                                                <use
+                                                    xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#error-filled'>
+                                                </use>
+                                            </svg>The stock request is ready to be submitted. Please click submit below
+                                            to Proceed.
+                                        </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='d-flex justify-content-end'>
+                        <!-- <button class="btn btn-primary me-2 wide-button mb-2" type="button"
+                            *ngIf="userType === 'origin-user' && approverPage == 1"
+                            (click)="transferSerialNumberClick.emit(true)">Transfer Serial Number
+                        </button> -->
+
+                        <button class="btn btn-primary me-2 smaller-button mb-2"
+                            *ngIf="userType === 'origin-user' && approverPage == 1"
+                            [disabled]="!stockTransferDetails?.enable_approve_reject" type="button"
+                            (click)="appRejClick()">Approve / Reject
+                        </button>
+                        <button class="btn btn-outline-primary me-2 smaller-button mb-2"
+                            *ngIf="userType === 'origin-user' && approverPage == 2" type="button"
+                            (click)="onRejectClick(modalReject)">Reject
+                        </button>
+                        <button class="btn btn-primary me-2 smaller-button mb-2"
+                            *ngIf="userType === 'origin-user' && approverPage == 2" type="button"
+                            (click)="appClick()">Approve
+                        </button>
+                        <button class="btn btn-primary me-2 smaller-button mb-2"
+                            *ngIf="userType === 'origin-user' && approverPage == 6 || approverPage == 5" type="button"
+                            (click)="closeClick()">Close
+                        </button>
+                        <button class="btn btn-primary me-2 smaller-button mb-2"
+                        *ngIf="userType === 'destination-user' && requestorPage == 5" type="button"
+                        (click)="closeClick()">Close
+                    </button>
+                        <button class="btn btn-primary me-2 smaller-button mb-2"
+                            *ngIf="userType === 'origin-user' && approverPage == 3" [disabled]="disableSubmit || checkAllVerified()"
+                            type="button" (click)="submitClick()">Submit
+                        </button>
+
+                        <button class="btn btn-primary me-2 smaller-button mb-2"
+                            *ngIf="userType === 'destination-user'&&stockTransferDetails?.enable_acknowledge"
+                            [disabled]="disableAcknowledge || checkAllVerified() || checkRecievedQty()" type="button" (click)="acknowledgeClick()"
+                           >Acknowledge
+                        </button>
+                    </div>
+                </div>
+            </sbpro-card>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #historicalDataModal>
+    <SW-historical-data [stockTransferDetails]="stockTransferDetails"></SW-historical-data>
+</ng-template>
+
+<ng-template #modalReject let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-danger'>Alert!</span></h5>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>Are you sure you want to reject the request stock? <br><br> Note: Don't forget to leave
+            remarks/reasons you rejecting this order.</div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-outline-primary' type='button' (click)='modal.close()'>Cancel</button>
+        <button class='btn btn-primary' type='button' (click)='confirmReject()'>Confirm</button>
+    </div>
+</ng-template>
+
+<ng-template #modalSubmit let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Successful</span></h5>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>{{stockTransferDetails.request_id}} has been succesfully submitted. Please make sure, the
+            correct serial numbers are pack and transfer accordingly</div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-primary' type='button' (click)='submitClose()'>Close</button>
+    </div>
+</ng-template>
+
+<ng-template #modalAcknowledge let-modal>
+    <div class='modal-header'>
+        <h5 class='modal-title'><span class='text-primary'>Success!</span></h5>
+    </div>
+    <div class='modal-body'>
+        <div class='mb-3'>{{stockTransferDetails.request_id}} has been succesfully acknowledged.</div>
+    </div>
+    <div class='modal-footer'>
+        <button class='btn btn-primary' type='button' (click)='submitAcknowledgeClose()'>Close</button>
+    </div>
+</ng-template>

@@ -1,0 +1,47 @@
+<sbpro-card [classes]='["h-100"]'>
+    <div
+        class='card card-body bg-gradient-primary-to-secondary d-flex flex-column  py-5 py-xl-4 '>
+        <div class='row gx-4 align-items-center'>
+            <div class='col-xl-12 col-xxl-12' *ngIf='balanceStatusResponse'>
+                <div class='row mb-4'>
+                    <div class='col-xl-9 col-lg-10 col-md-10 col-sm-10 col-xs-10 col-10'>
+                        <div class="select-label" >Store</div>
+                        <select  class='form-select custom-select' name='pageSize' (change)='outletChange()' [(ngModel)]='selectedOutletId'>
+                            <option class='dtxt-c' *ngFor="let outlet of outletList" [value]='outlet.outlet_id'>{{outlet.outlet_id}}</option>
+                        </select>
+                    </div>
+                    <div class='col-xl-3 col-md-2 col-sm-2 col-xs-2 col-2'>
+                        <svg class='icon text-primary' aria-hidden='true' width='48' height='48'>
+                            <use xlink:href='assets/icons/sprite/prisma-icons.symbol.svg#purchase-reload-history'></use>
+                        </svg>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-md-12'>
+                        <div class='text-white text-lg fw-bolder' *ngIf="noData"> - </div>
+                        <div class='text-white text-lg fw-bolder' *ngIf="!noData">{{ balanceStatusResponse.available_balance | currency: 'RM '}}</div>
+                        <div class='text-white-75 small'> Balance</div>
+                    </div>
+                </div>
+                <hr class='bg-white'>
+                <div class='row'>
+                    <div class='d-flex flex-column mb-2'>
+                        <div class='text-white-75 small'> Company Name</div>
+                        <div class='text-white small fw-bold'>
+                            <span title="{{balanceStatusResponse.account_holder_public_name}}" >{{balanceStatusResponse.account_holder_public_name}}</span>,
+                        </div>
+                    </div>
+                    <div class='d-flex flex-column mb-2'>
+                        <div class='text-white-75 small'> Company Number</div>
+                        <div class='text-white small fw-bold'>{{balanceStatusResponse.account_no}}</div>
+                    </div>
+                    <div class='d-flex flex-column mb-2'>
+                        <div class='text-white-75 small'> eWallet Status</div>
+                        <div class='text-white small fw-bold'> {{balanceStatusResponse.account_status}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</sbpro-card>
+

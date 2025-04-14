@@ -1,0 +1,86 @@
+@import 'styles/core/variables/_colors.scss';
+
+.img {
+    height: 45px;
+}
+
+.cursor {
+    cursor:pointer;
+}
+
+.custom-height {
+    height: calc(100% - 0px)
+}
+
+.m-player {
+    margin-left: -29px
+}
+
+.access-container {
+
+    flex: 1;
+    justify-content: space-around;
+    cursor: pointer;
+    align-items: center;
+    padding: 5rem;
+    flex-direction: row;
+    @media(max-width: 1200px) {
+        flex-direction: column;
+    }
+    @media(min-width: 1200px) {
+        height: 88vh;
+    }
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 30rem;
+}
+
+.text-title {
+    font-size: 2rem;
+    color: $blue;
+}
+
+.text-description {
+    font-weight: 500;
+}
+
+.separator {
+    height: 1px;
+    background-color: $gray-500;
+    width: 80%;
+}
+
+@media (max-width: 576px) {
+
+    .access-container {
+
+        flex: 1;
+        justify-content: space-around;
+        cursor: pointer;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+    }
+    .card-container {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        width: 300px;
+    }
+
+    .text-title {
+        font-size: 1.5rem;
+        color: $blue;
+    }
+
+    .text-description {
+        font-weight: 500;
+        font-size: 0.8rem;
+    }
+}

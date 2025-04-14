@@ -1,0 +1,19 @@
+<div style='border: 1px solid #c5d0d5; border-radius: 0.35rem;'>
+    <div class='dropdown-label'>Product</div>
+    <sbpro-dropdown dropdownStyle='text' background='btn-white' customCssClassForButton='dropdown-filter-box-button' [placement]='placement'>
+        <div class='dropdown-trigger mt-3'>
+            <span class='custom-select'>{{selectedProductName}}</span>
+        </div>
+        <div class='dropdown-items' *ngFor='let data of dataList'>
+            <a *ngIf='!data.plans.length' (click)='selectProduct(data)' class='dropdown-item'>{{data.product_name}}</a>
+            <li *ngIf='data.plans.length' class='dropdown-submenu'>
+                <a class='dropdown-item dropdown-toggle' data-toggle='dropdown'>{{data.product_name}}</a>
+                <ul class='dropdown-menu' *ngIf='data.plans.length'>
+                    <div *ngFor='let plane of data.plans'>
+                        <a class='dropdown-item' (click)='selectProductPlan(data.product_id, data.product_name, plane)'>{{plane}}</a>
+                    </div>
+                </ul>
+            </li>
+        </div>
+    </sbpro-dropdown>
+</div>

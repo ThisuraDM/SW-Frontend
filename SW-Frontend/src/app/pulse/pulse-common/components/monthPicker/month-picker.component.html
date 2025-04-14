@@ -1,0 +1,42 @@
+<div ngbDropdown display='dynamic'>
+    <div class='dropdown-label'>{{monthStaticLabel}}</div>
+    <sbpro-dropdown dropdownStyle='text' background='btn-white' customCssClassForButton='dropdown-filter-box-button-x'>
+        <div class='dropdown-trigger custom-select'>{{monthLabel}}</div>
+        <div class='dropdown-items'>
+            <a class='dropdown-item' (click)='selectMonth("current")'>Current Month</a>
+            <a class='dropdown-item' (click)='selectMonth("previous")' *ngIf='!monthLabelWithYear'>Previous Month</a>
+            <a class='dropdown-item dropdown-toggle' id='customMonthDropdown'
+               ngbDropdownToggle data-cy='messagesMenu' role='button' aria-haspopup='true'
+               aria-expanded='false'>Custom</a>
+        </div>
+    </sbpro-dropdown>
+
+    <div class='dropdown-menu custom-month-dropdown' ngbDropdownMenu aria-labelledby='customMonthDropdown'>
+        <div class='card-header'>Select Month to view</div>
+        <div class='card-body p-3'>
+            <div class='col-md-12 row p-0 m-0'>
+                <div class='d-flex justify-content-center mb-2'>
+                    <button class='btn btn-outline-primary btn-xs btn-icon rounded-1 shadow-sm me-3 mb-2'
+                            [disabled]='disablePrevious' (click)='getPreviousYear()'>
+                        <i-feather name='arrow-left'></i-feather>
+                    </button>
+                    <h5 class='card-title'>{{selectedYear}}</h5>
+                    <button class='btn btn-outline-primary btn-xs btn-icon rounded-1 shadow-sm ms-3 mb-2'
+                            [disabled]='disableNext' (click)='getNextYear()'>
+                        <i-feather name='arrow-right'></i-feather>
+                    </button>
+                </div>
+                <div class='col-sm-3 p-0 pe-2' *ngFor='let month of monthList'>
+                    <div class='month-item dropdown-item shadow-sm d-flex justify-content-between' [ngClass]='{disabled: month.active}'
+                         (change)='setYearAndMonth()'>
+                        <label class='form-check-label small' for='radio-20-"{{month.id}}"'>{{month.name}}</label>
+                        <input class='form-check-input' id='radio-20-"{{month.id}}"' type='radio'
+                               name='customSolidRadio'
+                               [(ngModel)]='selectedMonth'
+                               [value]='month.id' />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

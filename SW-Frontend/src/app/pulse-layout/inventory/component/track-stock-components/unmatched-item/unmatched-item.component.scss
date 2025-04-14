@@ -1,0 +1,31 @@
+@import 'styles/core/variables';
+.unamtched-div{
+   background: $gray-300 !important;
+}
+.form-control-custom {
+    line-height: 1.4 !important;
+    padding-top: 30px;
+}
+
+.custom-input {
+    color: $black;
+    font-weight: 600;
+    margin-left: -2.5px;
+}
+.unamtched-item{
+        display: block;
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1;
+        color: #697479;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #c5d0d5;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.35rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}

@@ -1,0 +1,25 @@
+<li class="nav-item dropdown no-caret me-3 me-lg-0 dropdown-user" *ngIf="userService.user$ | async as user" ngbDropdown [placement]="placement" display="dynamic">
+    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" ngbDropdownToggle data-cy="userMenu" role="button" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" [src]="user.image" alt='fluid'/></a>
+    <div class="dropdown-menu border-0 shadow animated--fade-in-up" ngbDropdownMenu aria-labelledby="dropdownUser">
+        <h6 class="dropdown-header d-flex align-items-center">
+            <img class="dropdown-user-img" [src]="user.image" alt='dropdown user'/>
+            <div class="dropdown-user-details">
+                <div class="dropdown-user-details-name" title="{{username}}">{{username}}</div>
+                <div class="dropdown-user-details-email" title="{{email}}">{{email}}</div>
+            </div>
+        </h6>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" routerLink="/user/change-password"
+            ><div class="dropdown-item-icon"><i-feather name="settings"></i-feather></div>
+            Account</a
+        >
+        <a *ngIf="allowPasswordChange" (click)="onClickChangePassword()"  class="dropdown-item"
+            ><div class="dropdown-item-icon"><i-feather name="edit"></i-feather></div>
+            Change Password</a
+        >
+        <a class="dropdown-item" (click)='onLogout()'
+            ><div class="dropdown-item-icon"><i-feather name="log-out"></i-feather></div>
+            Logout</a
+        >
+    </div>
+</li>
